@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Oceanaut</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAXVGtgOnsnr3d-o_r1XmXDISGwcTpbaC4</string>
+</resources>

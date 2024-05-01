@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "65818229154",
+    "project_id": "oceanaut-40f6f",
+    "storage_bucket": "oceanaut-40f6f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65818229154:android:34d7ba05f0ada34226dafb",
+        "android_client_info": {
+          "package_name": "com.oceanaut"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "65818229154-vvo28u2ap8adkn9e0ktplj5phdnldooh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.oceanaut",
+            "certificate_hash": "fb5f54e792b2dd3436113a5223fb0c98c91bf52a"
+          }
+        },
+        {
+          "client_id": "65818229154-6tmvrb2lanska1qtnj454usht7ce72aj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDon8386JCFPSILxe8hXmlwQ5yThLR_RvQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "65818229154-6tmvrb2lanska1qtnj454usht7ce72aj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

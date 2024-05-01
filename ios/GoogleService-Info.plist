@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>574703535421-7254o5dlkmssnmanlb6i4n6d8f1hbnsa.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.574703535421-7254o5dlkmssnmanlb6i4n6d8f1hbnsa</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAzrXK-0v5wOdt2CpErIibH-sMnwQQkyko</string>
+	<key>GCM_SENDER_ID</key>
+	<string>574703535421</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.oceanaut</string>
+	<key>PROJECT_ID</key>
+	<string>oceanaut-ios</string>
+	<key>STORAGE_BUCKET</key>
+	<string>oceanaut-ios.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:574703535421:ios:732cd2a31bf4b762fab154</string>
+</dict>
+</plist>
