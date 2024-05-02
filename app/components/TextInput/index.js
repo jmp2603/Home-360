@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
-import moment from 'moment';
+import React, { useState } from "react";
+import moment from "moment";
 import {
   Text,
   StyleSheet,
@@ -8,17 +8,17 @@ import {
   TextInput,
   Platform,
   TouchableOpacity,
-} from 'react-native';
-import {BaseColors} from '../../config/theme';
-import DatePicker from 'react-native-date-picker';
-import Dicon from 'react-native-vector-icons/Fontisto';
-import {CustomIcon} from '../../config/LoadIcons';
-import {useTheme} from '@react-navigation/native';
-import DeviceInfo from 'react-native-device-info';
+} from "react-native";
+import { BaseColors } from "../../config/theme";
+import DatePicker from "react-native-date-picker";
+import Dicon from "react-native-vector-icons/Fontisto";
+import { CustomIcon } from "../../config/LoadIcons";
+import { useTheme } from "@react-navigation/native";
+import DeviceInfo from "react-native-device-info";
 
 const isTabletDevice = DeviceInfo.isTablet();
 const currentDate = new Date();
-const IOS = Platform.OS === 'ios';
+const IOS = Platform.OS === "ios";
 /**
  *
  * Component for TextInput
@@ -27,17 +27,17 @@ const IOS = Platform.OS === 'ios';
  */
 function CInput(props, ref) {
   const {
-    title = '',
+    title = "",
     titleSty = {},
-    placeholderText = '',
+    placeholderText = "",
     onSubmit = () => {},
     onChange = () => {},
-    value = '',
+    value = "",
     secureText = false,
     textInputStyle = {},
     showError = false,
-    keyBoardType = 'default',
-    errorText = '',
+    keyBoardType = "default",
+    errorText = "",
     returnKeyType,
     mandatory = false,
     containerSty,
@@ -53,9 +53,10 @@ function CInput(props, ref) {
     FinIconPress = () => {},
     isSuffix = false,
     isPreffix = false,
-    preffix = '',
-    suffix = '',
+    preffix = "",
+    suffix = "",
     errorStyle,
+    maxLength,
     ...rest
   } = props;
 
@@ -71,7 +72,7 @@ function CInput(props, ref) {
     <>
       <View>
         {title ? (
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Text
               style={[
                 styles.titleTxt,
@@ -81,20 +82,22 @@ function CInput(props, ref) {
                     ? colors.colors.textColor
                     : BaseColors.inactive,
                 },
-              ]}>
+              ]}
+            >
               {title}
               <Text
                 style={{
                   fontSize: isTabletDevice ? 18 : 15,
-                }}>
-                {mandatory ? ' *' : ''}
+                }}
+              >
+                {mandatory ? " *" : ""}
               </Text>
             </Text>
             {FinIconShow ? (
               <CustomIcon
                 name="inform"
                 color={colors.colors.textColor}
-                style={{marginLeft: 5, paddingBottom: 2}}
+                style={{ marginLeft: 5, paddingBottom: 2 }}
                 onPress={FinIconPress}
                 size={12}
               />
@@ -113,7 +116,7 @@ function CInput(props, ref) {
           }
           style={{
             paddingBottom: 0,
-            backgroundColor: '#0000',
+            backgroundColor: "#0000",
             marginBottom: textArea
               ? showError || DateError
                 ? 20
@@ -122,39 +125,42 @@ function CInput(props, ref) {
               ? 5
               : 0,
 
-            borderColor: showError ? '#FF0B1E' : BaseColors.inputBorder,
+            borderColor: showError ? "#FF0B1E" : BaseColors.inputBorder,
             height: 40,
-            justifyContent: 'center',
-            alignSelf: 'center',
+            justifyContent: "center",
+            alignSelf: "center",
             ...containerSty,
-          }}>
+          }}
+        >
           <View
             style={{
-              flexDirection: 'row',
-            }}>
+              flexDirection: "row",
+            }}
+          >
             {Date ? (
               <View
                 style={{
                   ...styles.datePickView,
-                  height: textArea ? 'auto' : IOS ? 40 : 40,
+                  height: textArea ? "auto" : IOS ? 40 : 40,
                   minHeight: IOS ? 40 : 40,
                   maxHeight: textArea ? 82 : 40,
-                  justifyContent: 'center',
-                  alignSelf: 'center',
+                  justifyContent: "center",
+                  alignSelf: "center",
                   borderWidth: 1,
                   borderColor: BaseColors.inputBorder,
                   fontSize: 14,
-                  width: '100%',
-                  textAlignVertical: textArea ? 'top' : null,
+                  width: "100%",
+                  textAlignVertical: textArea ? "top" : null,
                   paddingLeft: 5,
-                }}>
+                }}
+              >
                 {show ? (
                   <DatePicker
                     ref={ref}
                     modal
                     open={show}
                     androidVariant="iosClone"
-                    onConfirm={date => {
+                    onConfirm={(date) => {
                       setShow(false);
                       onDateChange(date);
                     }}
@@ -172,48 +178,53 @@ function CInput(props, ref) {
                   />
                 ) : (
                   <TouchableOpacity
-                    style={{...styles.dateTxt}}
+                    style={{ ...styles.dateTxt }}
                     activeOpacity={0.5}
                     onPress={() => {
                       setShow(true);
-                    }}>
+                    }}
+                  >
                     <Text
                       style={{
-                        color: '#464E5F',
+                        color: "#464E5F",
                         fontSize: 16,
-                      }}>
+                      }}
+                    >
                       {selectedDate
-                        ? moment(selectedDate).format('MM/DD/YYYY')
-                        : 'Select date'}
+                        ? moment(selectedDate).format("MM/DD/YYYY")
+                        : "Select date"}
                     </Text>
                   </TouchableOpacity>
                 )}
                 <View
                   style={{
                     marginRight: 10,
-                  }}>
+                  }}
+                >
                   <Dicon name="date" size={20} />
                 </View>
               </View>
             ) : null}
 
             {!Date && (
-              <View style={{flexDirection: 'row'}}>
+              <View style={{ flexDirection: "row" }}>
                 {isSuffix && (
                   <View
                     style={{
-                      position: 'absolute',
+                      position: "absolute",
                       height: isTabletDevice ? 38.9 : 38,
                       backgroundColor: BaseColors.whiteSmoke,
                       borderRadius: 5,
-                      justifyContent: 'center',
+                      justifyContent: "center",
                       paddingHorizontal: 5,
-                    }}>
+                    }}
+                  >
                     <Text
                       style={{
-                        textAlign: 'center',
+                        textAlign: "center",
                         color: BaseColors.textColor,
-                      }}>
+                      }}
+                    >
                       {suffix}
                     </Text>
                   </View>
@@ -225,6 +236,7 @@ function CInput(props, ref) {
                   onFocus={() => {
                     setFocused(true);
                   }}
+                  maxLength={maxLength}
                   blurOnSubmit={false}
                   multiline={textArea ? true : false}
                   value={value}
@@ -241,15 +253,15 @@ function CInput(props, ref) {
                     height: textArea ? 55 : IOS ? 40 : 40,
                     minHeight: IOS ? 40 : 40,
                     maxHeight: textArea ? 82 : 40,
-                    justifyContent: 'center',
-                    alignSelf: 'center',
+                    justifyContent: "center",
+                    alignSelf: "center",
                     borderWidth: 1,
                     borderColor: editable
                       ? BaseColors.inputBorder
                       : BaseColors.inactive,
                     fontSize: isTabletDevice ? 16 : 14,
-                    width: '100%',
-                    textAlignVertical: textArea ? 'top' : null,
+                    width: "100%",
+                    textAlignVertical: textArea ? "top" : null,
                     color:
                       editable === false
                         ? BaseColors.inactive
@@ -266,21 +278,23 @@ function CInput(props, ref) {
                 {isPreffix && (
                   <View
                     style={{
-                      position: 'absolute',
+                      position: "absolute",
                       height: isTabletDevice ? 38.9 : 38,
                       backgroundColor: BaseColors.whiteSmoke,
                       borderRadius: 5,
-                      justifyContent: 'center',
+                      justifyContent: "center",
                       paddingHorizontal: 5,
                       right: 1,
                       top: 1,
-                    }}>
+                    }}
+                  >
                     <Text
                       style={{
-                        textAlign: 'center',
+                        textAlign: "center",
                         color: BaseColors.textColor,
                         fontSize: isTabletDevice ? 16 : null,
-                      }}>
+                      }}
+                    >
                       {preffix}
                     </Text>
                   </View>
@@ -303,23 +317,23 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     opacity: 1,
     fontSize: isTabletDevice ? 18 : 14,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   datePickView: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
   },
   dateTxt: {
     flex: 1,
-    textAlign: 'left',
+    textAlign: "left",
     paddingVertical: 2,
   },
   errorTxt: {
     fontSize: 13,
     color: BaseColors.red,
     paddingBottom: 5,
-    fontWeight: '500',
+    fontWeight: "500",
   },
 });
 

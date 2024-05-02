@@ -1,15 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import PropTypes from 'prop-types';
-import {TouchableOpacity, Text, View, ActivityIndicator} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import {BaseColors} from '../../config/theme';
-import {createStyles} from './style';
-import {CustomIcon} from '../../config/LoadIcons';
-import {useTheme} from '@react-navigation/native';
-import DeviceInfo from 'react-native-device-info';
+import React from "react";
+import PropTypes from "prop-types";
+import { TouchableOpacity, Text, View, ActivityIndicator } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome5";
+import { BaseColors } from "../../config/theme";
+import { createStyles } from "./style";
+import { CustomIcon } from "../../config/LoadIcons";
+import { useTheme } from "@react-navigation/native";
 
-const isTabletDevice = DeviceInfo.isTablet();
 /**
  * Component for Button
  * @function  Button
@@ -43,44 +41,43 @@ export default function Button(props) {
   const renderText = () => (
     <Text
       style={{
-        color: type === 'outlined' ? colors.colors.primary : BaseColors.white,
-
+        color: type === "outlined" ? BaseColors.primary : BaseColors.white,
         ...styles.btnText,
         ...txtSty,
-      }}>
+      }}
+    >
       {!loading ? (
         children
       ) : (
         <ActivityIndicator
           animating
-          color={type === 'outlined' ? BaseColors.primary : BaseColors.white}
+          color={type === "outlined" ? BaseColors.primary : BaseColors.white}
         />
       )}
     </Text>
   );
 
-  const renderIcon = positiontype => (
+  const renderIcon = (positiontype) => (
     <CustomIcon
       name={cIconName}
       size={20}
-      color={type === 'primary' ? BaseColors.white : BaseColors.primary}
+      color={type === "primary" ? BaseColors.white : BaseColors.primary}
       style={{
         [positiontype]: 0,
-        position: 'absolute',
-
+        position: "absolute",
         ...cIconSty,
       }}
     />
   );
 
-  const renderVectorIcon = positiontype => (
+  const renderVectorIcon = (positiontype) => (
     <Icon
       name={vIconName}
       size={20}
-      color={type === 'primary' ? BaseColors.white : BaseColors.primary}
+      color={type === "primary" ? BaseColors.white : BaseColors.primary}
       style={{
         [positiontype]: 20,
-        position: 'absolute',
+        position: "absolute",
         ...vIconSty,
       }}
     />
@@ -92,12 +89,13 @@ export default function Button(props) {
       {...rest}
       onPress={loading ? () => {} : onBtnClick}
       style={{
-        overflow: 'hidden',
+        overflow: "hidden",
         ...styles[shape],
         ...styles[type],
         ...style,
-      }}>
-      {type === 'primary' ? (
+      }}
+    >
+      {type === "primary" ? (
         <View
           style={{
             ...styles.btnContainer,
@@ -105,9 +103,12 @@ export default function Button(props) {
 
             backgroundColor: disabled
               ? BaseColors.inactive
-              : containerStyle.backgroundColor || colors.colors.primary,
-            padding: isTabletDevice ? 12 : 7.5,
-          }}>
+              : containerStyle.backgroundColor || BaseColors.primary,
+            borderWidth: disabled ? 1 : 0,
+            padding: 7.5,
+            borderColor: disabled ? BaseColors.inactive : BaseColors.primary,
+          }}
+        >
           {cIconName
             ? renderIcon(iconPosition)
             : renderVectorIcon(iconPosition)}
@@ -122,16 +123,12 @@ export default function Button(props) {
               backgroundColor: disabled
                 ? BaseColors.inactive
                 : BaseColors.white,
-              padding: isTabletDevice ? 12 : 7.5,
               borderWidth: 1,
               borderRadius: 5,
-              borderColor: disabled
-                ? BaseColors.inactive
-                : colors.colors.primary,
-
-              // borderRadius:1
+              borderColor: disabled ? BaseColors.inactive : BaseColors.primary,
             },
-          ]}>
+          ]}
+        >
           {cIconName
             ? renderIcon(iconPosition)
             : renderVectorIcon(iconPosition)}
@@ -143,8 +140,8 @@ export default function Button(props) {
 }
 
 Button.propTypes = {
-  type: PropTypes.oneOf(['primary', 'outlined', 'text']),
-  shape: PropTypes.oneOf(['round', 'square']),
+  type: PropTypes.oneOf(["primary", "outlined", "text"]),
+  shape: PropTypes.oneOf(["round", "square"]),
   raised: PropTypes.bool,
   containerStyle: PropTypes.object,
   loading: PropTypes.bool,
@@ -159,8 +156,8 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
-  type: 'primary',
-  shape: 'square',
+  type: "primary",
+  shape: "square",
   raised: true,
   disabled: false,
   containerStyle: {},
@@ -168,8 +165,8 @@ Button.defaultProps = {
   onBtnClick: () => {},
   style: {},
   txtSty: {},
-  iconPosition: 'left',
-  cIconName: '',
+  iconPosition: "left",
+  cIconName: "",
   cIconSty: {},
-  delivered: '',
+  delivered: "",
 };

@@ -1,4 +1,4 @@
-import {Images} from './images';
-import {theme} from './theme';
+import { Images } from "./images";
+import { theme } from "./theme";
 
-export {theme, Images};
+export { theme, Images };

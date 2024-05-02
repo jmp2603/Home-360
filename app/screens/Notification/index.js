@@ -26,11 +26,9 @@ import Aicon from 'react-native-vector-icons/AntDesign';
 import FastImage from 'react-native-fast-image';
 import {Images} from '../../config';
 import {useTheme} from '@react-navigation/native';
-import {translate} from '../../lang/Translate';
 import {Button} from '../../components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import TextInput from '../../components/TextInput';
-import NotificationFilter from './NotificationFilter';
 import notifiationAuth from '../../redux/reducers/notification/actions';
 import {useDispatch} from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
@@ -411,9 +409,7 @@ export default function UserManagement({navigation, route}) {
       }}>
       <CHeader
         title={
-          type === 'critical'
-            ? 'Critical Notification'
-            : translate('sidebarnotifications')
+           'Notification'
         }
         leftIcon={type === 'critical' ? 'Back' : 'drawer'}
         leftIconSty={{fontSize: 22, color: colors.colors.black}}
@@ -588,25 +584,6 @@ export default function UserManagement({navigation, route}) {
             </KeyboardAwareScrollView>
           </TouchableOpacity>
         </TouchableOpacity>
-      </Modal>
-      {/* End */}
-      {/* Filter Modal */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={filterModal}
-        close={() => {
-          setFilterModal(!filterModal);
-        }}
-        onRequestClose={() => {
-          setFilterModal(!filterModal);
-        }}>
-        <NotificationFilter
-          setVisible={setFilterModal}
-          selectedFilter={filterData}
-          visible={filterModal}
-          submitFilter={data => setFilterData(data)}
-        />
       </Modal>
       {/* End */}
     </View>

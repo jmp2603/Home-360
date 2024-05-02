@@ -1,10 +1,10 @@
-import DeviceInfo from 'react-native-device-info';
-import {BaseColors, FontFamily} from '../../config/theme';
-import {StyleSheet} from 'react-native';
+import DeviceInfo from "react-native-device-info";
+import { BaseColors, FontFamily } from "../../config/theme";
+import { StyleSheet } from "react-native";
 
 const isTabletDevice = DeviceInfo.isTablet();
 
-export const createStyles = colors => {
+export const createStyles = (colors) => {
   return StyleSheet.create({
     round: {
       borderTopStartRadius: 100,
@@ -16,12 +16,12 @@ export const createStyles = colors => {
       borderRadius: 3,
     },
     btnContainer: {
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
       shadowColor: BaseColors.black,
       // paddingVertical: 10,
       // paddinHorizontal:10,
-      width: '100%',
+      width: "100%",
       padding: 7.5,
     },
 
@@ -32,13 +32,13 @@ export const createStyles = colors => {
       borderColor: colors.colors.white,
     },
     btnText: {
-      fontSize: isTabletDevice ? 18 : 15,
-      textAlign: 'center',
-      textTransform: 'capitalize',
-      fontWeight: '700',
+      fontSize: 15,
+      textAlign: "center",
+      textTransform: "capitalize",
+      fontWeight: "700",
     },
     shadow: {
-      shadowColor: '#000',
+      shadowColor: "#000",
       shadowOffset: {
         width: 0,
         height: 4,
