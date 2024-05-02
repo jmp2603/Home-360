@@ -2,7 +2,6 @@ import {fileTypes} from '../config/staticData';
 import AuthAction from '../redux/reducers/auth/actions';
 import OfflineAuth from '../redux/reducers/offline/actions';
 import {store} from '../redux/store/configureStore';
-import Toast from 'react-native-simple-toast';
 import {
   has,
   isArray,
@@ -11,74 +10,20 @@ import {
   isObject,
   isUndefined,
   omitBy,
-  size,
 } from 'lodash';
 import {Platform, processColor} from 'react-native';
-import ReactNativeBlobUtil from 'react-native-blob-util';
 import offlineAuth from '../redux/reducers/offline/actions';
-import {MMKV} from 'react-native-mmkv';
-import {getApiData} from '../utils/apiHelper';
-import options from '../screens/Syncronize/options';
-import CryptoJS from 'react-native-crypto-js';
-import BaseSetting from '../config/setting';
 
-const mmkv = new MMKV();
 
 const IOS = Platform.OS === 'ios';
 const {setIsSyncData} = offlineAuth;
 export const logout = () => {
   store.dispatch(AuthAction.logOut());
   store.dispatch(OfflineAuth.clearData());
-  mmkv.clearAll(); // Clear all Data from mmkv storage..
   // store.dispatch(NotificationAction.clearData());
   // store.dispatch(FavouriteAction.clearData());
 };
 
-const CryptoJSAesJson = {
-  stringify: function (cipherParams) {
-    var j = {ct: cipherParams.ciphertext.toString(CryptoJS.enc.Base64)};
-    if (cipherParams.iv) j.iv = cipherParams.iv.toString();
-    if (cipherParams.salt) j.s = cipherParams.salt.toString();
-    return JSON.stringify(j);
-  },
-  parse: function (jsonStr) {
-    var j = JSON.parse(jsonStr);
-    var cipherParams = CryptoJS.lib.CipherParams.create({
-      ciphertext: CryptoJS.enc.Base64.parse(j.ct),
-    });
-    if (j.iv) cipherParams.iv = CryptoJS.enc.Hex.parse(j.iv);
-    if (j.s) cipherParams.salt = CryptoJS.enc.Hex.parse(j.s);
-    return cipherParams;
-  },
-};
-
-// For encrypt data we create below function
-export const encryptRequestData = request => {
-  try {
-    const cipherText = CryptoJS.AES.encrypt(request, BaseSetting.passphrase, {
-      format: CryptoJSAesJson,
-    });
-    return JSON.parse(cipherText.toString());
-  } catch (error) {
-    console.error('Encryption error:', error);
-    return null;
-  }
-};
-// End
-
-// For decrypt data we create a below function
-export const decryptResponseData = response => {
-  let bytes;
-  try {
-    bytes = CryptoJS.AES.decrypt(response, BaseSetting.passphrase, {
-      format: CryptoJSAesJson,
-    }).toString(CryptoJS.enc.Utf8);
-    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-    return JSON.parse(decrypted);
-  } catch (err) {
-    console.log('UNABLE TO DECIPHER', err);
-  }
-};
 export function chatFilesVal(type, size) {
   const fTypes = isObject(fileTypes) ? fileTypes : {};
   if (has(fTypes, type)) {
@@ -199,50 +144,6 @@ export function Duration(time) {
 }
 // End
 
-// Common Func for Download PDF
-export const downloadFile = async (fileUrl, formName) => {
-  const a = formName;
-  try {
-    const {config, fs} = ReactNativeBlobUtil;
-    const {DownloadDir, DocumentDir} = fs.dirs;
-    const saveFilePath = IOS ? DocumentDir : DownloadDir;
-    let options = {};
-    if (IOS) {
-      options = {
-        fileCache: true,
-        path: saveFilePath + `/${a}`,
-        notification: true,
-      };
-    } else {
-      options = {
-        fileCache: true,
-        timeout: 1000 * 15,
-        addAndroidDownloads: {
-          useDownloadManager: true,
-          notification: true,
-          path: `/storage/emulated/0/Download/${a}`, // path for direct show into Download folder
-          description: 'downloading file...',
-        },
-      };
-    }
-    config(options)
-      .fetch('GET', fileUrl)
-      .then(res => {
-        if (IOS) {
-          ReactNativeBlobUtil.ios.openDocument(res.path());
-        }
-        if (!IOS) {
-          Toast.show(`${'File downloaded'}`);
-        }
-      })
-      .catch(e => {
-        Toast.show('C2Something went wrong!');
-      });
-  } catch (e) {
-    Toast.show('C3Something went wrong!');
-  }
-};
-// End
 
 export const urlParams = async data => {
   const apiData = omitBy(data, v => isUndefined(v) || isNull(v));
@@ -293,133 +194,4 @@ export const formatNumber = number => {
     return number.toString();
   }
 };
-export function getOfflineData(roleKey) {
-  const reduxArr =
-    mmkv.contains('offlineData') && JSON.parse(mmkv.getString('offlineData'));
-  // const reduxArr =
-  //   // roleKey === 'vessels_management'
-  //   //   ? state.vesselOfflineData
-  //   //   :
-  //   state.offlineData ? state.offlineData : [];
-  if (isArray(reduxArr)) {
-    // create below function to check for permission
-    const authData = reduxArr.filter(item => item.role === roleKey);
-    return authData;
-    // End
-  }
-}
 
-// Function for update offline redux
-
-export const OnlineDataSyncinRedux = (
-  parentKey,
-  childKey,
-  obj,
-  type,
-  dispatch,
-) => {
-  const offlineData =
-    mmkv.contains('offlineData') && JSON.parse(mmkv.getString('offlineData'));
-  const nData = [...offlineData];
-  const parentIndex = nData.findIndex(li => li.role === parentKey); // Module Index
-  const childIndex = nData[parentIndex].moduleResult.findIndex(
-    ex => ex.name === childKey,
-  );
-  if (type === 'create') {
-    const sampleArr = nData[parentIndex].moduleResult[childIndex].data.data;
-    isEmpty(sampleArr) ? sampleArr.push(obj) : sampleArr.splice(0, 0, obj);
-    nData[parentIndex].moduleResult[childIndex].data.data = sampleArr;
-    mmkv.set('offlineData', JSON.stringify(nData));
-  } else if (type === 'delete') {
-    const sampleArr = nData[parentIndex].moduleResult[childIndex].data.data;
-
-    const index = sampleArr.findIndex(li => li.id === obj.id);
-    if (index > -1) {
-      sampleArr.splice(index, 1);
-      nData[parentIndex].moduleResult[childIndex].data.data = sampleArr;
-      mmkv.set('offlineData', JSON.stringify(nData));
-    }
-  } else if (type === 'edit') {
-    const sampleArr = nData[parentIndex].moduleResult[childIndex].data.data;
-    const index = sampleArr.findIndex(li => li.id === obj.id);
-    if (index > -1) {
-      sampleArr[index] = obj;
-    }
-    nData[parentIndex].moduleResult[childIndex].data.data = sampleArr;
-    mmkv.set('offlineData', JSON.stringify(nData));
-  }
-  // Sync data make false.
-  setTimeout(() => {
-    dispatch(setIsSyncData(false));
-  }, 1000);
-};
-
-/**
- * Function for get array value of list from redux.
- * @function getOnlineReduxSync
- * @param {String} moduleKey - Module Key of Redux Array.
- * @param {String} childKey - In module Child key for get data .
- * @returns
- */
-export const getOnlineReduxSync = (moduleKey, childKey) => {
-  const reduxArr = JSON.parse(mmkv.getString('offlineData'));
-  const oldRedux = reduxArr ? [...reduxArr] : [];
-  const arr = getOfflineData(moduleKey);
-  const finalArr = arr && arr[0]?.moduleResult;
-  if (!isEmpty(finalArr)) {
-    const moduleIndex =
-      finalArr && oldRedux.findIndex(li => li.role === moduleKey); // Module Index
-    const childIndex =
-      finalArr && finalArr.findIndex(ex => ex.name === childKey); // In Module List Index
-    let sampleArr = [];
-    if (moduleIndex > -1 && childIndex > -1) {
-      sampleArr =
-        (finalArr &&
-          oldRedux[moduleIndex].moduleResult[childIndex].data.data) ||
-        [];
-    }
-    return sampleArr;
-  } else {
-    return [];
-  }
-};
-
-// Function for Synced All data in Redux...
-export const allDataSync = async (role, dispatch) => {
-  const offlineData = JSON.parse(mmkv.getString('offlineData'));
-  const nData = [...offlineData];
-  const parentIndex = nData.findIndex(li => li.role === role); // Module Index
-  let moduleData = [];
-  if (parentIndex > -1) {
-    moduleData = {
-      title: nData[parentIndex].title,
-      key: nData[parentIndex].key,
-      role: nData[parentIndex].role,
-      moduleResult: [],
-    };
-  }
-  const menuDetail = options.find(li => li.role === role);
-  if (menuDetail?.api_url) {
-    menuDetail?.api_url.map(async li => {
-      let method = 'GET';
-      try {
-        const res = await getApiData(li.url, method);
-        if (res.status) {
-          const subModuleData = {
-            name: li.name,
-            url: li.url,
-            data: res,
-          };
-          moduleData.moduleResult.push(subModuleData);
-        }
-        if (parentIndex > -1) {
-          nData[parentIndex] = moduleData;
-          mmkv.set('offlineData', JSON.stringify(nData));
-        }
-      } catch (error) {}
-    });
-    setTimeout(() => {
-      dispatch(setIsSyncData(false));
-    }, 2000);
-  }
-};

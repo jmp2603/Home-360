@@ -3,7 +3,6 @@
 #import "AppDelegate.h"
 
 #import <React/RCTBundleURLProvider.h>
-#import <GoogleMaps/GoogleMaps.h>
 #import <Firebase.h>
 
 @implementation AppDelegate
@@ -33,7 +32,6 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  [GMSServices provideAPIKey:@"AIzaSyAXVGtgOnsnr3d-o_r1XmXDISGwcTpbaC4"];
   if ([FIRApp defaultApp] == nil) {
     [FIRApp configure];
     }

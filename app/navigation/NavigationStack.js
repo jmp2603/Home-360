@@ -13,6 +13,7 @@ import { navigationRef } from "./NavigationService";
 import Login from "../screens/Login";
 import BottomTabBar from "./BottomTabbar";
 import Home from "../screens/Home";
+import Notification from "../screens/Notification";
 
 const intitialNotificationState = {
   notification: null,
@@ -104,6 +105,11 @@ function App() {
           <Stack.Screen
             name="Home"
             component={BottomTabsNavigator}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Notification"
+            component={Notification}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

@@ -4,7 +4,8 @@ import React from "react";
 import { Dimensions, FlatList, Text, View } from "react-native";
 import { createStyles } from "./styles";
 import { useTheme } from "@react-navigation/native";
-import Button from "../../components/Button";
+import { Button, NoData } from "../../components";
+import { isEmpty } from "lodash";
 
 export default function CompletedTask(props) {
   //   const { chartState } = props;
@@ -113,18 +114,22 @@ export default function CompletedTask(props) {
 
   return (
     <View style={{ ...styles.container, backgroundColor: colors.colors.white }}>
-      <View style={{ marginHorizontal: 10 }}>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={TaskArray}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{
-            padding: 0,
-            margin: 0,
-          }}
-        />
-      </View>
+      {isEmpty(TaskArray) ? (
+        <NoData />
+      ) : (
+        <View style={{ marginHorizontal: 10 }}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={TaskArray}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={{
+              padding: 0,
+              margin: 0,
+            }}
+          />
+        </View>
+      )}
     </View>
   );
 }

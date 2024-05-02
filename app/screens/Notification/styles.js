@@ -1,21 +1,21 @@
-import {BaseColors} from '../../config/theme';
-import {Dimensions, Platform, StyleSheet} from 'react-native';
-import DeviceInfo from 'react-native-device-info';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
+import { BaseColors } from "../../config/theme";
+import { Dimensions, Platform, StyleSheet } from "react-native";
+import DeviceInfo from "react-native-device-info";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
-const IOS = Platform.OS === 'ios';
+const IOS = Platform.OS === "ios";
 const isTabletDevice = DeviceInfo.isTablet();
 
-export const createStyles = colors => {
+export const createStyles = (colors) => {
   return StyleSheet.create({
     emptydata: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+      justifyContent: "center",
+      alignItems: "center",
       marginBottom: 10,
     },
     mainView: {
-      flexDirection: 'row',
+      flexDirection: "row",
       borderBottomWidth: 1,
       borderBottomColor: BaseColors.inactive,
       marginTop: isTabletDevice ? 10 : 5,
@@ -28,23 +28,23 @@ export const createStyles = colors => {
       borderRadius: 50,
       backgroundColor: BaseColors.primary,
       // marginLeft: 10,
-      alignSelf: 'center',
+      alignSelf: "center",
       marginRight: 10,
     },
     btnContainer: {
-      backgroundColor: 'gray',
-      borderColor: 'gray',
+      backgroundColor: "gray",
+      borderColor: "gray",
       borderWidth: 1,
-      justifyContent: 'center',
+      justifyContent: "center",
       paddingHorizontal: 8,
       paddingVertical: 4,
       borderRadius: 3,
     },
     mainModalView: {
       flex: 1,
-      justifyContent: 'center',
-      alignContent: 'center',
-      backgroundColor: 'hsla(360, 20%,2%, 0.6)',
+      justifyContent: "center",
+      alignContent: "center",
+      backgroundColor: "hsla(360, 20%,2%, 0.6)",
     },
     background: {
       // marginTop: '30%',
@@ -53,21 +53,21 @@ export const createStyles = colors => {
       paddingHorizontal: 30,
       paddingVertical: 20,
       elevation: 10,
-      width: '90%',
-      justifyContent: 'center',
-      alignSelf: 'center',
+      width: "90%",
+      justifyContent: "center",
+      alignSelf: "center",
       shadowColor: BaseColors.transparent,
     },
     barStyle: {
-      alignSelf: 'center',
+      alignSelf: "center",
       backgroundColor: BaseColors.primary,
       borderRadius: 10,
       width: 75,
       height: 5,
     },
     titleView: {
-      justifyContent: 'center',
-      alignItems: 'center',
+      justifyContent: "center",
+      alignItems: "center",
     },
     marBtm15: {
       marginVertical: 10,
@@ -78,7 +78,7 @@ export const createStyles = colors => {
       color: BaseColors.secondary,
       marginTop: 10,
       // fontFamily: 'Poppins',
-      fontWeight: 'bold',
+      fontWeight: "bold",
     },
   });
 };
