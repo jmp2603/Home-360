@@ -1,109 +1,53 @@
-import DeviceInfo from "react-native-device-info";
 import { BaseColors } from "../../config/theme";
-import { Dimensions, Platform, StyleSheet } from "react-native";
-
-const IOS = Platform.OS === "ios";
-const isTabletDevice = DeviceInfo.isTablet();
+import { Dimensions, StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   container: {
     justifyContent: "center",
     alignContent: "center",
     marginHorizontal: 15,
-    marginVertical: 60,
+    marginTop: 60,
+    alignSelf: "center",
   },
   imageView: {
     width: Dimensions.get("window").width / 1.5,
     height: 150,
     justifyContent: "center",
     alignSelf: "center",
-    // paddingTop: 50,
-    // paddingTop: 60,
-  },
-  logoSty: {
-    // width: Dimensions.get('window').width / 3.8,
-    // height: Dimensions.get("window").width / 3.6,
-    // width: 103,
-  },
-  titletxt: {
-    paddingTop: isTabletDevice ? 40 : 20,
-    textAlign: "center",
-    fontSize: isTabletDevice ? 30 : 20,
-    fontWeight: "500",
-    color: BaseColors.primary,
-  },
-  txtsty: {
-    fontSize: isTabletDevice ? 26 : 16,
-    color: BaseColors.primary,
-    fontWeight: "400",
-    // fontFamily: 'Poppins',
-    textAlign: "center",
-    paddingBottom: 20,
-  },
-  checkboxView: {
-    paddingTop: 5,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-  },
-  checkboxTxt: {
-    fontSize: isTabletDevice ? 24 : 14,
-    // fontFamily: FontFamily.regular,
-    color: BaseColors.white,
-    maxWidth: 197,
-  },
-  checkIcon: {
-    alignSelf: "flex-start",
-    fontSize: isTabletDevice ? 35 : 25,
-    color: BaseColors.white,
-  },
-
-  btnView: {
-    paddingHorizontal: 40,
-    paddingVertical: 30,
-    // width: '100%',
-    // position: 'absolute',
-    // bottom: 25,
-  },
-  clickSty: {
-    borderWidth: 1,
-    borderColor: BaseColors.red,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 4,
-    height: 18,
-    width: 18,
-  },
-  txtSty: {
-    borderBottomColor: BaseColors.white,
-    borderBottomWidth: 1,
-    color: BaseColors.white,
-    // textAlign: 'center',
-    // backgroundColor: 'pink',
-  },
-  txtView: {
-    flexDirection: "row",
-  },
-  gogleiconSty: {
-    height: 40,
-    width: 40,
-    alignSelf: "center",
   },
   notetxtSty: {
-    fontSize: isTabletDevice ? 20 : 12,
+    fontSize: 14,
     fontWeight: "400",
-    paddingHorizontal: 10,
-    color: "#464E5F",
-    paddingTop: isTabletDevice ? 3 : 0,
-    // fontFamily: 'Poppins',
+    color: BaseColors.primary,
   },
-  bordersty: {
-    borderBottomWidth: 0.2,
-    borderColor: BaseColors.inactive,
-    display: "flex",
-    flexDirection: "row",
-    height: 0,
-    width: 70,
-    paddingBottom: 10,
+  titleTxt: {
+    paddingBottom: 5,
+    opacity: 1,
+    fontSize: 14,
+    fontWeight: "500",
+    color: BaseColors.textColor,
+  },
+  modalView: {
+    flex: 1,
+    justifyContent: "center",
+    alignContent: "center",
+    backgroundColor: "hsla(360, 20%,2%, 0.6)",
+  },
+  background: {
+    backgroundColor: BaseColors.modalHeaderColor,
+    paddingHorizontal: 30,
+    paddingVertical: 20,
+    elevation: 10,
+    width: "90%",
+    justifyContent: "center",
+    alignSelf: "center",
+    shadowColor: BaseColors.transparent,
+    borderRadius: 10,
+  },
+  errTxt: {
+    fontSize: 13,
+    color: BaseColors.red,
+    paddingVertical: 5,
+    fontWeight: "500",
   },
 });

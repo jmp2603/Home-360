@@ -1,20 +1,20 @@
-import {isEmpty, isNull, isObject, isUndefined, omitBy} from 'lodash';
-import axios from 'axios';
-import BaseSetting from '../config/setting';
-import {store} from '../redux/store/configureStore';
+import { isEmpty, isNull, isObject, isUndefined, omitBy } from "lodash";
+import axios from "axios";
+import BaseSetting from "../config/setting";
+import { store } from "../redux/store/configureStore";
 
 export const getApiData = async (
   endpoint,
   method,
   data,
   headers,
-  isFormData = false,
+  isFormData = false
 ) => {
   const authState = store?.getState() || {};
-  const token = authState?.auth?.accessToken || '';
+  const token = authState?.auth?.accessToken || "";
   let authHeaders = {
-    'Content-Type': 'application/json',
-    authorization: token ? `Bearer ${token}` : '',
+    "Content-Type": "application/json",
+    authorization: token ? `Bearer ${token}` : "",
   };
 
   if (headers) {
@@ -22,32 +22,15 @@ export const getApiData = async (
   }
   if (isFormData) {
     authHeaders = {
-      'Content-Type': 'multipart/form-data',
-      authorization: token ? `Bearer ${token}` : '',
+      "Content-Type": "multipart/form-data",
+      authorization: token ? `Bearer ${token}` : "",
     };
     const query = new FormData();
     if (data && Object.keys(data).length > 0) {
-      Object.keys(data).map(k => query.append(k, data[k]));
+      Object.keys(data).map((k) => query.append(k, data[k]));
     }
     data = query;
   }
-
-  // const apiData = !isFormData
-  //   ? omitBy(data, v => isUndefined(v) || isNull(v))
-  //   : data;
-  // const dataLength = apiData && !isFormData ? Object.keys(apiData).length : 0;
-  // let querry = '';
-  // let qs = '';
-  // if (method === 'GET' && dataLength > 0) {
-  //   Object.keys(apiData).forEach((key, i) => {
-  //     const sep = i === dataLength - 1 ? '' : '&';
-  //     querry += `${encodeURIComponent(key)}=${encodeURIComponent(
-  //       apiData[key],
-  //     )}${sep}`;
-  //   });
-  //   qs = `?${querry}`;
-  // }
-
   try {
     const obj = {
       method: method,
@@ -57,35 +40,29 @@ export const getApiData = async (
       data: !isEmpty(data) ? data : undefined,
     };
 
-    // if (isFormData) {
-    //   obj.data = query || {};
-    // } else if (data && !isEmpty(data)) {
-    //   obj.data = data || {};
-    // }
     let response = await axios(obj);
-    // console.log(`Success of ${endpoint}:`, JSON.stringify(response.data));
-    if (response?.data?.message === 'Unauthorized') {
+    if (response?.data?.message === "Unauthorized") {
       // logout();
       return;
     }
     return response.data;
   } catch (error) {
     if (error.response) {
-      if (error?.response?.data?.message === 'Unauthorized') {
+      if (error?.response?.data?.message === "Unauthorized") {
         // logout();
         return;
       }
       return (
         error?.response?.data || {
           success: false,
-          message: 'Something went wrong',
+          message: "Something went wrong",
         }
       );
     } else {
       console.error(error);
       return {
         success: false,
-        message: error.message || 'Something went wrong',
+        message: error.message || "Something went wrong",
       };
     }
   }
@@ -96,22 +73,22 @@ export function getApiDataProgress(
   method,
   data,
   onProgress,
-  customUrl = '',
+  customUrl = ""
 ) {
   const authState = store?.getState() || {};
-  const token = authState?.auth?.accessToken || '';
+  const token = authState?.auth?.accessToken || "";
 
   const headers = {
-    'Content-Type': 'multipart/form-data',
-    authorization: token ? `Bearer ${token}` : '',
+    "Content-Type": "multipart/form-data",
+    authorization: token ? `Bearer ${token}` : "",
   };
 
   return new Promise(async (resolve, reject) => {
-    const timeZone = 'await TimeZone.getTimeZone()';
+    const timeZone = "await TimeZone.getTimeZone()";
     const url = !isEmpty(customUrl) ? customUrl : BaseSetting.api + endpoint;
     const oReq = new XMLHttpRequest();
     // const token = store ? store.getState().auth.token : '';
-    oReq.upload.addEventListener('progress', event => {
+    oReq.upload.addEventListener("progress", (event) => {
       if (event.lengthComputable) {
         const progress = (event.loaded * 100) / event.total;
         if (onProgress) {
@@ -124,24 +101,24 @@ export function getApiDataProgress(
 
     const query = new FormData();
     if (data && Object.keys(data).length > 0) {
-      Object.keys(data).map(k => query.append(k, data[k]));
+      Object.keys(data).map((k) => query.append(k, data[k]));
     }
     const params = query;
     oReq.open(method, url, true);
-    oReq.setRequestHeader('Content-Type', 'multipart/form-data');
+    oReq.setRequestHeader("Content-Type", "multipart/form-data");
     // oReq.setRequestHeader('X-localization', language);
     if (isObject(headers)) {
-      Object.keys(headers).map(hK => {
+      Object.keys(headers).map((hK) => {
         oReq.setRequestHeader(hK, headers[hK]);
       });
     }
 
     if (token) {
-      oReq.setRequestHeader('Authorization', `Bearer ${token}`);
+      oReq.setRequestHeader("Authorization", `Bearer ${token}`);
     }
 
     if (timeZone) {
-      oReq.setRequestHeader('timezone', timeZone || '');
+      oReq.setRequestHeader("timezone", timeZone || "");
     }
 
     oReq.send(params);
@@ -150,7 +127,7 @@ export function getApiDataProgress(
         try {
           // console.log('Response Text => ', oReq.responseText);
           const resposeJson = oReq.responseText;
-          if (resposeJson && resposeJson.message === 'Unauthorized') {
+          if (resposeJson && resposeJson.message === "Unauthorized") {
             // logout();
           } else {
             resolve(resposeJson);
