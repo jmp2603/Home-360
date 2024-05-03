@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* oceanautTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* oceanautTests.m */; };
-		0C80B921A6F3F58F76C31292 /* libPods-oceanaut.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-oceanaut.a */; };
+		00E356F31AD99517003FC87E /* HomeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* HomeTests.m */; };
+		0C80B921A6F3F58F76C31292 /* libPods-Home.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-Home.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -36,7 +36,7 @@
 		5B836D522B15BEBD001C1A94 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B836D512B15BEBD001C1A94 /* GoogleService-Info.plist */; };
 		5BB3357F2B0DC4B80005D3A5 /* Ionicons.ttf in Sources */ = {isa = PBXBuildFile; fileRef = 5BB335242B0DC4B80005D3A5 /* Ionicons.ttf */; };
 		5BBEF2842B0C8ADF003E3484 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5BBEF2832B0C8ADE003E3484 /* AntDesign.ttf */; };
-		7699B88040F8A987B510C191 /* libPods-oceanaut-oceanautTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-oceanaut-oceanautTests.a */; };
+		7699B88040F8A987B510C191 /* libPods-Home-HomeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-Home-HomeTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -46,7 +46,7 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = oceanaut;
+			remoteInfo = "Home";
 		};
 		5B1816B02AFB9348005BA941 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -186,14 +186,14 @@
 			containerPortal = 5B6620002AFA6CEF00D696FE /* Pods.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 5B5F7E3783889DC5EB89A61695CB57A7;
-			remoteInfo = "Pods-oceanaut";
+			remoteInfo = "Pods-Home";
 		};
 		5B6620832AFA6CEF00D696FE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5B6620002AFA6CEF00D696FE /* Pods.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 5E7D64BF1D44937B57689A3A62A19590;
-			remoteInfo = "Pods-oceanaut-oceanautTests";
+			remoteInfo = "Pods-Home-HomeTests";
 		};
 		5B6620852AFA6CEF00D696FE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -611,18 +611,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00E356EE1AD99517003FC87E /* oceanautTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = oceanautTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* HomeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "HomeTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* oceanautTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = oceanautTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* oceanaut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = oceanaut.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = oceanaut/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = oceanaut/AppDelegate.mm; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = oceanaut/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = oceanaut/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = oceanaut/main.m; sourceTree = "<group>"; };
-		19F6CBCC0A4E27FBF8BF4A61 /* libPods-oceanaut-oceanautTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-oceanaut-oceanautTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B4392A12AC88292D35C810B /* Pods-oceanaut.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-oceanaut.debug.xcconfig"; path = "Target Support Files/Pods-oceanaut/Pods-oceanaut.debug.xcconfig"; sourceTree = "<group>"; };
-		5709B34CF0A7D63546082F79 /* Pods-oceanaut.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-oceanaut.release.xcconfig"; path = "Target Support Files/Pods-oceanaut/Pods-oceanaut.release.xcconfig"; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* HomeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "HomeTests.m"; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* Home.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Home.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = "Home/AppDelegate.h"; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = "Home/AppDelegate.mm"; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "Home/Images.xcassets"; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Home/Info.plist"; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "Home/main.m"; sourceTree = "<group>"; };
+		19F6CBCC0A4E27FBF8BF4A61 /* libPods-Home-HomeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Home-HomeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B4392A12AC88292D35C810B /* Pods-Home.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Home.debug.xcconfig"; path = "Target Support Files/Pods-Home/Pods-Home.debug.xcconfig"; sourceTree = "<group>"; };
+		5709B34CF0A7D63546082F79 /* Pods-Home.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Home.release.xcconfig"; path = "Target Support Files/Pods-Home/Pods-Home.release.xcconfig"; sourceTree = "<group>"; };
 		5B1180BA2B0C839000EF5E21 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
 		5B6620002AFA6CEF00D696FE /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = ../Pods/Pods.xcodeproj; sourceTree = "<group>"; };
 		5B6621042AFA6DE700D696FE /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
@@ -635,13 +635,13 @@
 		5B66210B2AFA6DE800D696FE /* FishyIcons.woff */ = {isa = PBXFileReference; lastKnownFileType = file; path = FishyIcons.woff; sourceTree = "<group>"; };
 		5B66210C2AFA6DE800D696FE /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
 		5B66210D2AFA6DE800D696FE /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
-		5B7EB9410499542E8C5724F5 /* Pods-oceanaut-oceanautTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-oceanaut-oceanautTests.debug.xcconfig"; path = "Target Support Files/Pods-oceanaut-oceanautTests/Pods-oceanaut-oceanautTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5B7EB9410499542E8C5724F5 /* Pods-Home-HomeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Home-HomeTests.debug.xcconfig"; path = "Target Support Files/Pods-Home-HomeTests/Pods-Home-HomeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5B836D512B15BEBD001C1A94 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5BB335242B0DC4B80005D3A5 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Ionicons.ttf; path = ../Ionicons.ttf; sourceTree = "<group>"; };
 		5BBEF2832B0C8ADE003E3484 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = AntDesign.ttf; path = ../AntDesign.ttf; sourceTree = "<group>"; };
-		5DCACB8F33CDC322A6C60F78 /* libPods-oceanaut.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-oceanaut.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = oceanaut/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		89C6BE57DB24E9ADA2F236DE /* Pods-oceanaut-oceanautTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-oceanaut-oceanautTests.release.xcconfig"; path = "Target Support Files/Pods-oceanaut-oceanautTests/Pods-oceanaut-oceanautTests.release.xcconfig"; sourceTree = "<group>"; };
+		5DCACB8F33CDC322A6C60F78 /* libPods-Home.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Home.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = "Home/LaunchScreen.storyboard"; sourceTree = "<group>"; };
+		89C6BE57DB24E9ADA2F236DE /* Pods-Home-HomeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Home-HomeTests.release.xcconfig"; path = "Target Support Files/Pods-Home-HomeTests/Pods-Home-HomeTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -650,7 +650,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7699B88040F8A987B510C191 /* libPods-oceanaut-oceanautTests.a in Frameworks */,
+				7699B88040F8A987B510C191 /* libPods-Home-HomeTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -658,21 +658,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C80B921A6F3F58F76C31292 /* libPods-oceanaut.a in Frameworks */,
+				0C80B921A6F3F58F76C31292 /* libPods-Home.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* oceanautTests */ = {
+		00E356EF1AD99517003FC87E /* HomeTests */ = {
 			isa = PBXGroup;
 			children = (
 				5B6620002AFA6CEF00D696FE /* Pods.xcodeproj */,
-				00E356F21AD99517003FC87E /* oceanautTests.m */,
+				00E356F21AD99517003FC87E /* HomeTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = oceanautTests;
+			path = "HomeTests";
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -683,7 +683,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* oceanaut */ = {
+		13B07FAE1A68108700A75B9A /* Home */ = {
 			isa = PBXGroup;
 			children = (
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -693,15 +693,15 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = oceanaut;
+			name = "Home";
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				5DCACB8F33CDC322A6C60F78 /* libPods-oceanaut.a */,
-				19F6CBCC0A4E27FBF8BF4A61 /* libPods-oceanaut-oceanautTests.a */,
+				5DCACB8F33CDC322A6C60F78 /* libPods-Home.a */,
+				19F6CBCC0A4E27FBF8BF4A61 /* libPods-Home-HomeTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -729,8 +729,8 @@
 				5B6620802AFA6CEF00D696FE /* libwebp */,
 				5B71DD6C2B15B79400A1C9FC /* lottie-ios */,
 				5B71DD6E2B15B79400A1C9FC /* lottie-react-native */,
-				5B6620822AFA6CEF00D696FE /* Pods-oceanaut */,
-				5B6620842AFA6CEF00D696FE /* Pods-oceanaut-oceanautTests */,
+				5B6620822AFA6CEF00D696FE /* Pods-Home */,
+				5B6620842AFA6CEF00D696FE /* Pods-Home-HomeTests */,
 				5B6620862AFA6CEF00D696FE /* RCT-Folly */,
 				5B6620882AFA6CEF00D696FE /* RCTTypeSafety */,
 				5B66208A2AFA6CEF00D696FE /* React-Codegen */,
@@ -825,9 +825,9 @@
 			children = (
 				5B836D512B15BEBD001C1A94 /* GoogleService-Info.plist */,
 				5B6620F72AFA6CF200D696FE /* fonts */,
-				13B07FAE1A68108700A75B9A /* oceanaut */,
+				13B07FAE1A68108700A75B9A /* Home */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* oceanautTests */,
+				00E356EF1AD99517003FC87E /* HomeTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -840,8 +840,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* oceanaut.app */,
-				00E356EE1AD99517003FC87E /* oceanautTests.xctest */,
+				13B07F961A680F5B00A75B9A /* Home.app */,
+				00E356EE1AD99517003FC87E /* HomeTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -849,10 +849,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3B4392A12AC88292D35C810B /* Pods-oceanaut.debug.xcconfig */,
-				5709B34CF0A7D63546082F79 /* Pods-oceanaut.release.xcconfig */,
-				5B7EB9410499542E8C5724F5 /* Pods-oceanaut-oceanautTests.debug.xcconfig */,
-				89C6BE57DB24E9ADA2F236DE /* Pods-oceanaut-oceanautTests.release.xcconfig */,
+				3B4392A12AC88292D35C810B /* Pods-Home.debug.xcconfig */,
+				5709B34CF0A7D63546082F79 /* Pods-Home.release.xcconfig */,
+				5B7EB9410499542E8C5724F5 /* Pods-Home-HomeTests.debug.xcconfig */,
+				89C6BE57DB24E9ADA2F236DE /* Pods-Home-HomeTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -860,9 +860,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* oceanautTests */ = {
+		00E356ED1AD99517003FC87E /* HomeTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "oceanautTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "HomeTests" */;
 			buildPhases = (
 				A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -876,14 +876,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = oceanautTests;
-			productName = oceanautTests;
-			productReference = 00E356EE1AD99517003FC87E /* oceanautTests.xctest */;
+			name = "HomeTests";
+			productname = "HomeTests";
+			productReference = 00E356EE1AD99517003FC87E /* HomeTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* oceanaut */ = {
+		13B07F861A680F5B00A75B9A /* Home */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "oceanaut" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Home" */;
 			buildPhases = (
 				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -899,9 +899,9 @@
 			);
 			dependencies = (
 			);
-			name = oceanaut;
-			productName = oceanaut;
-			productReference = 13B07F961A680F5B00A75B9A /* oceanaut.app */;
+			name = "Home";
+			productName = "Home";
+			productReference = 13B07F961A680F5B00A75B9A /* Home.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -921,7 +921,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "oceanaut" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Home" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -940,8 +940,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* oceanaut */,
-				00E356ED1AD99517003FC87E /* oceanautTests */,
+				13B07F861A680F5B00A75B9A /* Home */,
+				00E356ED1AD99517003FC87E /* HomeTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1099,19 +1099,19 @@
 			remoteRef = 5B66207F2AFA6CEF00D696FE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		5B6620822AFA6CEF00D696FE /* Pods-oceanaut */ = {
+		5B6620822AFA6CEF00D696FE /* Pods-Home */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			name = "Pods-oceanaut";
-			path = "libPods-oceanaut.a";
+			name = "Pods-Home";
+			path = "libPods-Home.a";
 			remoteRef = 5B6620812AFA6CEF00D696FE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		5B6620842AFA6CEF00D696FE /* Pods-oceanaut-oceanautTests */ = {
+		5B6620842AFA6CEF00D696FE /* Pods-Home-HomeTests */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			name = "Pods-oceanaut-oceanautTests";
-			path = "libPods-oceanaut-oceanautTests.a";
+			name = "Pods-Home-HomeTests";
+			path = "libPods-Home-HomeTests.a";
 			remoteRef = 5B6620832AFA6CEF00D696FE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -1644,15 +1644,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-oceanaut/Pods-oceanaut-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Home/Pods-Home-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-oceanaut/Pods-oceanaut-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Home/Pods-Home-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-oceanaut/Pods-oceanaut-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Home/Pods-Home-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		5FA9BA7CEF70B384C1061C32 /* [CP-User] [RNFB] Core Configuration */ = {
@@ -1683,7 +1683,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-oceanaut-oceanautTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Home-HomeTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1705,7 +1705,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-oceanaut-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Home-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1718,15 +1718,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-oceanaut-oceanautTests/Pods-oceanaut-oceanautTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Home-HomeTests/Pods-Home-HomeTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-oceanaut-oceanautTests/Pods-oceanaut-oceanautTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Home-HomeTests/Pods-Home-HomeTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-oceanaut-oceanautTests/Pods-oceanaut-oceanautTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Home-HomeTests/Pods-Home-HomeTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
@@ -1735,15 +1735,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-oceanaut/Pods-oceanaut-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Home/Pods-Home-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-oceanaut/Pods-oceanaut-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Home/Pods-Home-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-oceanaut/Pods-oceanaut-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Home/Pods-Home-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
@@ -1752,15 +1752,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-oceanaut-oceanautTests/Pods-oceanaut-oceanautTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Home-HomeTests/Pods-Home-HomeTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-oceanaut-oceanautTests/Pods-oceanaut-oceanautTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Home-HomeTests/Pods-Home-HomeTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-oceanaut-oceanautTests/Pods-oceanaut-oceanautTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Home-HomeTests/Pods-Home-HomeTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -1789,7 +1789,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* oceanautTests.m in Sources */,
+				00E356F31AD99517003FC87E /* HomeTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1818,7 +1818,7 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* oceanaut */;
+			target = 13B07F861A680F5B00A75B9A /* Home */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1826,14 +1826,14 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-oceanaut-oceanautTests.debug.xcconfig */;
+			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-Home-HomeTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = oceanautTests/Info.plist;
+				INFOPLIST_FILE = "HomeTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1845,19 +1845,19 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.home360";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/oceanaut.app/oceanaut";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Home.app/Home";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-oceanaut-oceanautTests.release.xcconfig */;
+			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-Home-HomeTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = oceanautTests/Info.plist;
+				INFOPLIST_FILE = "HomeTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1869,15 +1869,15 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.home360";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/oceanaut.app/oceanaut";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Home.app/Home";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-oceanaut.debug.xcconfig */;
+			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-Home.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1886,7 +1886,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = XW5GUWHQP6;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = oceanaut/Info.plist;
+				INFOPLIST_FILE = "Home/Info.plist";
+             INFOPLIST_KEY_CFBundleDisplayName = "Home";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1897,8 +1898,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.oceanaut;
-				PRODUCT_NAME = oceanaut;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.home360";
+				PRODUCT_NAME = "Home";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1912,7 +1913,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-oceanaut.release.xcconfig */;
+			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-Home.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1920,7 +1921,8 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = XW5GUWHQP6;
-				INFOPLIST_FILE = oceanaut/Info.plist;
+				INFOPLIST_FILE = "Home/Info.plist";
+             INFOPLIST_KEY_CFBundleDisplayName = "Home";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1931,8 +1933,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.oceanaut;
-				PRODUCT_NAME = oceanaut;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.home360";
+				PRODUCT_NAME = "Home";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -2100,7 +2102,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "oceanautTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "HomeTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -2109,7 +2111,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "oceanaut" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Home" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -2118,7 +2120,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "oceanaut" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Home" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

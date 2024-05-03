@@ -78,9 +78,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.oceanaut"
+    namespace "com.home360"
     defaultConfig {
-        applicationId "com.oceanaut"
+        applicationId "com.home360"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

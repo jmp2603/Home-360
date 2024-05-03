@@ -1,4 +1,4 @@
-package com.oceanaut;
+package com.home360;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
