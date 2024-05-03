@@ -1,50 +1,107 @@
 /* eslint-disable react-native/no-inline-styles */
 import { BaseColors } from "../../config/theme";
-import React from "react";
-import { FlatList, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, Modal, Text, View } from "react-native";
 import { createStyles } from "./styles";
 import { useTheme } from "@react-navigation/native";
 import { Button, NoData } from "../../components";
-import { isEmpty } from "lodash";
+import { flattenDeep, isEmpty } from "lodash";
+import Toast from "react-native-simple-toast";
+import { urlParams } from "../../utils/CommonFunc";
+import BaseSetting from "../../config/setting";
+import { getApiData } from "../../utils/apiHelper";
+import moment from "moment";
+import CreateTask from "./CompleteTask";
 
 export default function TaskCard(props) {
-  //   const { chartState } = props;
+  const { type, navigation } = props;
   const colors = useTheme();
   const styles = createStyles(colors);
+  const [taskList, setTaskList] = useState([]);
+  const [nextPage, setNextPage] = useState(false);
+  const [nextLoading, setNextLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [screenLoader, setScreenLoader] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [selectItem, setSelectItem] = useState({});
 
-  const TaskArray = [
-    {
-      task: "Clean the house",
-      description:
-        "Sweep and mop the floors, dust all surfaces, and organize clutter.",
-      date: "02/05/2024",
-    },
-    {
-      task: "Complete homework assignments",
-      description:
-        "Review the assignments, work on them diligently, and double-check for accuracy.",
-      date: "02/05/2024",
-    },
-    {
-      task: "Exercise regularly",
-      description:
-        "Engage in physical activity such as jogging, cycling, or yoga for at least 30 minutes a day.",
-      date: "02/05/2024",
-    },
-    {
-      task: "Read a book",
-      description:
-        "Select a book of interest, allocate some time daily for reading, and immerse yourself in the content.",
-      date: "02/05/2024",
-    },
-    {
-      task: "Prepare healthy meals",
-      description:
-        "Plan balanced meals with plenty of fruits, vegetables, lean proteins, and whole grains, and avoid processed foods.",
-      date: "02/05/2024",
-    },
-  ];
+  /**
+   * Function for Get Task List...
+   * @function getTaskList
+   * @param {Number} p - Set for Page Number
+   * @param {String} ty - Type for loader.
+   */
+  const getTaskList = async (p = 1, ty) => {
+    setScreenLoader(ty == "onEndreached" ? false : true);
+    const data = { type: type, page: p };
+    const string = urlParams(data);
+    const url = BaseSetting.endpoints.taskList + string?._j;
+    try {
+      const resp = await getApiData(url, "GET");
+      if (resp?.status) {
+        let tempPArr = resp?.data;
+        if (p > 1) {
+          tempPArr = flattenDeep([taskList, tempPArr]);
+        }
+        setPage(Number(resp?.pagination?.currentPage));
+        setTaskList(tempPArr);
+        if (resp?.pagination?.isMore) {
+          setNextPage(true);
+        } else {
+          setNextPage(false);
+        }
+        setNextLoading(false);
+      } else {
+        setTaskList([]);
+      }
+      setScreenLoader(false);
+    } catch (error) {
+      setTaskList([]);
+      setScreenLoader(false);
+      Toast.show("Something went wrong");
+    }
+  };
+  const onEndReached = () => {
+    if (nextPage && !nextLoading) {
+      setNextLoading(true);
+      const tempPage = page + 1;
+      setPage(tempPage);
+      getTaskList(tempPage, "onEndreached");
+    }
+  };
+  const renderListFooter = () => {
+    if (!nextPage) {
+      return (
+        <Text
+          style={{
+            width: "100%",
+            textAlign: "center",
+            textAlignVertical: "center",
+            height: 20,
+          }}
+        >
+          {/* No more Data */}
+        </Text>
+      );
+    }
+    if (nextLoading) {
+      return (
+        <ActivityIndicator style={{ color: BaseColors.primary, height: 60 }} />
+      );
+    }
+    return null;
+  };
 
+  useEffect(() => {
+    getTaskList(1);
+  }, [type]);
+
+  /**
+   * Function for Render Task list..
+   * @function renderItem
+   * @param {Object} param0 - This is Map of object Array
+   * @returns
+   */
   const renderItem = ({ item, index }) => {
     return (
       <View style={styles.cardSty}>
@@ -62,7 +119,7 @@ export default function TaskCard(props) {
               paddingVertical: 3,
             }}
           >
-            {item.task}
+            {item?.title}
           </Text>
           <Text
             style={{
@@ -71,7 +128,7 @@ export default function TaskCard(props) {
               paddingVertical: 3,
             }}
           >
-            {item.description}
+            {item?.description}
           </Text>
           <Text
             style={{
@@ -80,57 +137,120 @@ export default function TaskCard(props) {
               fontSize: 14,
             }}
           >
-            {item.date}
+            {item?.created_at
+              ? moment.unix(item.created_at).format("DD/MM/YYYY")
+              : "-"}
           </Text>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-around" }}
-          >
-            <Button
-              txtSty={{ fontSize: 14 }}
-              style={{
-                borderColor: BaseColors.inactive,
-              }}
-              containerStyle={{
-                backgroundColor: "green",
-              }}
+          {type === 0 ? (
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-around" }}
             >
-              Completed
-            </Button>
-            <Button
-              txtSty={{ fontSize: 14 }}
-              style={{
-                borderColor: BaseColors.inactive,
-              }}
-              containerStyle={{
-                backgroundColor: BaseColors.primary,
-              }}
-            >
-              View Details
-            </Button>
-          </View>
+              {type === 0 && (
+                <Button
+                  onBtnClick={() => handleComplete(item)}
+                  txtSty={{ fontSize: 14 }}
+                  style={{
+                    borderColor: BaseColors.inactive,
+                  }}
+                  containerStyle={{
+                    backgroundColor: "green",
+                  }}
+                >
+                  Completed
+                </Button>
+              )}
+              <Button
+                onBtnClick={() =>
+                  navigation.navigate("TaskDetails", { detail: item })
+                }
+                txtSty={{ fontSize: 14 }}
+                style={{
+                  borderColor: BaseColors.inactive,
+                }}
+                containerStyle={{
+                  backgroundColor: BaseColors.primary,
+                }}
+              >
+                View Details
+              </Button>
+            </View>
+          ) : (
+            <View style={{ flexDirection: "row" }}>
+              <Button
+                onBtnClick={() =>
+                  navigation.navigate("TaskDetails", { detail: item })
+                }
+                txtSty={{ fontSize: 14 }}
+                style={{
+                  borderColor: BaseColors.inactive,
+                }}
+                containerStyle={{
+                  backgroundColor: BaseColors.primary,
+                }}
+              >
+                View Details
+              </Button>
+            </View>
+          )}
         </View>
       </View>
     );
   };
 
+  const handleComplete = (item) => {
+    setSelectItem(item);
+    setVisible(true);
+  };
+
   return (
-    <View style={{ ...styles.container, backgroundColor: colors.colors.white }}>
-      {isEmpty(TaskArray) ? (
-        <NoData />
-      ) : (
-        <View style={{ marginHorizontal: 10 }}>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={TaskArray}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={{
-              padding: 0,
-              margin: 0,
+    <>
+      <View style={{ ...styles.container, backgroundColor: BaseColors.white }}>
+        {screenLoader ? (
+          <ActivityIndicator
+            color={BaseColors.primary}
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignSelf: "center",
             }}
           />
-        </View>
-      )}
-    </View>
+        ) : isEmpty(taskList) ? (
+          <NoData />
+        ) : (
+          <View style={{ marginHorizontal: 10 }}>
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={taskList}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index.toString()}
+              onEndReached={onEndReached}
+              onendreachedthreshold={0.8}
+              ListFooterComponent={renderListFooter}
+              contentContainerStyle={{
+                padding: 0,
+                margin: 0,
+              }}
+            />
+          </View>
+        )}
+      </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={visible}
+        close={() => {
+          setVisible(false);
+        }}
+        onRequestClose={() => {
+          setVisible(false);
+        }}
+      >
+        <CreateTask
+          setVisible={setVisible}
+          visible={visible}
+          selectItem={selectItem}
+        />
+      </Modal>
+    </>
   );
 }

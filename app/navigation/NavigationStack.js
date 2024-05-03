@@ -14,6 +14,7 @@ import Login from "../screens/Login";
 import BottomTabBar from "./BottomTabbar";
 import Home from "../screens/Home";
 import Notification from "../screens/Notification";
+import ViewDetails from "../screens/ViewDetails";
 
 const intitialNotificationState = {
   notification: null,
@@ -110,6 +111,11 @@ function App() {
           <Stack.Screen
             name="Notification"
             component={Notification}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TaskDetails"
+            component={ViewDetails}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

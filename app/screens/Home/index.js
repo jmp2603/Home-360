@@ -1,12 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import CHeader from "../../components/Header";
 import { BaseColors } from "../../config/theme";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StatusBar } from "react-native";
 import { createStyles } from "./styles";
 import { useTheme } from "@react-navigation/native";
 import TaskCard from "../../components/TaskCard";
-import CompletedTask from "../../components/CompletedTask";
 
 export default function Home({ navigation, index }) {
   const colors = useTheme();
@@ -103,7 +102,12 @@ export default function Home({ navigation, index }) {
           </TouchableOpacity>
         </View>
       </View>
-      {activeButton === "pending" ? <TaskCard /> : <CompletedTask />}
+      {
+        <TaskCard
+          type={activeButton === "pending" ? 0 : 1}
+          navigation={navigation}
+        />
+      }
     </View>
   );
 }

@@ -26,17 +26,16 @@ const SplashScreen = ({ navigation }) => {
     };
   });
   const version = DeviceInfo.getVersion();
-  const Screen = Images.SplashScreenImg;
-  const svgSource = {
-    uri: `https://example.com/${Images.splashScreenImg}`,
-    cache: FastImage.cacheControl.web,
-  };
 
   useEffect(() => {
     scale.value = withTiming(1, { duration: 2000 });
     transform.value = withSpring(200, { duration: 2000 });
     setTimeout(() => {
-      navigation.replace("Login");
+      if(accessToken){
+        navigation.replace('Home')
+      } else {
+        navigation.replace("Login");
+      }
     }, 3000);
   }, []);
 

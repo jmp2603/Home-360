@@ -18,5 +18,30 @@ export const createStyles = (colors) => {
       shadowRadius: 4,
       elevation: 4,
     },
+    filterView: {
+      flex: 1,
+      justifyContent: "center",
+      alignContent: "center",
+      backgroundColor: "hsla(360, 20%,2%, 0.6)",
+    },
+    background: {
+      // marginTop: '30%',
+      backgroundColor: BaseColors.white,
+      paddingHorizontal: 30,
+      paddingVertical: 20,
+      elevation: 10,
+      width: "90%",
+      justifyContent: "center",
+      alignSelf: "center",
+      shadowColor: BaseColors.transparent,
+      borderRadius: 10,
+    },
+    optionsContainer: {
+      // width: nWidth,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      marginVertical: 5,
+    },
   });
 };

@@ -1,7 +1,6 @@
-import {fileTypes} from '../config/staticData';
-import AuthAction from '../redux/reducers/auth/actions';
-import OfflineAuth from '../redux/reducers/offline/actions';
-import {store} from '../redux/store/configureStore';
+import { fileTypes } from "../config/staticData";
+import AuthAction from "../redux/reducers/auth/actions";
+import { store } from "../redux/store/configureStore";
 import {
   has,
   isArray,
@@ -10,16 +9,12 @@ import {
   isObject,
   isUndefined,
   omitBy,
-} from 'lodash';
-import {Platform, processColor} from 'react-native';
-import offlineAuth from '../redux/reducers/offline/actions';
+} from "lodash";
+import { Platform, processColor } from "react-native";
 
-
-const IOS = Platform.OS === 'ios';
-const {setIsSyncData} = offlineAuth;
+const IOS = Platform.OS === "ios";
 export const logout = () => {
   store.dispatch(AuthAction.logOut());
-  store.dispatch(OfflineAuth.clearData());
   // store.dispatch(NotificationAction.clearData());
   // store.dispatch(FavouriteAction.clearData());
 };
@@ -50,7 +45,7 @@ export const getRandomNumber = (length, excludedArray = []) => {
   do {
     // Generate a random number within a certain range
     randomNumber = Math.floor(
-      Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1),
+      Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1)
     ); // Adjust the range as needed
   } while (excludedArray.includes(randomNumber)); // Check if it's in the excluded array
   return randomNumber;
@@ -58,16 +53,16 @@ export const getRandomNumber = (length, excludedArray = []) => {
 
 function checkPermission(list) {
   const {
-    auth: {userPermission, userData},
+    auth: { userPermission, userData },
   } = store.getState();
-  const {isAdmin} = userData ? userData : 0;
+  const { isAdmin } = userData ? userData : 0;
   if (isArray(userPermission)) {
     if (isAdmin) {
       // If admin then we can give all the access
       return 1;
     }
     // create below function to check for permission
-    const fIndex = userPermission.findIndex(item => item === list);
+    const fIndex = userPermission.findIndex((item) => item === list);
     return fIndex;
     // End
   }
@@ -81,34 +76,34 @@ export function getSlug(string, type) {
       .toString()
       .trim()
       .toLowerCase()
-      .replace('&', 'and')
-      .replace(/[&_\/\\#,+()$~%.'":*?<>{}]/g, '_')
-      .replace(/\s+/g, '_')
-      .replace(/[^\w\-]+/g, '')
-      .replace(/\-\-+/g, '_')
-      .replace(/^-+/, '')
-      .replace(/-+$/, '');
+      .replace("&", "and")
+      .replace(/[&_\/\\#,+()$~%.'":*?<>{}]/g, "_")
+      .replace(/\s+/g, "_")
+      .replace(/[^\w\-]+/g, "")
+      .replace(/\-\-+/g, "_")
+      .replace(/^-+/, "")
+      .replace(/-+$/, "");
   }
   return string
     .toString()
     .trim()
     .toLowerCase()
-    .replace('&', 'and')
-    .replace(/[&_\/\\#,+()$~%.'":*?<>{}]/g, '-')
-    .replace(/\s+/g, '-')
-    .replace(/[^\w\-]+/g, '')
-    .replace(/\-\-+/g, '-')
-    .replace(/^-+/, '')
-    .replace(/-+$/, '');
+    .replace("&", "and")
+    .replace(/[&_\/\\#,+()$~%.'":*?<>{}]/g, "-")
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\-]+/g, "")
+    .replace(/\-\-+/g, "-")
+    .replace(/^-+/, "")
+    .replace(/-+$/, "");
 }
 
 export const getRandomAlphaNumeric = (length, excludedArray = []) => {
-  const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
   let randomString;
   do {
     // Generate a random string of the specified length
-    randomString = '';
+    randomString = "";
     for (let i = 0; i < length; i++) {
       const randomIndex = Math.floor(Math.random() * characters.length);
       randomString += characters[randomIndex];
@@ -144,17 +139,16 @@ export function Duration(time) {
 }
 // End
 
-
-export const urlParams = async data => {
-  const apiData = omitBy(data, v => isUndefined(v) || isNull(v));
-  let querry = '';
-  let qs = '';
+export const urlParams = async (data) => {
+  const apiData = omitBy(data, (v) => isUndefined(v) || isNull(v));
+  let querry = "";
+  let qs = "";
   const dataLength = apiData ? Object.keys(apiData).length : 0;
   if (dataLength > 0) {
     Object.keys(apiData).forEach((key, i) => {
-      const sep = i === dataLength - 1 ? '' : '&';
+      const sep = i === dataLength - 1 ? "" : "&";
       querry += `${encodeURIComponent(key)}=${encodeURIComponent(
-        apiData[key],
+        apiData[key]
       )}${sep}`;
     });
     qs = `?${querry}`;
@@ -163,15 +157,15 @@ export const urlParams = async data => {
 };
 
 //this is for generate random light color
-export const rendomColor = async numColors => {
+export const rendomColor = async (numColors) => {
   const colors = [];
 
   function getRandomHexColor() {
-    let color = '#';
+    let color = "#";
     // Generate a color that is lighter but not fully light by selecting values between 128 and 191 for each color component (R, G, B)
     for (let i = 0; i < 3; i++) {
       const component = Math.floor(Math.random() * 118) + 128; // Limiting to values between 128 and 191
-      const hex = component.toString(16).padStart(2, '0'); // Convert to hexadecimal and ensure two-digit representation
+      const hex = component.toString(16).padStart(2, "0"); // Convert to hexadecimal and ensure two-digit representation
       color += hex;
     }
     return processColor(color);
@@ -185,13 +179,12 @@ export const rendomColor = async numColors => {
 };
 
 // Function for Number Formating...
-export const formatNumber = number => {
+export const formatNumber = (number) => {
   if (number >= 1000 && number < 1000000) {
-    return (number / 1000).toFixed(1) + 'k';
+    return (number / 1000).toFixed(1) + "k";
   } else if (number >= 1000000) {
-    return (number / 1000000).toFixed(1) + 'm';
+    return (number / 1000000).toFixed(1) + "m";
   } else {
     return number.toString();
   }
 };
-

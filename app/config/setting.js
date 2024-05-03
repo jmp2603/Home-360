@@ -6,8 +6,8 @@ const baseUrl = !devMode
   : "http://192.168.1.16/home360/v1/";
 
 const BaseSetting = {
-  name: "Oceanaut",
-  displayName: "Oceanaut",
+  name: "Home 360",
+  displayName: "Home 360",
   appVersionCode: "1",
   stripeKey: "",
   bugsnagApiKey: "",
@@ -20,6 +20,9 @@ const BaseSetting = {
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   endpoints: {
     signin: "user/login",
+    taskList: "task/list",
+    taskDetail: "task/detail",
+    taskComplete: "task/update-status",
   },
 };
 
