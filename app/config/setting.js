@@ -2,8 +2,8 @@ const devMode = __DEV__;
 
 // Production Server...
 const baseUrl = !devMode
-  ? "https://api.oceanaut.ca/v1/"
-  : "https://api.oceanaut.ca/v1/";
+  ? "http://192.168.1.16/home360/v1/"
+  : "http://192.168.1.16/home360/v1/";
 
 const BaseSetting = {
   name: "Oceanaut",
@@ -19,7 +19,6 @@ const BaseSetting = {
   emailRegex:
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   endpoints: {
-    signup: "user/sign-up",
     signin: "user/login",
   },
 };
