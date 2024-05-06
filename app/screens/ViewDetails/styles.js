@@ -19,13 +19,22 @@ export const createStyles = (colors) => {
     },
     value: {
       fontSize: 14,
-      fontWeight: "400",
+      fontWeight: "600",
       color: BaseColors.textColor,
       width: "68%",
     },
     cotent: {
       flexDirection: "row",
       paddingVertical: 3,
+    },
+    imageContainer: {
+      width: 80,
+      height: 80,
+      borderWidth: 1,
+      margin: 2,
+      borderColor: BaseColors.inactive,
+      borderRadius: 5,
+      padding: 2,
     },
   });
 };

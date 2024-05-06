@@ -31,13 +31,12 @@ export default function Home({ navigation, index }) {
         barStyle="dark-content"
         backgroundColor={BaseColors.transparent}
       />
-      <View style={{ marginHorizontal: 15 }}>
+      <View style={{ marginHorizontal: 15, marginBottom: 5 }}>
         <View
           style={{
             flexDirection: "row",
             justifyContent: "space-evenly",
             backgroundColor: "#e6ecf0",
-            paddingVertical: 4,
           }}
         >
           <TouchableOpacity

@@ -23,13 +23,14 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { CustomIcon } from "../../config/LoadIcons";
 import AuthAuthentication from "../../redux/reducers/auth/actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FastImage from "react-native-fast-image";
 
 const IOS = Platform.OS === "ios";
 const { setUserData, setAccessToken } = AuthAuthentication;
 export default function Login({ navigation }) {
   let backPressed = 0;
+  const { fcmToken } = useSelector((state) => state.notification);
   const phoneRef = useRef();
   const passwordRef = useRef();
   const dispatch = useDispatch();
@@ -79,6 +80,23 @@ export default function Login({ navigation }) {
   };
 
   /**
+   * Function for save fcm Token for Notificaiton.
+   * @function saveFcmToken
+   */
+  const saveFcmToken = () => {
+    let url = BaseSetting.endpoints.saveFcmToken;
+    const userData = {
+      "AuthUserUuid[uuid]": fcmToken,
+      "AuthUserUuid[platform]": IOS ? "ios" : "android",
+    };
+    getApiData(url, "POST", userData, "", true)
+      .then(async (resp) => {})
+      .catch((err) => {
+        Toast.show("Something went wrong");
+      });
+  };
+
+  /**
    * Function for user Login
    * @function userLogin
    */
@@ -96,6 +114,7 @@ export default function Login({ navigation }) {
             name: resp?.data?.name,
             phone: resp?.data?.phone,
           };
+          saveFcmToken();
           dispatch(setUserData(user));
           dispatch(setAccessToken(resp?.data?.access_token));
           Toast.show(resp?.message);

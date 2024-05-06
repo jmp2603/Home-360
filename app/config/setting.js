@@ -23,6 +23,9 @@ const BaseSetting = {
     taskList: "task/list",
     taskDetail: "task/detail",
     taskComplete: "task/update-status",
+    saveFcmToken: "user/add-token",
+    completeTask: "task/update-status",
+    notificationList: "notification/list",
   },
 };
 

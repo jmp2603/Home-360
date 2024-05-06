@@ -7,6 +7,7 @@ import {
   View,
   ActivityIndicator,
   Platform,
+  TouchableOpacity,
 } from "react-native";
 import { createStyles } from "./styles";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -15,6 +16,9 @@ import { BaseColors } from "../../config/theme";
 import BaseSetting from "../../config/setting";
 import { getApiData } from "../../utils/apiHelper";
 import moment from "moment";
+import FastImage from "react-native-fast-image";
+import { isEmpty } from "lodash";
+import ImageViewModal from "../../components/ImageViewModal";
 
 const { width, height } = Dimensions.get("window");
 export default function ViewDetails({ navigation, route }) {
@@ -24,6 +28,8 @@ export default function ViewDetails({ navigation, route }) {
   const styles = createStyles(colors);
   const [taskDetail, setTaskDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [imgVisible, setImgVisible] = useState(false);
+  const [selectedImag, setSelectedImag] = useState({});
 
   // View Vessel Details...
   async function getTaskDetails() {
@@ -44,6 +50,11 @@ export default function ViewDetails({ navigation, route }) {
   useEffect(() => {
     getTaskDetails();
   }, [detail]);
+
+  const closeModal = () => {
+    setImgVisible(false);
+    setSelectedImag({});
+  };
 
   return (
     <View style={{ backgroundColor: BaseColors.white, flex: 1 }}>
@@ -107,6 +118,67 @@ export default function ViewDetails({ navigation, route }) {
               </Text>
             </View>
           </View>
+          {!isEmpty(taskDetail?.task_files) && (
+            <View style={{ paddingHorizontal: 15 }}>
+              <Text style={styles.header}>Task Images :</Text>
+              <View style={{ flexDirection: "row", marginVertical: 5 }}>
+                {taskDetail?.task_files &&
+                  taskDetail?.task_files.map((li) => {
+                    return (
+                      <TouchableOpacity
+                        activeOpacity={0.7}
+                        onPress={() => {
+                          setImgVisible(true);
+                          setSelectedImag(li);
+                        }}
+                        style={styles.imageContainer}
+                      >
+                        <FastImage
+                          style={{ width: "100%", height: "100%" }}
+                          source={{ uri: li }}
+                        />
+                      </TouchableOpacity>
+                    );
+                  })}
+              </View>
+            </View>
+          )}
+          {!isEmpty(taskDetail?.proof_files) && (
+            <View style={{ paddingHorizontal: 15 }}>
+              <Text style={styles.header}>Proof Images :</Text>
+              <View style={{ flexDirection: "row" }}>
+                {taskDetail?.proof_files &&
+                  taskDetail?.proof_files.map((li) => {
+                    return (
+                      <TouchableOpacity
+                        activeOpacity={0.7}
+                        style={styles.imageContainer}
+                        onPress={() => {
+                          setImgVisible(true);
+                          setSelectedImag(li);
+                        }}
+                      >
+                        <FastImage
+                          style={{ width: "100%", height: "100%" }}
+                          source={{ uri: li }}
+                        />
+                      </TouchableOpacity>
+                    );
+                  })}
+              </View>
+            </View>
+          )}
+          <ImageViewModal
+            visible={imgVisible}
+            onRequestClose={closeModal}
+            content={{
+              type: "image",
+              source: selectedImag,
+            }}
+            onPress={(event) => {
+              closeModal();
+            }}
+          />
         </KeyboardAwareScrollView>
       )}
     </View>

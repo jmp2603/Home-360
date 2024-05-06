@@ -113,6 +113,7 @@ export default function TaskCard(props) {
           }}
         >
           <Text
+            numberOfLines={1}
             style={{
               color: BaseColors.primary,
               fontSize: 16,
@@ -122,6 +123,7 @@ export default function TaskCard(props) {
             {item?.title}
           </Text>
           <Text
+            numberOfLines={2}
             style={{
               color: item.color ? BaseColors.white : BaseColors.black,
               fontSize: 14,
@@ -249,6 +251,7 @@ export default function TaskCard(props) {
           setVisible={setVisible}
           visible={visible}
           selectItem={selectItem}
+          handleSubmit={() => getTaskList()}
         />
       </Modal>
     </>
