@@ -12,6 +12,7 @@ import BaseSetting from "../../config/setting";
 import { getApiData } from "../../utils/apiHelper";
 import moment from "moment";
 import CreateTask from "./CompleteTask";
+import TextInput from "../../components/TextInput";
 
 export default function TaskCard(props) {
   const { type, navigation } = props;
@@ -24,6 +25,7 @@ export default function TaskCard(props) {
   const [screenLoader, setScreenLoader] = useState(false);
   const [visible, setVisible] = useState(false);
   const [selectItem, setSelectItem] = useState({});
+  const [searchVal, setSearchVal] = useState("");
 
   /**
    * Function for Get Task List...
@@ -31,9 +33,9 @@ export default function TaskCard(props) {
    * @param {Number} p - Set for Page Number
    * @param {String} ty - Type for loader.
    */
-  const getTaskList = async (p = 1, ty) => {
+  const getTaskList = async (p = 1, name, ty) => {
     setScreenLoader(ty == "onEndreached" ? false : true);
-    const data = { type: type, page: p };
+    const data = { type: type, page: p, title: name };
     const string = urlParams(data);
     const url = BaseSetting.endpoints.taskList + string?._j;
     try {
@@ -66,7 +68,7 @@ export default function TaskCard(props) {
       setNextLoading(true);
       const tempPage = page + 1;
       setPage(tempPage);
-      getTaskList(tempPage, "onEndreached");
+      getTaskList(tempPage, "", "onEndreached");
     }
   };
   const renderListFooter = () => {
@@ -207,6 +209,18 @@ export default function TaskCard(props) {
   return (
     <>
       <View style={{ ...styles.container, backgroundColor: BaseColors.white }}>
+        <View style={{ marginHorizontal: 15 }}>
+          <TextInput
+            placeholderText="Search task"
+            value={searchVal}
+            numberOfLines={4}
+            numberofLine={4}
+            onChange={(value) => {
+              setSearchVal(value);
+              getTaskList(1, value);
+            }}
+          />
+        </View>
         {screenLoader ? (
           <ActivityIndicator
             color={BaseColors.primary}

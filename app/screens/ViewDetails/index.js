@@ -19,6 +19,8 @@ import moment from "moment";
 import FastImage from "react-native-fast-image";
 import { isEmpty } from "lodash";
 import ImageViewModal from "../../components/ImageViewModal";
+import CommentView from "../../components/CommentView";
+import { CustomIcon } from "../../config/LoadIcons";
 
 const { width, height } = Dimensions.get("window");
 export default function ViewDetails({ navigation, route }) {
@@ -30,6 +32,7 @@ export default function ViewDetails({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(false);
   const [imgVisible, setImgVisible] = useState(false);
   const [selectedImag, setSelectedImag] = useState({});
+  const [commentView, setCommentView] = useState(false);
 
   // View Vessel Details...
   async function getTaskDetails() {
@@ -168,19 +171,65 @@ export default function ViewDetails({ navigation, route }) {
               </View>
             </View>
           )}
-          <ImageViewModal
-            visible={imgVisible}
-            onRequestClose={closeModal}
-            content={{
-              type: "image",
-              source: selectedImag,
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={{
+              marginHorizontal: 15,
+              marginTop: 10,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              backgroundColor: "#e6ecf0",
             }}
-            onPress={(event) => {
-              closeModal();
-            }}
-          />
+            onPress={() => setCommentView(!commentView)}
+          >
+            <Text
+              style={{
+                paddingVertical: 6,
+                paddingHorizontal: 5,
+                fontSize: 16,
+                fontWeight: "600",
+              }}
+            >
+              Comments
+            </Text>
+            {commentView ? (
+              <CustomIcon
+                name={"Down-Vector"}
+                color={BaseColors.textColor}
+                size={11}
+                style={{
+                  justifyContent: "center",
+                  paddingHorizontal: 5,
+                  alignSelf: "center",
+                }}
+              />
+            ) : (
+              <CustomIcon
+                name={"up"}
+                color={BaseColors.textColor}
+                size={14}
+                style={{
+                  justifyContent: "center",
+                  paddingHorizontal: 5,
+                  alignSelf: "center",
+                }}
+              />
+            )}
+          </TouchableOpacity>
+          {commentView && <CommentView detail={detail} />}
         </KeyboardAwareScrollView>
       )}
+      <ImageViewModal
+        visible={imgVisible}
+        onRequestClose={closeModal}
+        content={{
+          type: "image",
+          source: selectedImag,
+        }}
+        onPress={(event) => {
+          closeModal();
+        }}
+      />
     </View>
   );
 }

@@ -18,8 +18,8 @@ export const createStyles = (colors) => {
       flexDirection: "row",
       borderBottomWidth: 1,
       borderBottomColor: BaseColors.inactive,
-      marginTop: isTabletDevice ? 10 : 5,
-      padding: isTabletDevice ? 10 : 5,
+      marginTop: 5,
+      padding: 5,
       borderRadius: 3,
     },
     dotIcon: {

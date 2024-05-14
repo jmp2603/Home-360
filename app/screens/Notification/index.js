@@ -21,7 +21,10 @@ import { useTheme } from "@react-navigation/native";
 import { NoData } from "../../components";
 import { getApiData } from "../../utils/apiHelper";
 import BaseSetting from "../../config/setting";
-import { urlParams } from "../../utils/CommonFunc";
+import Swipeable from "react-native-swipeable";
+import { CustomIcon } from "../../config/LoadIcons";
+import { Duration, urlParams } from "../../utils/CommonFunc";
+import DeleteModal from "../../components/DeleteModal";
 
 export default function Notification({ navigation, route }) {
   const IOS = Platform.OS === "ios";
@@ -32,6 +35,11 @@ export default function Notification({ navigation, route }) {
   const [page, setPage] = useState(1);
   const [nextPage, setNextPage] = useState(false);
   const [nextLoading, setNextLoading] = useState(false);
+  const [activeItem, setActiveItem] = useState(null);
+  const [currentlyOpenSwipeable, setCurrentlyOpenSwipeable] = useState(null);
+  const [visible, setVisible] = useState(false);
+  const [btnloader, setBtnLoader] = useState(false);
+  const [selectData, setSelectData] = useState();
 
   /**
    * Function for Get Task List...
@@ -46,7 +54,6 @@ export default function Notification({ navigation, route }) {
     const url = BaseSetting.endpoints.notificationList + string?._j;
     try {
       const resp = await getApiData(url, "GET");
-      console.log("🚀 ~ getNotificationList ~ resp:", resp);
       if (resp?.status) {
         let tempPArr = resp?.data;
         if (p > 1) {
@@ -105,46 +112,136 @@ export default function Notification({ navigation, route }) {
     getNotificationList(1);
   }, []);
 
+  function onOpen(event, gestureState, swipeable) {
+    if (currentlyOpenSwipeable && currentlyOpenSwipeable !== swipeable) {
+      currentlyOpenSwipeable.recenter();
+    }
+    setCurrentlyOpenSwipeable(swipeable);
+  }
+
+  function onClose() {
+    if (currentlyOpenSwipeable) {
+      currentlyOpenSwipeable.recenter();
+    }
+    setActiveItem(null);
+    setCurrentlyOpenSwipeable(null);
+  }
+
   // Render Item List...
   const renderItem = ({ item, index }) => {
     return (
-      <TouchableOpacity
-        style={[
-          styles.mainView,
-          {
-            backgroundColor: "#e6ecf0",
-          },
-        ]}
-      >
-        <View
-          style={{
-            justifyContent: "center",
-            flexDirection: "row",
-            alignSelf: "center",
-          }}
-        >
-          <FastImage
-            source={Images.Profile}
-            style={{
-              width: 35,
-              height: 35,
-              borderRadius: 20,
-              borderWidth: 1,
-              borderColor: BaseColors.inactive,
-              backgroundColor: BaseColors.inactive,
-            }}
-          />
-        </View>
-        <View>
+      <Swipeable
+        onSwipeStart={() => setActiveItem(index)}
+        rightButtons={[
           <View
             style={{
-              display: "flex",
-              flexDirection: "row",
-              paddingHorizontal: 10,
-              justifyContent: "space-between",
-              width: Dimensions.get("screen").width / 1.32,
+              backgroundColor: "#e6ecf0",
+              borderBottomColor: "#e7e9eb",
+              justifyContent: "center",
+              flex: 1,
+              marginTop: 5,
             }}
           >
+            <TouchableOpacity
+              style={{
+                width: 50,
+                height: 50,
+                backgroundColor: "#EBE9E9",
+                padding: 5,
+                borderRadius: 20,
+                justifyContent: "center",
+              }}
+              onPress={() => {
+                setVisible(true);
+                setSelectData(item.id);
+              }}
+            >
+              <CustomIcon
+                name="delete"
+                color={"red"}
+                size={20}
+                style={{ alignSelf: "center" }}
+              />
+            </TouchableOpacity>
+          </View>,
+        ]}
+        onRightButtonsOpenRelease={onOpen}
+        onRightButtonsCloseRelease={onClose}
+      >
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={[
+            styles.mainView,
+            {
+              backgroundColor: "#e6ecf0",
+            },
+          ]}
+        >
+          <View
+            style={{
+              justifyContent: "center",
+              flexDirection: "row",
+              alignSelf: "center",
+            }}
+          >
+            <FastImage
+              source={Images.Profile}
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 20,
+                borderWidth: 1,
+                borderColor: BaseColors.inactive,
+                backgroundColor: BaseColors.inactive,
+              }}
+            />
+          </View>
+          <View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                paddingHorizontal: 10,
+                justifyContent: "space-between",
+                width: Dimensions.get("screen").width / 1.32,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      color: BaseColors.textColor,
+                      fontSize: 12,
+                      fontWeight: "500",
+                      marginRight: 3,
+                    }}
+                  >
+                    {item?.data?.name}
+                  </Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  justifyContent: "flex-end",
+                  alignItems: "flex-end",
+                  alignContent: "flex-end",
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: "right",
+                    color: BaseColors.primary,
+                    fontSize: 10,
+                  }}
+                >
+                  {Duration(item.created_at)}
+                </Text>
+              </View>
+            </View>
             <View
               style={{
                 flexDirection: "row",
@@ -153,36 +250,59 @@ export default function Notification({ navigation, route }) {
               <View>
                 <Text
                   style={{
-                    color: BaseColors.textColor,
+                    color: BaseColors.primary,
                     fontSize: 14,
-                    fontWeight: "bold",
+                    paddingHorizontal: 10,
+                    paddingVertical: 5,
+                    fontWeight: "600",
                   }}
                 >
-                  {item.user}
+                  {item?.title}
                 </Text>
               </View>
             </View>
-          </View>
-          <View
-            style={{
-              paddingLeft: 10,
-            }}
-          >
-            <Text
+            <View
               style={{
-                width: Dimensions.get("window").width / 1.41,
-                color: BaseColors.msgColor,
-                fontSize: 12,
+                paddingLeft: 10,
               }}
             >
-              {item?.message}
-            </Text>
+              <Text
+                style={{
+                  width: Dimensions.get("window").width / 1.41,
+                  color: BaseColors.msgColor,
+                  fontSize: 12,
+                }}
+              >
+                {item?.message}
+              </Text>
+            </View>
           </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </Swipeable>
     );
   };
   // End
+
+  const handledelete = async (id) => {
+    setBtnLoader(true);
+    let url = `${BaseSetting.endpoints.deleteNotification}?id=${id}`;
+    try {
+      console.log("🚀 ~ handledelete ~ url:", url);
+      const resp = await getApiData(url, "GET");
+      console.log("🚀 ~ handledelete ~ resp:", resp);
+      if (resp.status) {
+        getNotificationList();
+        Toast.show(resp?.message);
+        setVisible(!visible);
+      } else {
+        Toast.show(resp?.message);
+      }
+      setBtnLoader(false);
+    } catch (error) {
+      setBtnLoader(false);
+      Toast.show("Something went wrong");
+    }
+  };
 
   return (
     <View
@@ -237,6 +357,17 @@ export default function Notification({ navigation, route }) {
           />
         )}
       </View>
+      <DeleteModal
+        visible={visible}
+        loader={btnloader}
+        setVisible={setVisible}
+        btnNPress={() => {
+          setVisible(!visible);
+        }}
+        btnYPress={(d) => {
+          handledelete(selectData);
+        }}
+      />
     </View>
   );
 }

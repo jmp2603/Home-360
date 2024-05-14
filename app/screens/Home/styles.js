@@ -73,11 +73,12 @@ export const createStyles = (colors) => {
       borderRadius: 10,
     },
     BtnViewSty: {
-      padding: 4,
+      padding: 6,
       backgroundColor: "green",
       width: "50%",
       justifyContent: "center",
       alignSelf: "center",
+      borderRadius: 5,
     },
     detailviewsty: {
       marginHorizontal: 20,
