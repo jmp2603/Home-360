@@ -37,6 +37,7 @@ export default function Home({ navigation, index }) {
             flexDirection: "row",
             justifyContent: "space-evenly",
             backgroundColor: "#e6ecf0",
+            borderRadius: 5,
           }}
         >
           <TouchableOpacity

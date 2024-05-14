@@ -4,6 +4,7 @@
  */
 export const Images = {
   //  ===== COMMON IMAGES ====
-  logo: require("../assets/images/profile.png"),
+  logo: require("../assets/images/logo.png"),
   Profile: require("../assets/images/profile.png"),
+  icon: require("../assets/images/photo.png"),
 };
