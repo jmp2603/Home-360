@@ -15,6 +15,11 @@ import Dicon from "react-native-vector-icons/Fontisto";
 import { CustomIcon } from "../../config/LoadIcons";
 import { useTheme } from "@react-navigation/native";
 import DeviceInfo from "react-native-device-info";
+import Icon from "react-native-vector-icons/Fontisto";
+import { isEmpty } from "lodash";
+import CountryPicker, {
+  DEFAULT_THEME,
+} from "react-native-country-picker-modal";
 
 const isTabletDevice = DeviceInfo.isTablet();
 const currentDate = new Date();
@@ -57,37 +62,61 @@ function CInput(props, ref) {
     suffix = "",
     errorStyle,
     maxLength,
+    phoneNumber,
+    callingCode = "",
+    countryCode = "",
+    codeTxtSty,
+    placeholderStyle,
+    suffixStyle,
     ...rest
   } = props;
 
   const [focused, setFocused] = useState(false);
-  const [timesPressed, setTimesPressed] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const colors = useTheme();
 
   const handlePress = () => {};
 
   const [show, setShow] = useState(false);
+  const onSelect = (Country) => {
+    onCountryChange(Country);
+  };
+
+  const myTheme = {
+    ...DEFAULT_THEME,
+    primaryColor: "#ccc",
+    primaryColorVariant: "#eee",
+    onBackgroundTextColor: !isVisible ? "white" : BaseColors.black,
+    backgroundColor: BaseColors.white,
+    filterPlaceholderTextColor: "#aaa",
+    flagSize: 20,
+    fontSize: 14,
+  };
 
   return (
     <>
       <View>
         {title ? (
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              paddingBottom: 5,
+            }}
+          >
             <Text
               style={[
                 styles.titleTxt,
                 titleSty,
                 {
-                  color: editable
-                    ? colors.colors.textColor
-                    : BaseColors.inactive,
+                  color: editable ? BaseColors.titleColor : BaseColors.inactive,
                 },
               ]}
             >
               {title}
               <Text
                 style={{
-                  fontSize: isTabletDevice ? 18 : 15,
+                  fontSize: 15,
                 }}
               >
                 {mandatory ? " *" : ""}
@@ -212,20 +241,40 @@ function CInput(props, ref) {
                   <View
                     style={{
                       position: "absolute",
-                      height: isTabletDevice ? 38.9 : 38,
-                      backgroundColor: BaseColors.whiteSmoke,
+                      height: 38,
+                      zIndex: 1,
                       borderRadius: 5,
-                      justifyContent: "center",
+                      alignItems: "center",
                       paddingHorizontal: 5,
+                      flexDirection: "row",
+                      ...suffixStyle,
                     }}
                   >
+                    <CountryPicker
+                      theme={myTheme}
+                      containerButtonStyle={{}}
+                      {...{
+                        countryCode,
+                        withCallingCode: true,
+                        withFilter: true,
+                        withAlphaFilter: true,
+                        onSelect,
+                        modalProps: {
+                          visible: isVisible,
+                        },
+                      }}
+                    />
+                    <Icon name="angle-down" color="#6D7177" size={12} />
                     <Text
                       style={{
-                        textAlign: "center",
-                        color: BaseColors.textColor,
+                        fontSize: 20,
+                        fontWeight: "200",
+                        paddingHorizontal: 5,
+                        color: "#6D7177",
                       }}
                     >
-                      {suffix}
+                      {" "}
+                      |{" "}
                     </Text>
                   </View>
                 )}
@@ -250,14 +299,16 @@ function CInput(props, ref) {
                   returnKeyType={returnKeyType}
                   isSuffix={isSuffix}
                   style={{
-                    height: textArea ? 55 : IOS ? 40 : 40,
-                    minHeight: IOS ? 40 : 40,
+                    height: textArea ? 55 : 40,
+                    minHeight: 40,
                     maxHeight: textArea ? 82 : 40,
                     justifyContent: "center",
                     alignSelf: "center",
                     borderWidth: 1,
                     borderColor: editable
                       ? BaseColors.inputBorder
+                      : showError
+                      ? BaseColors.errorRed
                       : BaseColors.inactive,
                     fontSize: isTabletDevice ? 16 : 14,
                     width: "100%",
@@ -275,37 +326,25 @@ function CInput(props, ref) {
                     setFocused(false);
                   }}
                 />
-                {isPreffix && (
-                  <View
-                    style={{
-                      position: "absolute",
-                      height: isTabletDevice ? 38.9 : 38,
-                      backgroundColor: BaseColors.whiteSmoke,
-                      borderRadius: 5,
-                      justifyContent: "center",
-                      paddingHorizontal: 5,
-                      right: 1,
-                      top: 1,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        textAlign: "center",
-                        color: BaseColors.textColor,
-                        fontSize: isTabletDevice ? 16 : null,
-                      }}
-                    >
-                      {preffix}
-                    </Text>
-                  </View>
-                )}
               </View>
             )}
           </View>
         </TouchableOpacity>
 
         {showError || DateError ? (
-          <Text style={[styles.errorTxt, errorStyle]}>{errorText}</Text>
+          <View
+            style={{
+              marginTop: 7,
+              backgroundColor: "#ffeded",
+              borderRadius: 8,
+              flexDirection: "row",
+              alignItems: "center",
+              paddingHorizontal: 10,
+            }}
+          >
+            <CustomIcon name="inform" size={13} color={BaseColors.errorRed} />
+            <Text style={[styles.errorTxt, errorStyle]}>{errorText}</Text>
+          </View>
         ) : null}
       </View>
     </>
@@ -331,9 +370,26 @@ const styles = StyleSheet.create({
   },
   errorTxt: {
     fontSize: 13,
-    color: BaseColors.red,
-    paddingBottom: 5,
+    color: BaseColors.errorRed,
+    padding: 8,
     fontWeight: "500",
+  },
+  countryCodeTxt: {
+    fontSize: 15,
+    color: BaseColors.titleTxt,
+    fontWeight: "500",
+  },
+  countryCodetxtsty: {
+    fontSize: 15,
+    color: BaseColors.titleTxt,
+    fontWeight: "500",
+    paddingRight: 5,
+  },
+  countryCodeView: {
+    // paddingHorizontal: 10,
+    // alignItems: "center",
+    // justifyContent: "center",
+    // overflow: "hidden",
   },
 });
 

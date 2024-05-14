@@ -5,15 +5,17 @@ export default StyleSheet.create({
   container: {
     justifyContent: "center",
     alignContent: "center",
-    marginHorizontal: 15,
-    marginTop: 60,
+    marginHorizontal: 20,
     alignSelf: "center",
+    marginVertical: 10,
   },
   imageView: {
-    width: Dimensions.get("window").width / 1.5,
-    height: 150,
+    width: Dimensions.get("window").width / 2.5,
+    height: 100,
     justifyContent: "center",
     alignSelf: "center",
+    marginVertical: 10,
+    marginTop: Dimensions.get("window").width / 8,
   },
   notetxtSty: {
     fontSize: 14,
@@ -25,7 +27,7 @@ export default StyleSheet.create({
     opacity: 1,
     fontSize: 14,
     fontWeight: "500",
-    color: BaseColors.textColor,
+    color: BaseColors.titleColor,
   },
   modalView: {
     flex: 1,
@@ -44,10 +46,19 @@ export default StyleSheet.create({
     shadowColor: BaseColors.transparent,
     borderRadius: 10,
   },
-  errTxt: {
-    fontSize: 13,
-    color: BaseColors.red,
-    paddingVertical: 5,
-    fontWeight: "500",
+  textInputStyle: {
+    paddingHorizontal: 80,
+    minHeight: 50,
+    backgroundColor: BaseColors.offWhite,
+    borderRadius: 10,
+  },
+  OtpStyle: {
+    width: 50,
+    height: 50,
+    borderWidth: 1,
+    borderColor: BaseColors.offWhite,
+    backgroundColor: BaseColors.offWhite,
+    color: BaseColors.black,
+    borderRadius: 10,
   },
 });

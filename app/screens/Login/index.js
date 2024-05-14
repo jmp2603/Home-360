@@ -6,7 +6,6 @@ import TextInput from "../../components/TextInput";
 import { Images } from "../../config";
 import { BaseColors } from "../../config/theme";
 import {
-  Keyboard,
   Platform,
   StatusBar,
   Text,
@@ -21,10 +20,10 @@ import { getApiData } from "../../utils/apiHelper";
 import BaseSetting from "../../config/setting";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { CustomIcon } from "../../config/LoadIcons";
 import AuthAuthentication from "../../redux/reducers/auth/actions";
 import { useDispatch, useSelector } from "react-redux";
 import FastImage from "react-native-fast-image";
+import OTPInputView from "@twotalltotems/react-native-otp-input";
 
 const IOS = Platform.OS === "ios";
 const { setUserData, setAccessToken } = AuthAuthentication;
@@ -186,100 +185,90 @@ export default function Login({ navigation }) {
               resizeMode="contain"
             />
           </View>
+          <View style={{ marginVertical: 20 }}>
+            <View style={{ paddingVertical: 10 }}>
+              <Text
+                style={{ textAlign: "center", fontSize: 30, fontWeight: "700" }}
+              >
+                Login
+              </Text>
+            </View>
+            <View>
+              <Text
+                style={{
+                  textAlign: "center",
+                  flexWrap: "wrap",
+                  fontSize: 14,
+                  fontWeight: "400",
+                }}
+              >
+                {"Please login by providing your \n phone number and pin"}
+              </Text>
+            </View>
+          </View>
+          <View style={{ paddingVertical: 15 }}>
+            <TextInput
+              isSuffix
+              phoneNumber={true}
+              keyBoardType="number-pad"
+              title={"Mobile Number"}
+              placeholderText={"Mobile number"}
+              suffixStyle={{
+                height: 50,
+                backgroundColor: BaseColors.transparent,
+              }}
+              textInputStyle={{
+                paddingHorizontal: 80,
+                minHeight: 50,
+                backgroundColor: BaseColors.offWhite,
+                borderRadius: 10,
+                borderColor: phoneErr.err
+                  ? BaseColors.errorRed
+                  : BaseColors.offWhite,
+              }}
+              onChange={(value) => {
+                setPhone(value.replace(/  +/g, " "));
+                if (value) {
+                  setPhoneErr({ err: false, txt: "" });
+                }
+              }}
+              maxLength={10}
+              value={phone}
+              returnKeyType="next"
+              showError={phoneErr.err}
+              errorText={phoneErr.txt}
+              countryCode={"IN"}
+              mandatory={true}
+            />
+          </View>
           <View style={{ paddingTop: 15 }}>
             <Text style={styles.titleTxt}>
-              {"Phone"}
+              {"Enter Pin"}
               <Text
                 style={{
                   fontSize: 15,
                 }}
               >
-                {"*"}
+                {" *"}
               </Text>
             </Text>
           </View>
-          <View style={{ paddingBottom: 15 }}>
-            <View style={{ flexDirection: "row" }}>
-              <View style={{ width: "20%", marginRight: 5 }}>
-                <TextInput
-                  title={""}
-                  placeholderText={""}
-                  value={"+91"}
-                  keyBoardType="number-pad"
-                  returnKeyType="done"
-                  editable={false}
-                  onSubmit={() => {
-                    Keyboard.dismiss();
-                  }}
-                />
-              </View>
-              <View style={{ width: "78%" }}>
-                <TextInput
-                  keyBoardType={"numeric"}
-                  ref={phoneRef}
-                  maxLength={10}
-                  title={""}
-                  placeholderText={"Phone"}
-                  value={phone}
-                  containerSty={{}}
-                  onChange={(value) => {
-                    setPhone(value.replace(/[^\w\s]/gi, ""));
-                    if (value?.length > 0) {
-                      setPhoneErr(false);
-                    }
-                  }}
-                  onSubmit={() => {
-                    passwordRef.current.focus();
-                  }}
-                  returnKeyType="next"
-                  textInputStyle={{ color: BaseColors.textColor }}
-                />
-              </View>
-            </View>
-            {phoneErr.err ? (
-              <Text style={styles.errTxt}>{phoneErr.txt}</Text>
-            ) : null}
-          </View>
-          <View style={{ flexDirection: "row" }}>
-            <TextInput
-              keyBoardType={"numeric"}
-              ref={passwordRef}
-              maxLength={6}
-              title={"Pin"}
-              placeholderText={"Pin"}
-              value={password}
-              secureText={hidePassword}
-              containerSty={{}}
-              onChange={(value) => {
-                setPassword(value);
-                if (value.length > 0) {
-                  setPasswordErr(false);
-                }
+          <View style={{ marginVertical: 20 }}>
+            <OTPInputView
+              style={{ width: "100%", height: 10 }}
+              pinCount={6}
+              code={password} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
+              onCodeChanged={(code) => {
+                setPassword(code);
               }}
-              onSubmit={() => {
-                Keyboard.dismiss();
+              codeInputFieldStyle={[styles.OtpStyle]}
+              codeInputHighlightStyle={{ color: BaseColors.black }}
+              onCodeFilled={(code) => {
+                console.log(`Code is ${code}, you are good to go!`);
               }}
-              showError={passwordErr.err}
-              errorText={passwordErr.txt}
-              textInputStyle={{ color: BaseColors.textColor }}
-              returnKeyType="done"
             />
-            <TouchableOpacity
-              style={{
-                position: "absolute",
-                top: IOS ? 32 : 34,
-                right: 10,
-              }}
-              onPress={togglePasswordVisibility}
-            >
-              <CustomIcon
-                size={20}
-                name={hidePassword ? "CloseEye" : "eye"}
-                style={{ color: BaseColors.inputBorder }}
-              />
-            </TouchableOpacity>
           </View>
-          <View
+          {/* <View
             style={{
               justifyContent: "flex-end",
               paddingTop: 15,
@@ -293,9 +282,14 @@ export default function Login({ navigation }) {
             >
               <Text style={styles.notetxtSty}>{"Forgot Pin"}</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
           <View style={{ marginTop: 20 }}>
             <Button
+              containerStyle={{
+                backgroundColor: BaseColors.primary,
+                height: 45,
+              }}
+              style={{ marginTop: 30 }}
               loading={btnLoader}
               onBtnClick={() => {
                 loginValidate();

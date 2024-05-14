@@ -3,7 +3,7 @@ const devMode = __DEV__;
 // Production Server...
 const baseUrl = !devMode
   ? "http://192.168.1.16/home360/v1/"
-  : "http://192.168.1.16/home360/v1/";
+  : "http://68.183.108.148/v1/";
 
 const BaseSetting = {
   name: "Home 360",

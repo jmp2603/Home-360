@@ -31,8 +31,8 @@ const SplashScreen = ({ navigation }) => {
     scale.value = withTiming(1, { duration: 2000 });
     transform.value = withSpring(200, { duration: 2000 });
     setTimeout(() => {
-      if(accessToken){
-        navigation.replace('Home')
+      if (accessToken) {
+        navigation.replace("Home");
       } else {
         navigation.replace("Login");
       }
@@ -69,7 +69,7 @@ const SplashScreen = ({ navigation }) => {
       <StatusBar
         animated
         barStyle="light-content"
-        backgroundColor={BaseColors.white}
+        backgroundColor={"#F7EBDA"}
         translucent
       />
 
@@ -78,16 +78,12 @@ const SplashScreen = ({ navigation }) => {
           {/* <Svg height="100" width="100">
             <Image href={Images.oceananutLogo} style={styles.logoSty} />
           </Svg> */}
-          <FastImage source={Images.oceananutpngLogo} style={styles.logoSty} />
+          <FastImage
+            source={Images.logo}
+            style={styles.logoSty}
+            resizeMode="contain"
+          />
         </Animated.View>
-        <View
-          style={{
-            alignItems: "center",
-            marginBottom: Dimensions.get("window").height / 8,
-          }}
-        >
-          <Text style={{ color: "#464E5F" }}>{`Version: ${version}`}</Text>
-        </View>
       </View>
     </>
   );
