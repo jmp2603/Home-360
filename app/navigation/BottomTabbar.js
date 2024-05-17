@@ -33,7 +33,7 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
         return (
           <View style={styles.tabIconView}>
             <CustomIcon
-              name={isFocused ? "home-selected" : "home"}
+              name={isFocused ? "Home-Filled" : "Home"}
               size={24}
               color={isFocused ? "white" : "white"}
             />
@@ -80,7 +80,7 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
               </View>
             )}
             <CustomIcon
-              name={isFocused ? "Notification-selected" : "Notification"}
+              name={isFocused ? "Notification-Filled" : "Notification"}
               size={24}
               color={isFocused ? "white" : "white"}
             />

@@ -54,7 +54,7 @@
 	<string>This app contains functionalities where user need to take pictures to upload, Which will be used for user's and organization identification.</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>FishyIcons.ttf</string>
+		<string>icomoon.ttf</string>
 		<string>AntDesign.ttf</string>
 		<string>Entypo.ttf</string>
 		<string>EvilIcons.ttf</string>
