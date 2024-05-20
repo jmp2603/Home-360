@@ -12,7 +12,7 @@ export const BaseColors = {
   textColor: "#464E5F",
   msgColor: "#676767",
   lightYellow: "#FFFCF2",
-  yellow: "#F8C102",
+  yellow: "#DE9C36",
   red: "#FF0000",
   lightblue: "#F0FDFF",
   primaryLight: "#67ffff",
@@ -52,6 +52,11 @@ export const BaseColors = {
   RoleBackground: "#f7f7f7",
   titleColor: "#262626",
   errorRed: "#FF4949",
+  orangeColor: "#E75F3C",
+  redColor: "#E64646",
+  greenColor: "#2A5241",
+  lightOrange: "#F7EBDA",
+  grey: "#616161",
 };
 
 export const DarkBaseColor = {
