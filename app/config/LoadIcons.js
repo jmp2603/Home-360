@@ -23,6 +23,7 @@ const CustIcon = {
   "Clock-In-Filled": [navIconSize, "#7E87AE"],
   "Clock-In": [navIconSize, "#7E87AE"],
   "Clock-Out-Filled": [navIconSize, "#7E87AE"],
+  "notification-filled": [navIconSize, "#7E87AE"],
   Delete: [navIconSize, "#7E87AE"],
   Deliverdmark: [navIconSize, "#7E87AE"],
   Refresh: [navIconSize, "#7E87AE"],
