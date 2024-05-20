@@ -127,6 +127,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging'
     implementation("com.facebook.react:react-android")
     implementation project(':react-native-fs')
+    implementation project(':@react-native-clipboard_clipboard')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
