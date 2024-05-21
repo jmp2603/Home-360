@@ -5,6 +5,7 @@ import { Platform } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import SplashScreen from "../screens/SplashScreen";
 import { NotificationContext } from "../components";
 import RemotePushController from "../components/Common/RemotePushController";
@@ -15,6 +16,8 @@ import BottomTabBar from "./BottomTabbar";
 import Home from "../screens/Home";
 import Notification from "../screens/Notification";
 import ViewDetails from "../screens/ViewDetails";
+import SideDrawer from "./SideDrawer";
+import ViewTask from "../screens/ViewTask";
 
 const intitialNotificationState = {
   notification: null,
@@ -34,6 +37,7 @@ function App() {
 
   const Stack = createStackNavigator();
   const Tab = createBottomTabNavigator();
+  const Drawer = createDrawerNavigator();
   const HomeStack = createStackNavigator();
   const NotificationStack = createStackNavigator();
 
@@ -81,6 +85,25 @@ function App() {
     );
   };
 
+  const DrawerNavigator = () => (
+    <Drawer.Navigator
+      initialRouteName="BottomTabsNavigator"
+      detachInactiveScreens={IOS ? true : false}
+      drawerPosition="right"
+      screenOptions={{
+        headerShown: false,
+        drawerStyle: { width: "80%" },
+      }}
+      drawerContent={(props) => <SideDrawer {...props} />}
+      defaultStatus="closed"
+    >
+      <Drawer.Screen
+        name="BottomTabsNavigator"
+        component={BottomTabsNavigator}
+      />
+    </Drawer.Navigator>
+  );
+
   return (
     <NotificationContext.Provider value={notiValue}>
       <RemotePushController />
@@ -105,7 +128,7 @@ function App() {
           />
           <Stack.Screen
             name="Home"
-            component={BottomTabsNavigator}
+            component={DrawerNavigator}
             options={{ headerShown: false }}
           />
           <Stack.Screen
@@ -116,6 +139,11 @@ function App() {
           <Stack.Screen
             name="TaskDetails"
             component={ViewDetails}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ViewTask"
+            component={ViewTask}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
