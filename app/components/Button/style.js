@@ -22,7 +22,6 @@ export const createStyles = (colors) => {
       // paddingVertical: 10,
       // paddinHorizontal:10,
       width: "100%",
-      padding: 7.5,
     },
 
     primary: {

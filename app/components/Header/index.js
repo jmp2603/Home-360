@@ -12,7 +12,7 @@ import {
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import { BaseColors } from "../../config/theme";
 import { CustomIcon } from "../../config/LoadIcons";
-import { useTheme } from "@react-navigation/native";
+import FIcon from "react-native-vector-icons/Feather";
 import DeviceInfo from "react-native-device-info";
 
 const isTabletDevice = DeviceInfo.isTablet();
@@ -22,19 +22,18 @@ const isProMax = getStatusBarHeight(true);
 const styles = StyleSheet.create({
   mainCon: {
     width: "100%",
-    // height: getStatusBarHeight() + 50,
     flexDirection: "row",
     alignItems: "center",
-    paddingTop: isTabletDevice
-      ? getStatusBarHeight() + 20
-      : IOS && isProMax <= 20
-      ? getStatusBarHeight() + 40
-      : IOS
-      ? getStatusBarHeight() + 10
-      : getStatusBarHeight() + 20,
-    // paddingTop: IOS ? getStatusBarHeight() : 0,
+    paddingTop:
+      IOS && isProMax <= 20
+        ? getStatusBarHeight() + 40
+        : IOS
+        ? getStatusBarHeight() + 10
+        : getStatusBarHeight() + 20,
     paddingHorizontal: 20,
     paddingBottom: 20,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
   },
   titleCon: {
     flex: 1,
@@ -43,9 +42,7 @@ const styles = StyleSheet.create({
   },
   titleTxt: {
     textAlign: "center",
-    fontSize: isTabletDevice ? 22 : 18,
-    // textTransform: 'capitalize',
-    // fontFamily: 'Poppins',
+    fontSize: 23,
     fontWeight: "600",
   },
   defaultIconSty: {
@@ -57,7 +54,12 @@ const styles = StyleSheet.create({
   },
   defaultLesticonSty: {
     fontSize: 20,
-    // color: "#464E5F",
+    width: 40,
+    height: 40,
+    borderWidth: 1,
+    borderRadius: 30,
+    backgroundColor: BaseColors.yellow,
+    borderColor: BaseColors.yellow,
   },
   defaultRightTextSty: {
     alignItems: "flex-end",
@@ -80,19 +82,14 @@ export default function CHeader(props) {
     leftIcon,
     leftIconSty,
     onLeftPress,
-    rText,
-    rTextClick,
     rightIcon,
     rightIconSty,
     onRightPress,
     Rsize,
-    defaultRtxtSty,
-    rtxtsty,
     disabled,
-    rTextDisabled = false,
+    customIcon,
     notification,
   } = props;
-  const colors = useTheme();
 
   return (
     <>
@@ -100,13 +97,13 @@ export default function CHeader(props) {
         style={[
           styles.mainCon,
           {
-            backgroundColor: colors.colors.white,
+            backgroundColor: BaseColors.primary,
           },
           ContainerSty,
         ]}
       >
         <StatusBar
-          barStyle="dark-content"
+          barStyle="light-content"
           backgroundColor={BaseColors.transparent}
           translucent
         />
@@ -118,9 +115,8 @@ export default function CHeader(props) {
             style={[
               styles.defaultLesticonSty,
               {
-                alignItems: "flex-start",
+                alignItems: "center",
                 justifyContent: "center",
-                width: isTabletDevice ? 65 : 50,
               },
             ]}
           >
@@ -130,7 +126,7 @@ export default function CHeader(props) {
                 styles.defaultIconSty,
                 {
                   fontWeight: "600",
-                  color: colors.colors.textColor,
+                  color: BaseColors.white,
                 },
                 leftIconSty,
               ]}
@@ -143,15 +139,7 @@ export default function CHeader(props) {
           <TouchableOpacity
             activeOpacity={1}
             onPress={null}
-            style={[
-              styles.titleCon,
-              {
-                paddingLeft:
-                  notification &&
-                  isTabletDevice &&
-                  Dimensions.get("window").width / 8,
-              },
-            ]}
+            style={[styles.titleCon]}
           >
             <Text
               numberOfLines={1}
@@ -159,7 +147,7 @@ export default function CHeader(props) {
               style={[
                 styles.titleTxt,
                 titleSty,
-                { color: colors.colors.textColor }, // fontFamily: 'Poppins'}
+                { color: BaseColors.white }, // fontFamily: 'Poppins'}
               ]}
             >
               {title}
@@ -179,25 +167,19 @@ export default function CHeader(props) {
               },
             ]}
           >
-            <CustomIcon
-              name={rightIcon}
-              size={Rsize}
-              // color={colors.colors.textColor}
-              style={[
-                styles.defaultIconSty,
-                { color: colors.colors.primary },
-                rightIconSty,
-              ]}
-            />
-          </TouchableOpacity>
-        ) : rText ? (
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={rTextClick}
-            disabled={rTextDisabled}
-            style={[styles.defaultRightTextSty, defaultRtxtSty]}
-          >
-            <Text style={[styles.rTxt, rtxtsty]}>{rText}</Text>
+            {customIcon ? (
+              <FIcon name="more-vertical" size={20} color={BaseColors.white} />
+            ) : (
+              <CustomIcon
+                name={rightIcon}
+                size={Rsize}
+                style={[
+                  styles.defaultIconSty,
+                  { color: BaseColors.white },
+                  rightIconSty,
+                ]}
+              />
+            )}
           </TouchableOpacity>
         ) : (
           <View style={{ width: 50 }} />

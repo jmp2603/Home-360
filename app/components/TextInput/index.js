@@ -124,7 +124,7 @@ function CInput(props, ref) {
             </Text>
             {FinIconShow ? (
               <CustomIcon
-                name="inform"
+                name="warning"
                 color={colors.colors.textColor}
                 style={{ marginLeft: 5, paddingBottom: 2 }}
                 onPress={FinIconPress}
@@ -342,7 +342,7 @@ function CInput(props, ref) {
               paddingHorizontal: 10,
             }}
           >
-            <CustomIcon name="inform" size={13} color={BaseColors.errorRed} />
+            <CustomIcon name="warning" size={13} color={BaseColors.errorRed} />
             <Text style={[styles.errorTxt, errorStyle]}>{errorText}</Text>
           </View>
         ) : null}

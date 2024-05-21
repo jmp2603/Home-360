@@ -1,19 +1,19 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
-import PropTypes from 'prop-types';
-import {View, Text, Platform, Dimensions} from 'react-native';
-import {Dropdown, MultiSelect} from 'react-native-element-dropdown';
-import {BaseColors, FontFamily} from '../../config/theme';
-import {createStyles} from './styles';
-import {CustomIcon} from '../../config/LoadIcons';
-import {useTheme} from '@react-navigation/native';
-import {isArray} from 'lodash';
-import DeviceInfo from 'react-native-device-info';
-import {TouchableOpacity} from 'react-native';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { View, Text, Platform, Dimensions } from "react-native";
+import { Dropdown, MultiSelect } from "react-native-element-dropdown";
+import { BaseColors, FontFamily } from "../../config/theme";
+import { createStyles } from "./styles";
+import { CustomIcon } from "../../config/LoadIcons";
+import { useTheme } from "@react-navigation/native";
+import { isArray } from "lodash";
+import DeviceInfo from "react-native-device-info";
+import { TouchableOpacity } from "react-native";
 
 const isTabletDevice = DeviceInfo.isTablet();
 
-const IOS = Platform.OS === 'ios';
+const IOS = Platform.OS === "ios";
 
 /**
  *
@@ -62,23 +62,25 @@ export default function DropDownList(props) {
               color: disable ? BaseColors.inactive : colors.colors.textColor,
               fontSize: isTabletDevice ? 18 : 14,
             },
-          ]}>
+          ]}
+        >
           {titleText}
           <Text
             style={{
               fontSize: isTabletDevice ? 18 : 15,
-            }}>
-            {mandatory ? ' *' : ''}
-          </Text>{' '}
+            }}
+          >
+            {mandatory ? " *" : ""}
+          </Text>{" "}
         </Text>
       )
     );
   };
 
   const renderIcon = () => (
-    <View style={{marginRight: 10}}>
+    <View style={{ marginRight: 10 }}>
       <CustomIcon
-        name="Down-Vector"
+        name="Down-Arrow"
         size={12}
         style={{
           color: disable ? BaseColors.inactive : colors.colors.textColor,
@@ -91,7 +93,7 @@ export default function DropDownList(props) {
     return (
       <View>
         <CustomIcon
-          name="Down-Vector"
+          name="Down-Arrow"
           size={12}
           style={{
             color: disable ? BaseColors.inactive : colors.colors.textColor,
@@ -105,19 +107,20 @@ export default function DropDownList(props) {
     return (
       <TouchableOpacity
         activeOpacity={0.8}
-        style={{backgroundColor: colors.colors.white}}
+        style={{ backgroundColor: colors.colors.white }}
         disabled={
-          item.value === 'label-My Ports' || item?.value === 'label-All Ports'
+          item.value === "label-My Ports" || item?.value === "label-All Ports"
             ? false
             : true
-        }>
+        }
+      >
         <View style={styles.listItem}>
           <Text
             style={[
               styles.listItemTxt,
               {
                 color: isLabelDisabled
-                  ? 'gray'
+                  ? "gray"
                   : disable
                   ? BaseColors.inactive
                   : selected
@@ -125,7 +128,8 @@ export default function DropDownList(props) {
                   : colors.colors.textColor,
                 fontSize: isLabelDisabled ? 12 : 16,
               },
-            ]}>
+            ]}
+          >
             {userList
               ? `${item.first_name} ${item.last_name}`
               : item[labelProp]}
@@ -135,7 +139,7 @@ export default function DropDownList(props) {
     );
   };
 
-  const renderMultiItem = item => {
+  const renderMultiItem = (item) => {
     const isLabelDisabled = item.isLabel;
     return (
       <View style={styles.listItem}>
@@ -144,13 +148,14 @@ export default function DropDownList(props) {
             styles.listItemTxt,
             {
               color: isLabelDisabled
-                ? 'gray'
+                ? "gray"
                 : disable
                 ? BaseColors.inactive
                 : colors.colors.dropdownTextColor,
               fontSize: isLabelDisabled ? 12 : 16,
             },
-          ]}>
+          ]}
+        >
           {item[labelProp]}
         </Text>
       </View>
@@ -162,13 +167,14 @@ export default function DropDownList(props) {
       {hidetitle ? null : renderLabel()}
       <View
         style={{
-          backgroundColor: '#0000',
+          backgroundColor: "#0000",
           marginBottom: showError ? 5 : 0,
           borderColor: disable ? BaseColors.inactive : BaseColors.inputBorder,
           borderRadius: 5,
           borderWidth: multiSelection ? 0 : 1,
           ...containerSty,
-        }}>
+        }}
+      >
         {multiSelection ? (
           <MultiSelect
             statusBarIsTranslucent={true}
@@ -177,7 +183,7 @@ export default function DropDownList(props) {
               styles.dropdown,
               dropDownSty,
               {
-                backgroundColor: 'transparent',
+                backgroundColor: "transparent",
                 borderBottomColor: disable
                   ? BaseColors.inactive
                   : colors.colors.inputBorder,
@@ -191,14 +197,14 @@ export default function DropDownList(props) {
                   ? colors.colors.inactive
                   : colors.colors.textColor,
                 fontSize: isTabletDevice ? 18 : 14,
-                fontWeight: '500',
+                fontWeight: "500",
               },
             ]}
             selectedTextStyle={[styles.showTextSty]}
             renderRightIcon={renderMultiIcon}
             data={data}
             value={isArray(value) ? value : []}
-            itemTextStyle={{color: 'black'}}
+            itemTextStyle={{ color: "black" }}
             activeColor={colors.colors.whiteSmoke}
             renderItem={(item, sel) => renderMultiItem(item)}
             search={search}
@@ -210,7 +216,7 @@ export default function DropDownList(props) {
               mandatory ? `${placeholderTxt} * ` : `${placeholderTxt}`
             }
             onChange={onChange}
-            onChangeValue={e => {}}
+            onChangeValue={(e) => {}}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             disable={disable}
@@ -232,7 +238,7 @@ export default function DropDownList(props) {
             placeholderStyle={[
               styles.showTextSty,
               {
-                color: disable ? BaseColors.inactive : '#c2c2c2',
+                color: disable ? BaseColors.inactive : "#c2c2c2",
                 fontSize: isTabletDevice ? 16 : 14,
               },
             ]}
@@ -253,19 +259,19 @@ export default function DropDownList(props) {
             labelField={labelProp}
             valueField={valueProp}
             placeholder={placeholderTxt}
-            value={isArray(value) ? '' : value}
+            value={isArray(value) ? "" : value}
             onFocus={() => {
               onClick && onClick();
               setIsFocus(true);
             }}
             onBlur={() => setIsFocus(false)}
-            onChange={item => {
+            onChange={(item) => {
               onChange(item[valueProp]);
               setIsFocus(false);
             }}
             activeColor={BaseColors.white}
             inputSearchStyle={inputSearchStyle}
-            containerStyle={{backgroundColor: colors.colors.white}}
+            containerStyle={{ backgroundColor: colors.colors.white }}
           />
         )}
       </View>
@@ -294,21 +300,21 @@ DropDownList.propTypes = {
 
 DropDownList.defaultProps = {
   data: [
-    {lable: 'name1', value: 12, id: 1},
-    {lable: 'name2', value: 34, id: 2},
-    {lable: 'name3', value: 56, id: 3},
-    {lable: 'name4', value: 78, id: 4},
-    {lable: 'name5', value: 90, id: 5},
+    { lable: "name1", value: 12, id: 1 },
+    { lable: "name2", value: 34, id: 2 },
+    { lable: "name3", value: 56, id: 3 },
+    { lable: "name4", value: 78, id: 4 },
+    { lable: "name5", value: 90, id: 5 },
   ],
   onChange: () => {},
-  labelProp: 'lable',
-  valueProp: 'value',
-  value: '',
-  titleText: 'Name',
-  placeholderTxt: 'Select Name',
-  rIcon: 'dropdown',
+  labelProp: "lable",
+  valueProp: "value",
+  value: "",
+  titleText: "Name",
+  placeholderTxt: "Select Name",
+  rIcon: "dropdown",
   dropDownSty: {},
-  errorText: '',
+  errorText: "",
   showError: false,
   search: false,
   multiSelection: false,

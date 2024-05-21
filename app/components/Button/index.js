@@ -85,10 +85,12 @@ export default function Button(props) {
   return (
     <TouchableOpacity
       disabled={disabled}
-      activeOpacity={0.7}
+      activeOpacity={0.8}
       {...rest}
       onPress={loading ? () => {} : onBtnClick}
       style={{
+        opacity: disabled ? 0.4 : 1,
+        paddingVertical: 3,
         overflow: "hidden",
         ...styles[shape],
         ...styles[type],
@@ -99,14 +101,11 @@ export default function Button(props) {
         <View
           style={{
             ...styles.btnContainer,
+            backgroundColor:
+              containerStyle.backgroundColor || BaseColors.primary,
+            padding: 10,
+            borderColor: BaseColors.primary,
             ...containerStyle,
-
-            backgroundColor: disabled
-              ? BaseColors.inactive
-              : containerStyle.backgroundColor || BaseColors.primary,
-            borderWidth: disabled ? 1 : 0,
-            padding: 7.5,
-            borderColor: disabled ? BaseColors.inactive : BaseColors.primary,
           }}
         >
           {cIconName
@@ -120,12 +119,10 @@ export default function Button(props) {
             styles.btnContainer,
             containerStyle,
             {
-              backgroundColor: disabled
-                ? BaseColors.inactive
-                : BaseColors.white,
+              backgroundColor: BaseColors.white,
               borderWidth: 1,
               borderRadius: 5,
-              borderColor: disabled ? BaseColors.inactive : BaseColors.primary,
+              borderColor: BaseColors.primary,
             },
           ]}
         >
