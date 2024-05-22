@@ -24,14 +24,13 @@ import AuthAuthentication from "../../redux/reducers/auth/actions";
 import { useDispatch, useSelector } from "react-redux";
 import FastImage from "react-native-fast-image";
 import OTPInputView from "@twotalltotems/react-native-otp-input";
+import { isEmpty } from "lodash";
 
 const IOS = Platform.OS === "ios";
 const { setUserData, setAccessToken } = AuthAuthentication;
 export default function Login({ navigation }) {
   let backPressed = 0;
   const { fcmToken } = useSelector((state) => state.notification);
-  const phoneRef = useRef();
-  const passwordRef = useRef();
   const dispatch = useDispatch();
   const [phone, setPhone] = useState(__DEV__ ? "9995277508" : "");
   const [password, setPassword] = useState(__DEV__ ? "593304" : "");
@@ -289,6 +288,7 @@ export default function Login({ navigation }) {
                 backgroundColor: BaseColors.primary,
                 height: 45,
               }}
+              disabled={isEmpty(phone) || isEmpty(password)}
               style={{ marginTop: 30 }}
               loading={btnLoader}
               onBtnClick={() => {

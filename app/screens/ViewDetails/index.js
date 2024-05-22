@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import CHeader from "../../components/Header";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   Text,
@@ -18,14 +18,18 @@ import { getApiData } from "../../utils/apiHelper";
 import moment from "moment";
 import FastImage from "react-native-fast-image";
 import { isEmpty } from "lodash";
-import ImageViewModal from "../../components/ImageViewModal";
-import CommentView from "../../components/CommentView";
 import { CustomIcon } from "../../config/LoadIcons";
+import CAlert from "../../components/CAlert";
+import ImageCropPicker from "react-native-image-crop-picker";
+import { chatFilesVal } from "../../utils/CommonFunc";
+import RBSheet from "react-native-raw-bottom-sheet";
+import { Button } from "../../components";
 
 const { width, height } = Dimensions.get("window");
 export default function ViewDetails({ navigation, route }) {
   const IOS = Platform.OS === "ios";
   const detail = route?.params?.detail;
+  const ActionSheetRef = useRef();
   const colors = useTheme();
   const styles = createStyles(colors);
   const [taskDetail, setTaskDetails] = useState({});
@@ -54,15 +58,96 @@ export default function ViewDetails({ navigation, route }) {
     getTaskDetails();
   }, [detail]);
 
-  const closeModal = () => {
-    setImgVisible(false);
-    setSelectedImag({});
+  const openGallery = () => {
+    ImageCropPicker.openPicker({
+      cropping: true,
+    }).then((image) => {
+      setLoader(true);
+      const fType = image?.mime || "";
+      const isValidFile = chatFilesVal(fType, image.size);
+      if (isValidFile) {
+        uploadImage(image);
+        setLoader(false);
+      } else {
+        setTimeout(() => {
+          setProfileImg(image?.path);
+          setLoader(false);
+        }, 2000);
+      }
+    });
   };
+
+  const openCamera = () => {
+    ImageCropPicker.openCamera({
+      width: 110,
+      height: 110,
+      // useFrontCamera: true,
+    }).then((image) => {
+      setLoader(true);
+      const fType = image?.mime || "";
+      const isValidFile = chatFilesVal(fType, image.size);
+      if (isValidFile) {
+        uploadImage(image);
+        setLoader(false);
+      } else {
+        setTimeout(() => {
+          CAlert(
+            "Please select valid file or file size must be exceeded",
+            "Alert!"
+          );
+        }, 2000);
+      }
+    });
+  };
+
+  const options = [
+    <TouchableOpacity
+      onPress={() => openGallery()}
+      style={[styles.optionsContainer, { paddingVertical: 10 }]}
+    >
+      <CustomIcon name="Image-2" size={18} color={BaseColors.titleColor} />
+      <Text
+        style={{ marginLeft: 15, color: BaseColors.titleColor, fontSize: 16 }}
+      >
+        {"Gallery"}
+      </Text>
+    </TouchableOpacity>,
+    <TouchableOpacity
+      onPress={() => openCamera()}
+      style={[
+        styles.optionsContainer,
+        {
+          borderColor: "#e6e6e6",
+          paddingBottom: 10,
+        },
+      ]}
+    >
+      <CustomIcon name="Camera" size={20} color={BaseColors.titleColor} />
+      <Text
+        style={{ marginLeft: 15, color: BaseColors.titleColor, fontSize: 16 }}
+      >
+        {"Camera"}
+      </Text>
+    </TouchableOpacity>,
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => {
+        ActionSheetRef.current.close();
+      }}
+      style={[styles.cancleButton]}
+    >
+      <Text
+        style={{ color: BaseColors.white, textAlign: "center", fontSize: 16 }}
+      >
+        {"Cancel"}
+      </Text>
+    </TouchableOpacity>,
+  ];
 
   return (
     <View style={{ backgroundColor: BaseColors.white, flex: 1 }}>
       <CHeader
-        title={"View Detail"}
+        title={"Task Details"}
         leftIcon="Back"
         onLeftPress={() => navigation.goBack()}
       />
@@ -83,48 +168,43 @@ export default function ViewDetails({ navigation, route }) {
             }}
           >
             <View style={styles.cotent}>
-              <Text style={styles.header} numberOfLines={1}>
-                Title:{" "}
-              </Text>
-              <Text style={styles.value}>{taskDetail?.title || "-"}</Text>
+              <Text style={styles.title}>{taskDetail?.title || "-"}</Text>
             </View>
-            <View style={styles.cotent}>
-              <Text style={styles.header} numberOfLines={1}>
-                Description:{" "}
-              </Text>
-              <Text style={styles.value}>{taskDetail?.description || "-"}</Text>
-            </View>
-            <View style={styles.cotent}>
-              <Text style={styles.header} numberOfLines={1}>
-                Created Date:{" "}
-              </Text>
+            <View style={[styles.cotent, { paddingVertical: 5 }]}>
+              <Text style={styles.dateTxt}>Last completion date : </Text>
               <Text style={styles.value}>
-                {taskDetail?.created_at
-                  ? moment.unix(taskDetail?.created_at).format("DD/MM/YYYY")
-                  : "-"}
+                {moment(taskDetail?.end_date).format("DD-MM-YYYY") || "-"}
               </Text>
             </View>
-            <View style={styles.cotent}>
-              <Text style={styles.header} numberOfLines={1}>
-                Status:{" "}
+            {taskDetail?.type !== "once" && (
+              <View style={styles.cotent}>
+                <Text style={styles.dateTxt}>Next due date: </Text>
+                <Text style={styles.value}>
+                  {taskDetail?.created_at
+                    ? moment.unix(taskDetail?.created_at).format("DD-MM-YYYY")
+                    : "15-05-2024"}
+                </Text>
+              </View>
+            )}
+            <View
+              style={{ borderBottomWidth: 1, borderColor: BaseColors.offWhite }}
+            />
+            <View style={{ marginTop: 10 }}>
+              <Text style={{ fontSize: 16, fontWeight: "600" }}>
+                Task Description :
               </Text>
-              <Text
-                style={[
-                  styles.value,
-                  {
-                    color: taskDetail?.status === 0 ? "red" : "green",
-                    fontWeight: "600",
-                  },
-                ]}
+            </View>
+            <Text style={{ color: BaseColors.textColor, marginTop: 10 }}>
+              {taskDetail?.description}
+            </Text>
+            {!isEmpty(taskDetail?.task_files) && (
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginVertical: 5,
+                  flexWrap: "wrap",
+                }}
               >
-                {taskDetail?.status === 0 ? "Pending" : "Completed"}
-              </Text>
-            </View>
-          </View>
-          {!isEmpty(taskDetail?.task_files) && (
-            <View style={{ paddingHorizontal: 15 }}>
-              <Text style={styles.header}>Task Images :</Text>
-              <View style={{ flexDirection: "row", marginVertical: 5 }}>
                 {taskDetail?.task_files &&
                   taskDetail?.task_files.map((li) => {
                     return (
@@ -144,11 +224,45 @@ export default function ViewDetails({ navigation, route }) {
                     );
                   })}
               </View>
-            </View>
-          )}
-          {!isEmpty(taskDetail?.proof_files) && (
-            <View style={{ paddingHorizontal: 15 }}>
-              <Text style={styles.header}>Proof Images :</Text>
+            )}
+            <View
+              style={{
+                borderBottomWidth: 1,
+                borderColor: BaseColors.offWhite,
+                paddingVertical: 10,
+              }}
+            />
+            {/* {!isEmpty(taskDetail?.proof_files) && ( */}
+            <View style={{ marginTop: 10 }}>
+              <Text style={styles.header}>
+                Upload Photos{" "}
+                {taskDetail.is_required && (
+                  <Text style={{ color: BaseColors.redColor }}>*</Text>
+                )}{" "}
+                :
+              </Text>
+              <Text style={{ color: BaseColors.textColor, fontSize: 16 }}>
+                Maximum 5 photos can be uploaded.
+              </Text>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => ActionSheetRef.current.open()}
+                style={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: 50,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: BaseColors.lightOrange,
+                  marginVertical: 20,
+                }}
+              >
+                <CustomIcon
+                  name="Plus"
+                  size={25}
+                  color={BaseColors.orangeColor}
+                />
+              </TouchableOpacity>
               <View style={{ flexDirection: "row" }}>
                 {taskDetail?.proof_files &&
                   taskDetail?.proof_files.map((li) => {
@@ -170,31 +284,30 @@ export default function ViewDetails({ navigation, route }) {
                   })}
               </View>
             </View>
-          )}
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={{
-              marginHorizontal: 15,
-              marginTop: 10,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              backgroundColor: "#e6ecf0",
-            }}
-            onPress={() => setCommentView(!commentView)}
-          >
-            <Text
+            {/* )} */}
+            {/* <TouchableOpacity
+              activeOpacity={0.7}
               style={{
-                paddingVertical: 6,
-                paddingHorizontal: 5,
-                fontSize: 16,
-                fontWeight: "600",
+                marginHorizontal: 15,
+                marginTop: 10,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                backgroundColor: "#e6ecf0",
               }}
+              onPress={() => setCommentView(!commentView)}
             >
-              Comments
-            </Text>
-            {commentView ? (
+              <Text
+                style={{
+                  paddingVertical: 6,
+                  paddingHorizontal: 5,
+                  fontSize: 16,
+                  fontWeight: "600",
+                }}
+              >
+                Comments
+              </Text>
               <CustomIcon
-                name={"Down-Vector"}
+                name={"Down-Arrow"}
                 color={BaseColors.textColor}
                 size={11}
                 style={{
@@ -203,33 +316,57 @@ export default function ViewDetails({ navigation, route }) {
                   alignSelf: "center",
                 }}
               />
-            ) : (
-              <CustomIcon
-                name={"up"}
-                color={BaseColors.textColor}
-                size={14}
-                style={{
-                  justifyContent: "center",
-                  paddingHorizontal: 5,
-                  alignSelf: "center",
-                }}
-              />
-            )}
-          </TouchableOpacity>
-          {commentView && <CommentView detail={detail} />}
+            </TouchableOpacity>
+            {commentView && <CommentView detail={detail} />} */}
+            <View style={{ marginVertical: 10 }}>
+              <Button txtSty={{ fontSize: 16, textTransform: "uppercase" }}>
+                {" "}
+                MARK COMPLETE
+              </Button>
+            </View>
+          </View>
         </KeyboardAwareScrollView>
       )}
-      <ImageViewModal
-        visible={imgVisible}
-        onRequestClose={closeModal}
-        content={{
-          type: "image",
-          source: selectedImag,
+      <RBSheet
+        ref={ActionSheetRef}
+        closeOnDragDown={true}
+        closeOnPressMask={true}
+        dragFromTopOnly={true}
+        height={200}
+        customStyles={{
+          container: {
+            backgroundColor: "#FFF",
+            borderTopRightRadius: 30,
+            borderTopLeftRadius: 30,
+          },
         }}
-        onPress={(event) => {
-          closeModal();
-        }}
-      />
+      >
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "600",
+              marginVertical: 10,
+              color: BaseColors.black,
+            }}
+          >
+            Upload Proof
+          </Text>
+          <Text
+            style={{
+              fontSize: 14,
+              color: BaseColors.textColor,
+            }}
+          >
+            Maximum 5 photos can be uploaded.
+          </Text>
+        </View>
+        <View>
+          {options?.map((item) => {
+            return item;
+          })}
+        </View>
+      </RBSheet>
     </View>
   );
 }

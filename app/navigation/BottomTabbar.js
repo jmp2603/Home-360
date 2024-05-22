@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     bottom: 15,
     justifyContent: "center",
     alignSelf: "center",
-    borderRadius: 30,
+    borderRadius: 40,
     paddingVertical: 10,
   },
   tabIconView: {

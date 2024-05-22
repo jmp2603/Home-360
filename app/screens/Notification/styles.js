@@ -16,7 +16,6 @@ export const createStyles = (colors) => {
     },
     mainView: {
       flexDirection: "row",
-      borderBottomWidth: 1,
       borderBottomColor: BaseColors.inactive,
       marginTop: 5,
       padding: 5,

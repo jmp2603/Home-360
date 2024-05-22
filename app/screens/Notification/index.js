@@ -157,7 +157,7 @@ export default function Notification({ navigation, route }) {
               }}
             >
               <CustomIcon
-                name="delete"
+                name="Delete"
                 color={"red"}
                 size={20}
                 style={{ alignSelf: "center" }}
@@ -168,15 +168,7 @@ export default function Notification({ navigation, route }) {
         onRightButtonsOpenRelease={onOpen}
         onRightButtonsCloseRelease={onClose}
       >
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={[
-            styles.mainView,
-            {
-              backgroundColor: "#e6ecf0",
-            },
-          ]}
-        >
+        <TouchableOpacity activeOpacity={0.7} style={[styles.mainView]}>
           <View
             style={{
               justifyContent: "center",
@@ -199,52 +191,8 @@ export default function Notification({ navigation, route }) {
           <View>
             <View
               style={{
-                display: "flex",
                 flexDirection: "row",
-                paddingHorizontal: 10,
                 justifyContent: "space-between",
-                width: Dimensions.get("screen").width / 1.32,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                }}
-              >
-                <View>
-                  <Text
-                    style={{
-                      color: BaseColors.textColor,
-                      fontSize: 12,
-                      fontWeight: "500",
-                      marginRight: 3,
-                    }}
-                  >
-                    {item?.data?.name}
-                  </Text>
-                </View>
-              </View>
-              <View
-                style={{
-                  justifyContent: "flex-end",
-                  alignItems: "flex-end",
-                  alignContent: "flex-end",
-                }}
-              >
-                <Text
-                  style={{
-                    textAlign: "right",
-                    color: BaseColors.primary,
-                    fontSize: 10,
-                  }}
-                >
-                  {Duration(item.created_at)}
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
               }}
             >
               <View>
@@ -258,6 +206,23 @@ export default function Notification({ navigation, route }) {
                   }}
                 >
                   {item?.title}
+                </Text>
+              </View>
+              <View
+                style={{
+                  justifyContent: "flex-end",
+                  alignItems: "flex-end",
+                  alignContent: "flex-end",
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: "right",
+                    color: BaseColors.titleColor,
+                    fontSize: 10,
+                  }}
+                >
+                  {Duration(item.created_at)}
                 </Text>
               </View>
             </View>
@@ -287,9 +252,7 @@ export default function Notification({ navigation, route }) {
     setBtnLoader(true);
     let url = `${BaseSetting.endpoints.deleteNotification}?id=${id}`;
     try {
-      console.log("🚀 ~ handledelete ~ url:", url);
       const resp = await getApiData(url, "GET");
-      console.log("🚀 ~ handledelete ~ resp:", resp);
       if (resp.status) {
         getNotificationList();
         Toast.show(resp?.message);
@@ -311,21 +274,7 @@ export default function Notification({ navigation, route }) {
         backgroundColor: colors.colors.white,
       }}
     >
-      <CHeader
-        title={"Notification"}
-        defaultRtxtSty={{
-          width: "20%",
-          borderWidth: 1,
-          borderColor: BaseColors.inactive,
-          borderRadius: 3,
-        }}
-        rtxtsty={{
-          alignSelf: "center",
-          color: colors.colors.primary,
-          fontSize: 15,
-          paddingVertical: 3,
-        }}
-      />
+      <CHeader title={"Notification"} customIcon rightIcon />
       <View style={{ marginHorizontal: 15, flex: 1 }}>
         <StatusBar
           translucent

@@ -18,7 +18,6 @@ export const BaseColors = {
   primaryLight: "#67ffff",
   primaryDark: "#00a49b",
   lightBlack: "#121212",
-  lightRed: "#FEE9E6",
   offWhite: "#F5F5F5",
   transparent: "#0000",
   inactive: "#c2c2c2",
@@ -57,6 +56,9 @@ export const BaseColors = {
   greenColor: "#2A5241",
   lightOrange: "#F7EBDA",
   grey: "#616161",
+  lightPrimary: "#E9F8FF",
+  lightYellow: "#FFF9F0",
+  lightRed: "#FFEDED",
 };
 
 export const DarkBaseColor = {
