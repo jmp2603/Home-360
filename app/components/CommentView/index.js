@@ -2,26 +2,24 @@ import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
-  KeyboardAvoidingViewBase,
-  ScrollView,
+  FlatList,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { BaseColors } from "../../config/theme";
-import { flattenDeep, size } from "lodash";
+import { flattenDeep, isEmpty } from "lodash";
 import styles from "./styles";
-import Button from "../../components/Button";
 import { getApiData } from "../../utils/apiHelper";
 import BaseSetting from "../../config/setting";
 import Toast from "react-native-simple-toast";
-import { useTheme } from "@react-navigation/native";
-import DeviceInfo from "react-native-device-info";
 import { urlParams } from "../../utils/CommonFunc";
 import TextInput from "../../components/TextInput";
 import moment from "moment";
+import { CustomIcon } from "../../config/LoadIcons";
+import NoData from "../../components/NoData";
 
 export default function CommentView(props) {
-  const colors = useTheme();
   const { detail } = props;
   const [page, setPage] = useState(1);
   const [nextPage, setNextPage] = useState(false);
@@ -33,8 +31,8 @@ export default function CommentView(props) {
   const [commentLoader, setCommentLoader] = useState(false);
 
   // Get My All users
-  async function getChatHistory(p = page) {
-    setCommentLoader(true);
+  async function getChatHistory(p = page, ty) {
+    setCommentLoader(ty === "onEndreached" ? false : true);
     const ndata = {
       page: p,
       taskId: detail?.id,
@@ -59,7 +57,6 @@ export default function CommentView(props) {
       } else {
         setCommentList([]);
         setNextLoading(false);
-        Toast.show(resp?.message);
       }
       setCommentLoader(false);
     } catch (error) {
@@ -68,6 +65,36 @@ export default function CommentView(props) {
     }
   }
   // End
+  const onEndReached = () => {
+    if (nextPage && !nextLoading) {
+      setNextLoading(true);
+      const tempPage = page + 1;
+      setPage(tempPage);
+      getChatHistory(tempPage, "onEndreached");
+    }
+  };
+  const renderListFooter = () => {
+    if (!nextPage) {
+      return (
+        <Text
+          style={{
+            width: "100%",
+            textAlign: "center",
+            textAlignVertical: "center",
+            height: 20,
+          }}
+        >
+          {/* No more Data */}
+        </Text>
+      );
+    }
+    if (nextLoading) {
+      return (
+        <ActivityIndicator style={{ color: BaseColors.primary, height: 60 }} />
+      );
+    }
+    return null;
+  };
 
   const validation = () => {
     let valid = true;
@@ -112,24 +139,24 @@ export default function CommentView(props) {
     getChatHistory(1);
   }, []);
 
-  const renderComment = (item, index) => {
+  const renderComment = ({ item, index }) => {
     const val = item;
     return (
       <View
         style={{
-          backgroundColor: "#ffffff",
+          backgroundColor: BaseColors.offWhite,
           borderWidth: 1,
           marginBottom: 8,
-          padding: 5,
-          borderRadius: 6,
-          borderColor: BaseColors.inputBorder,
+          padding: 3,
+          borderRadius: 10,
+          borderColor: "#E2E8F0",
         }}
       >
         <View
           style={{
             flexDirection: "row",
-            padding: 5,
             borderRadius: 3,
+            marginVertical: 8,
           }}
         >
           <View
@@ -142,12 +169,13 @@ export default function CommentView(props) {
             <View>
               <Text
                 style={{
-                  fontSize: 14,
-                  color: "#7c8287",
+                  fontSize: 16,
+                  color: BaseColors.titleColor,
                   marginLeft: 10,
+                  fontWeight: "600",
                 }}
               >
-                {val?.user_name || "User Name"}
+                {val?.name || "User Name"}
               </Text>
             </View>
           </View>
@@ -156,7 +184,14 @@ export default function CommentView(props) {
               flexDirection: "row",
             }}
           >
-            <Text style={{ marginLeft: 5, color: "#7c8287", fontSize: 14 }}>
+            <Text
+              style={{
+                marginLeft: 5,
+                color: BaseColors.titleColor,
+                fontSize: 16,
+                fontWeight: "600",
+              }}
+            >
               {val?.created_at &&
                 moment.unix(val?.created_at).format("DD/MM/YYYY")}{" "}
             </Text>
@@ -164,13 +199,15 @@ export default function CommentView(props) {
         </View>
         <View
           style={{
-            marginHorizontal: 15,
+            marginHorizontal: 10,
+            marginBottom: 5,
           }}
         >
           <Text
             style={{
-              fontSize: 18,
-              color: "#000000",
+              fontSize: 16,
+              color: BaseColors.titleColor,
+              fontWeight: "400",
             }}
           >
             {val?.message}
@@ -182,52 +219,71 @@ export default function CommentView(props) {
 
   return (
     <>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{
-          ...styles.bottomView,
-          backgroundColor: BaseColors.white,
-          maxHeight: Dimensions.get("window").height / 1.6,
-        }}
-      >
-        <View style={{ marginVertical: 10 }}>
-          {commentLoader ? (
-            <ActivityIndicator color={BaseColors.primary} />
-          ) : (
-            size(commentList) > 0 &&
-            commentList.map((li, index) => {
-              return renderComment(li, index);
-            })
-          )}
-        </View>
-      </ScrollView>
       <View style={styles.bottomView}>
-        <View>
+        <View style={{ width: "84%" }}>
           <TextInput
-            textArea
-            placeholderText="Add Comment..."
+            placeholderText="Type message..."
             value={textAreaVal}
-            numberOfLines={4}
+            textInputStyle={{
+              minHeight: 50,
+              backgroundColor: BaseColors.offWhite,
+              borderRadius: 10,
+              // borderColor: BaseColors.offWhite,
+            }}
             showError={textValErr.err}
             errorText={textValErr.txt}
-            numberofLine={4}
             onChange={(value) => {
-              setTextAreaVal(value);
+              if (value) {
+                setTextAreaVal(value);
+                setTextValErr({ err: false, txt: "" });
+              }
             }}
           />
         </View>
-        <View style={{ marginVertical: 20 }}>
-          <Button
-            loading={btnLoader}
-            type="primary"
-            onBtnClick={() => {
-              validation();
+        <View style={{ marginBottom: textValErr.err && 50 }}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => validation()}
+            style={{
+              width: "20%",
+              marginHorizontal: 10,
+              width: 50,
+              height: 50,
+              borderRadius: 30,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: BaseColors.primary,
             }}
           >
-            {"Send"}
-          </Button>
+            <CustomIcon name="Send" size={20} color={BaseColors.white} />
+          </TouchableOpacity>
         </View>
       </View>
+      {commentLoader ? (
+        <ActivityIndicator
+          color={BaseColors.primary}
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignSelf: "center",
+          }}
+        />
+      ) : isEmpty(commentList) ? (
+        <NoData />
+      ) : (
+        <FlatList
+          nestedScrollEnabled
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          data={commentList}
+          maxHeight={Dimensions.get("window").height / 2}
+          renderItem={renderComment}
+          keyExtractor={(item, index) => index.toString()}
+          onEndReached={onEndReached}
+          onendreachedthreshold={0.8}
+          ListFooterComponent={renderListFooter}
+        />
+      )}
     </>
   );
 }

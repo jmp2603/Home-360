@@ -4,13 +4,14 @@ import { BaseColors, FontFamily } from "../../config/theme";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: "space-between",
   },
   bottomView: {
     backgroundColor: BaseColors.white,
     borderRadius: 5,
-    marginHorizontal: 15,
     marginVertical: 10,
+    flexDirection: "row",
+    width: "100%",
+    alignItems: "center",
   },
   heading: {
     color: BaseColors.white,

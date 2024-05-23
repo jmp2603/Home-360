@@ -289,7 +289,7 @@ function CInput(props, ref) {
                   blurOnSubmit={false}
                   multiline={textArea ? true : false}
                   value={value}
-                  placeholderTextColor={BaseColors.inactive}
+                  placeholderTextColor={BaseColors.grey}
                   editable={editable}
                   placeholder={placeholderText}
                   onSubmitEditing={onSubmit}
@@ -299,24 +299,24 @@ function CInput(props, ref) {
                   returnKeyType={returnKeyType}
                   isSuffix={isSuffix}
                   style={{
-                    height: textArea ? 55 : 40,
-                    minHeight: 40,
+                    height: textArea ? 55 : 50,
+                    minHeight: 50,
                     maxHeight: textArea ? 82 : 40,
                     justifyContent: "center",
                     alignSelf: "center",
                     borderWidth: 1,
-                    borderColor: editable
-                      ? BaseColors.inputBorder
-                      : showError
+                    borderColor: showError
                       ? BaseColors.errorRed
-                      : BaseColors.inactive,
+                      : editable
+                      ? BaseColors.offWhite
+                      : BaseColors.offWhite,
                     fontSize: isTabletDevice ? 16 : 14,
                     width: "100%",
                     textAlignVertical: textArea ? "top" : null,
                     color:
                       editable === false
                         ? BaseColors.inactive
-                        : colors.colors.textColor,
+                        : BaseColors.textColor,
                     paddingHorizontal: 7,
                     borderRadius: 5,
                     marginTop: textArea ? 10 : 0,
