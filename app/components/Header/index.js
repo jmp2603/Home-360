@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import {
   View,
@@ -13,6 +13,7 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 import { BaseColors } from "../../config/theme";
 import { CustomIcon } from "../../config/LoadIcons";
 import FIcon from "react-native-vector-icons/Feather";
+import Popover, { PopoverPlacement } from "react-native-popover-view";
 import DeviceInfo from "react-native-device-info";
 
 const isTabletDevice = DeviceInfo.isTablet();
@@ -89,7 +90,12 @@ export default function CHeader(props) {
     disabled,
     customIcon,
     notification,
+    setShowPopover,
+    showPopover,
+    popoverPress,
   } = props;
+  const touchable = useRef();
+  // const [showPopover, setShowPopover] = useState();
 
   return (
     <>
@@ -156,31 +162,66 @@ export default function CHeader(props) {
         ) : null}
 
         {rightIcon ? (
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={onRightPress}
-            style={[
-              {
-                alignItems: "flex-end",
-                justifyContent: "center",
-                width: 50,
-              },
-            ]}
-          >
-            {customIcon ? (
-              <FIcon name="more-vertical" size={20} color={BaseColors.white} />
-            ) : (
-              <CustomIcon
-                name={rightIcon}
-                size={Rsize}
-                style={[
-                  styles.defaultIconSty,
-                  { color: BaseColors.white },
-                  rightIconSty,
-                ]}
-              />
-            )}
-          </TouchableOpacity>
+          <>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={onRightPress}
+              style={[
+                {
+                  alignItems: "flex-end",
+                  justifyContent: "center",
+                  width: 50,
+                },
+              ]}
+            >
+              {customIcon ? (
+                <FIcon
+                  onPress={() => setShowPopover(true)}
+                  ref={touchable}
+                  name="more-vertical"
+                  size={20}
+                  color={BaseColors.white}
+                />
+              ) : (
+                <CustomIcon
+                  name={rightIcon}
+                  size={Rsize}
+                  style={[
+                    styles.defaultIconSty,
+                    { color: BaseColors.white },
+                    rightIconSty,
+                  ]}
+                />
+              )}
+            </TouchableOpacity>
+            <Popover
+              from={touchable}
+              isVisible={showPopover}
+              statusBarTranslucent={true}
+              popoverStyle={{ width: 120, borderRadius: 5 }} // Adjust as needed
+              arrowSize={{ height: 0, width: 0 }}
+              onRequestClose={() => setShowPopover(false)}
+            >
+              <TouchableOpacity
+                onPress={popoverPress}
+                activeOpacity={0.8}
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    color: BaseColors.errorRed,
+                    fontSize: 18,
+                    padding: 15,
+                  }}
+                >
+                  Delete All
+                </Text>
+              </TouchableOpacity>
+            </Popover>
+          </>
         ) : (
           <View style={{ width: 50 }} />
         )}
