@@ -12,7 +12,7 @@ import {
   Alert,
 } from "react-native";
 import { createStyles } from "./styles";
-import { useTheme } from "@react-navigation/native";
+import { useIsFocused, useTheme } from "@react-navigation/native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import FastImage from "react-native-fast-image";
 import { Images } from "../../config";
@@ -29,17 +29,19 @@ import { flattenDeep, isArray, isEmpty, isObject, size } from "lodash";
 import { chatFilesVal, urlParams } from "../../utils/CommonFunc";
 import RBSheet from "react-native-raw-bottom-sheet";
 import CAlert from "../../components/CAlert";
-import ImageCropPicker from "react-native-image-crop-picker";
+import ImagePicker from "react-native-image-crop-picker";
 
 const IOS = Platform.OS === "ios";
 const { width, height } = Dimensions.get("window");
 export default function Home({ navigation, index }) {
+  const isFocused = useIsFocused();
   const colors = useTheme();
   const styles = createStyles(colors);
   const flatListRef = useRef();
   const touchable = useRef();
   const ActionSheetRef = useRef();
   const ActionUploadRef = useRef();
+  const ActionCompleted = useRef();
   const [showPopover, setShowPopover] = useState(false);
   const { userData } = useSelector((state) => state.auth);
   const [taskList, setTaskList] = useState([]);
@@ -50,11 +52,13 @@ export default function Home({ navigation, index }) {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [multipicLoader, setMultipicLoader] = useState(false);
   const [pagination, setPagination] = useState({});
-  console.log("🚀 ~ Home ~ pagination:", pagination);
   const [selectedDate, setSelectedDate] = useState(
     moment().format("YYYY-MM-DD")
   );
   const [dates, setDates] = useState([]);
+  const [btnLoading, setBtnLoading] = useState(false);
+  const [selectItem, setSelectItem] = useState({});
+  const [completedLoader, setCompletedLoader] = useState(false);
 
   useEffect(() => {
     generateDatesForCurrentMonth();
@@ -113,7 +117,7 @@ export default function Home({ navigation, index }) {
    */
   const getTaskList = async (p = 1, ty) => {
     setScreenLoader(ty == "onEndreached" ? false : true);
-    const data = { endDate: selectedDate, page: p };
+    const data = { page: p };
     const string = urlParams(data);
     const url = BaseSetting.endpoints.taskList + string?._j;
     try {
@@ -175,7 +179,7 @@ export default function Home({ navigation, index }) {
 
   useEffect(() => {
     getTaskList(1);
-  }, []);
+  }, [isFocused]);
 
   const renderItem = ({ item, index }) => {
     const background =
@@ -278,33 +282,44 @@ export default function Home({ navigation, index }) {
                 )}
               </View>
               <View style={{ flexDirection: "row" }}>
+                {item?.status !== 1 && (
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={() => {
+                      setUploadedImages(item?.proof_files);
+                      setSelectItem(item);
+                      ActionUploadRef.current.open();
+                    }}
+                    style={[
+                      styles.attechStyle,
+                      {
+                        backgroundColor:
+                          item?.proof_needed === 0
+                            ? BaseColors.grey
+                            : BaseColors.errorRed,
+                      },
+                    ]}
+                  >
+                    <CustomIcon
+                      name="Attech"
+                      size={18}
+                      color={BaseColors.white}
+                    />
+                  </TouchableOpacity>
+                )}
                 <TouchableOpacity
                   activeOpacity={0.7}
-                  onPress={() => ActionUploadRef.current.open()}
-                  style={[
-                    styles.attechStyle,
-                    {
-                      backgroundColor:
-                        item?.proof_needed === 0
-                          ? BaseColors.grey
-                          : BaseColors.errorRed,
-                    },
-                  ]}
-                >
-                  <CustomIcon
-                    name="Attech"
-                    size={18}
-                    color={BaseColors.white}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  onPress={() => console.log("Testing Details=====")}
+                  disabled={item?.status === 1}
+                  onPress={() => {
+                    setSelectItem(item);
+                    ActionCompleted.current.open();
+                  }}
                   style={[
                     styles.attechStyle,
                     {
                       marginHorizontal: 10,
                       backgroundColor: BaseColors.greenColor,
+                      opacity: item?.status === 1 ? 0.5 : 1,
                     },
                   ]}
                 >
@@ -324,10 +339,10 @@ export default function Home({ navigation, index }) {
 
   /**
    * Function for Upload Images.
-   * @function uploadImage
+   * @function upload
    * @param {Object} imag - Show Image Object for Upload
    */
-  async function uploadImage(imag) {
+  async function upload(imag) {
     setMultipicLoader(true);
     let imagData = {};
     const name =
@@ -343,7 +358,7 @@ export default function Home({ navigation, index }) {
       setUploadedImages([...uploadedImages, imagData]);
       setTimeout(() => {
         ActionUploadRef.current.open();
-      }, 1000);
+      }, 500);
       ActionSheetRef.current.close();
       setMultipicLoader(false);
     } catch (err) {
@@ -352,13 +367,13 @@ export default function Home({ navigation, index }) {
   }
 
   const openGallery = () => {
-    ImageCropPicker.openPicker({
+    ImagePicker.openPicker({
       cropping: true,
     }).then((image) => {
       const fType = image?.mime || "";
       const isValidFile = chatFilesVal(fType, image.size);
       if (isValidFile) {
-        uploadImage(image);
+        upload(image);
       } else {
         setTimeout(() => {
           setProfileImg(image?.path);
@@ -368,7 +383,7 @@ export default function Home({ navigation, index }) {
   };
 
   const openCamera = () => {
-    ImageCropPicker.openCamera({
+    ImagePicker.openCamera({
       width: 110,
       height: 110,
       // useFrontCamera: true,
@@ -376,7 +391,7 @@ export default function Home({ navigation, index }) {
       const fType = image?.mime || "";
       const isValidFile = chatFilesVal(fType, image.size);
       if (isValidFile) {
-        uploadImage(image);
+        upload(image);
       } else {
         setTimeout(() => {
           CAlert(
@@ -431,6 +446,71 @@ export default function Home({ navigation, index }) {
       </Text>
     </TouchableOpacity>,
   ];
+
+  async function uploadMultiImage() {
+    setBtnLoading(true);
+    let uploadImg = {};
+    uploadedImages &&
+      uploadedImages.map((li, ind) => {
+        uploadImg = { ...uploadImg, [`TaskData[proofFile][${ind}]`]: li };
+      });
+    const passData = {
+      ...uploadImg,
+    };
+    const url =
+      BaseSetting.endpoints.uploadImage +
+      `?taskDataId=${selectItem?.task_data_id}`;
+    try {
+      const resp = await getApiData(url, "POST", passData, "", true);
+      if (resp.status) {
+        getTaskList(1, "onEndreached");
+        ActionUploadRef.current.close();
+        Toast.show(resp?.message);
+      }
+      setBtnLoading(false);
+    } catch (er) {
+      ActionUploadRef.current.close();
+      setBtnLoading(false);
+    }
+  }
+
+  async function markAsCompleted() {
+    setCompletedLoader(true);
+    const url =
+      BaseSetting.endpoints.markasComplete +
+      `?taskDataId=${selectItem?.task_data_id}`;
+    try {
+      const resp = await getApiData(url, "GET");
+      if (resp.status) {
+        getTaskList(1);
+      }
+      setCompletedLoader(false);
+      Toast.show(resp?.message);
+      ActionCompleted.current.close();
+    } catch (er) {
+      ActionCompleted.current.close();
+      setCompletedLoader(false);
+    }
+  }
+
+  const removeImage = async (id, ind) => {
+    const removeImage = [...uploadedImages];
+    if (removeImage) {
+      if (id) {
+        const url = BaseSetting.endpoints.deleteImage + `?id=${id}`;
+        try {
+          const resp = await getApiData(url, "GET");
+          if (resp.status) {
+            removeImage.splice(ind, 1);
+            Toast.show(resp?.message);
+          }
+        } catch (er) {}
+      } else {
+        removeImage.splice(ind, 1);
+      }
+      setUploadedImages(removeImage);
+    }
+  };
 
   return (
     <View
@@ -677,7 +757,7 @@ export default function Home({ navigation, index }) {
         closeOnDragDown={true}
         closeOnPressMask={true}
         dragFromTopOnly={true}
-        height={250}
+        height={size(uploadedImages) <= 3 ? 250 : 350}
         customStyles={{
           container: {
             backgroundColor: "#FFF",
@@ -706,9 +786,10 @@ export default function Home({ navigation, index }) {
             Maximum 5 photos can be uploaded.
           </Text>
         </View>
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", marginTop: 10 }}>
           <TouchableOpacity
             activeOpacity={0.7}
+            disabled={size(uploadedImages) === 5}
             onPress={() => {
               if (ActionSheetRef.current) {
                 setTimeout(() => {
@@ -724,8 +805,9 @@ export default function Home({ navigation, index }) {
               justifyContent: "center",
               alignItems: "center",
               backgroundColor: BaseColors.lightOrange,
-              marginVertical: 20,
+              marginTop: 10,
               marginLeft: 20,
+              opacity: size(uploadedImages) === 5 ? 0.5 : 1,
             }}
           >
             <CustomIcon name="Plus" size={25} color={BaseColors.orangeColor} />
@@ -734,37 +816,14 @@ export default function Home({ navigation, index }) {
             ? uploadedImages.map((d, index) => {
                 return (
                   <TouchableOpacity
-                    onPress={() => {
-                      setTimeout(() => {
-                        if (!isEmpty(d[index])) {
-                          Alert.alert(
-                            "Remove",
-                            "Are you sure you want to remove this photo?",
-                            [
-                              {
-                                text: "No",
-                                onPress: () => {},
-                              },
-                              {
-                                text: "Yes",
-                                // onPress: () => {
-                                //   removeUploadImage(index, uploadedImages);
-                                // },
-                              },
-                            ]
-                          );
-                        }
-                      }, 200);
-                    }}
                     style={[
                       styles.imageContainer,
                       {
                         width: 85,
                         height: 85,
-                        marginVertical: 15,
                         flexDirection: "row",
                         position: "relative",
-                        marginLeft: 1,
+                        marginLeft: 10,
                         borderRadius: 50,
                         flexWrap: "wrap",
                       },
@@ -778,7 +837,7 @@ export default function Home({ navigation, index }) {
                         borderRadius: 50,
                       }}
                       resizeMode={"cover"}
-                      source={{ uri: d?.uri }}
+                      source={{ uri: d?.file || d?.uri }}
                     />
                     {size(uploadedImages) > 0 && (
                       <TouchableOpacity
@@ -794,9 +853,9 @@ export default function Home({ navigation, index }) {
                               },
                               {
                                 text: "Yes",
-                                // onPress: () => {
-                                //   removeUploadImage(index, uploadedImages);
-                                // },
+                                onPress: () => {
+                                  removeImage(d?.id, index);
+                                },
                               },
                             ]
                           );
@@ -821,7 +880,7 @@ export default function Home({ navigation, index }) {
             flexDirection: "row",
             justifyContent: "center",
             paddingHorizontal: 10,
-            marginBottom: 10,
+            marginVertical: 10,
           }}
         >
           <Button
@@ -835,7 +894,13 @@ export default function Home({ navigation, index }) {
             CANCEL
           </Button>
           <View style={{ marginHorizontal: 10 }}>
-            <Button containerStyle={{ width: 160 }}>Submit</Button>
+            <Button
+              loading={btnLoading}
+              containerStyle={{ width: 160 }}
+              onBtnClick={() => uploadMultiImage()}
+            >
+              Submit
+            </Button>
           </View>
         </View>
       </RBSheet>
@@ -877,6 +942,70 @@ export default function Home({ navigation, index }) {
           {options?.map((item) => {
             return item;
           })}
+        </View>
+      </RBSheet>
+      <RBSheet
+        ref={ActionCompleted}
+        closeOnDragDown={true}
+        closeOnPressMask={true}
+        dragFromTopOnly={true}
+        height={150}
+        customStyles={{
+          container: {
+            backgroundColor: "#FFF",
+            borderTopRightRadius: 30,
+            borderTopLeftRadius: 30,
+          },
+        }}
+      >
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "700",
+              marginVertical: 10,
+              color: BaseColors.black,
+            }}
+          >
+            Confirm
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "500",
+              color: BaseColors.textColor,
+            }}
+          >
+            Are you sure you want to complete this task?
+          </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            paddingHorizontal: 10,
+            marginVertical: 10,
+          }}
+        >
+          <Button
+            onBtnClick={() => ActionCompleted.current.close()}
+            containerStyle={{
+              width: 160,
+              backgroundColor: BaseColors.yellow,
+            }}
+            style={{ backgroundColor: BaseColors.yellow, borderWidth: 0 }}
+          >
+            NO
+          </Button>
+          <View style={{ marginHorizontal: 10 }}>
+            <Button
+              loading={completedLoader}
+              containerStyle={{ width: 160 }}
+              onBtnClick={() => markAsCompleted()}
+            >
+              YES
+            </Button>
+          </View>
         </View>
       </RBSheet>
     </View>
