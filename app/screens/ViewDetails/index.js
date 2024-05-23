@@ -40,6 +40,7 @@ export default function ViewDetails({ navigation, route }) {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [multipicLoader, setMultipicLoader] = useState(false);
   const [completedLoader, setCompletedLoader] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   // View Vessel Details...
   async function getTaskDetails() {
@@ -50,6 +51,11 @@ export default function ViewDetails({ navigation, route }) {
       if (res.status) {
         setTaskDetails(res?.data);
         setUploadedImages(res?.data?.proof_files);
+        if (res?.data?.status === 1) {
+          setDisabled(true);
+        } else if (isEmpty(res?.data?.proof_files) && res?.data.proof_needed) {
+          setDisabled(true);
+        }
       }
       setIsLoading(false);
     } catch (err) {
@@ -87,6 +93,7 @@ export default function ViewDetails({ navigation, route }) {
     try {
       const resp = await getApiData(url, "POST", uploadData, "", true);
       if (resp?.status) {
+        setDisabled(false);
         setUploadedImages([...uploadedImages, imagData]);
         ActionSheetRef.current.close();
       }
@@ -192,6 +199,9 @@ export default function ViewDetails({ navigation, route }) {
       } else {
         removeImage.splice(ind, 1);
       }
+      if (isEmpty(removeImage)) {
+        setDisabled(true);
+      }
       setUploadedImages(removeImage);
     }
   };
@@ -259,7 +269,13 @@ export default function ViewDetails({ navigation, route }) {
               style={{ borderBottomWidth: 1, borderColor: BaseColors.offWhite }}
             />
             <View style={{ marginTop: 10 }}>
-              <Text style={{ fontSize: 16, fontWeight: "600" }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "600",
+                  color: BaseColors.titleColor,
+                }}
+              >
                 Task Description :
               </Text>
             </View>
@@ -317,7 +333,7 @@ export default function ViewDetails({ navigation, route }) {
             <View style={{ marginTop: 10 }}>
               <Text style={styles.header}>
                 Upload Photos{" "}
-                {taskDetail.is_required && (
+                {taskDetail.proof_needed && (
                   <Text style={{ color: BaseColors.redColor }}>*</Text>
                 )}{" "}
               </Text>
@@ -448,7 +464,7 @@ export default function ViewDetails({ navigation, route }) {
               <Button
                 loading={completedLoader}
                 onBtnClick={() => markAsCompleted()}
-                disabled={detail?.status === 1}
+                disabled={disabled}
                 txtSty={{ fontSize: 16, textTransform: "uppercase" }}
               >
                 {" "}

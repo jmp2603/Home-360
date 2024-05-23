@@ -97,15 +97,6 @@ export const createStyles = (colors) => {
       alignItems: "center",
       marginBottom: 10,
     },
-
-    cleardatatxt: {
-      fontSize: isTabletDevice ? 20 : 16,
-      // fontFamily: FontFamily.bold,
-      color: BaseColors.secondary,
-      marginTop: 10,
-      // fontFamily: 'Poppins',
-      fontWeight: "bold",
-    },
     filterView: {
       flex: 1,
       justifyContent: "center",

@@ -187,7 +187,12 @@ export default function Login({ navigation }) {
           <View style={{ marginVertical: 20 }}>
             <View style={{ paddingVertical: 10 }}>
               <Text
-                style={{ textAlign: "center", fontSize: 30, fontWeight: "700" }}
+                style={{
+                  textAlign: "center",
+                  fontSize: 30,
+                  fontWeight: "700",
+                  color: BaseColors.titleColor,
+                }}
               >
                 Login
               </Text>
@@ -198,6 +203,7 @@ export default function Login({ navigation }) {
                   textAlign: "center",
                   flexWrap: "wrap",
                   fontSize: 14,
+                  color: BaseColors.titleColor,
                   fontWeight: "400",
                 }}
               >

@@ -236,7 +236,14 @@ export default function Home({ navigation, index }) {
                 fontWeight: "600",
               }}
             >
-              {item?.title}
+              {item?.title}{" "}
+              {item?.status === 2 && (
+                <CustomIcon
+                  name="warning"
+                  size={16}
+                  color={BaseColors.errorRed}
+                />
+              )}
             </Text>
             <Text
               numberOfLines={1}
@@ -719,7 +726,7 @@ export default function Home({ navigation, index }) {
             </Popover>
           </View>
           <View style={{ justifyContent: "center", marginTop: 10 }}>
-            <Text style={{ fontSize: 18 }}>
+            <Text style={{ fontSize: 18, color: BaseColors.titleColor }}>
               {pagination?.completedCount || 0}/{pagination?.totalCount || 0}
             </Text>
           </View>
