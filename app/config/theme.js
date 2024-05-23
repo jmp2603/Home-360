@@ -59,6 +59,7 @@ export const BaseColors = {
   lightPrimary: "#E9F8FF",
   lightYellow: "#FFF9F0",
   lightRed: "#FFEDED",
+  lightGreen: "#E5FFF4",
 };
 
 export const DarkBaseColor = {

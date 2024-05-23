@@ -35,6 +35,8 @@ const BaseSetting = {
     uploadImage: "task/upload-files",
     markasComplete: "task/mark-as-completed",
     deleteImage: "task/delete-file",
+    allNotificationDelete: "notification/delete-all",
+    readNotification: "notification/mark-as-read",
   },
 };
 
