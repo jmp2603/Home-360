@@ -20,7 +20,6 @@ export const createStyles = (colors) => {
     dateTxt: {
       fontSize: 16,
       color: BaseColors.grey,
-      paddingBottom: 5,
     },
     title: {
       fontSize: 20,
@@ -30,6 +29,7 @@ export const createStyles = (colors) => {
     cotent: {
       flexDirection: "row",
       paddingVertical: 10,
+      alignItems: "center",
     },
     imageContainer: {
       width: 80,
@@ -54,6 +54,7 @@ export const createStyles = (colors) => {
       fontSize: 14,
       fontWeight: "600",
       textAlign: "center",
+      color: BaseColors.titleColor,
     },
     mainViewStyMultiple: {
       alignItems: "center",

@@ -68,7 +68,7 @@ const SplashScreen = ({ navigation }) => {
     <>
       <StatusBar
         animated
-        barStyle="light-content"
+        barStyle="dark-content"
         backgroundColor={"#F7EBDA"}
         translucent
       />

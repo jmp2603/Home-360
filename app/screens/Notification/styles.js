@@ -73,13 +73,5 @@ export const createStyles = (colors) => {
     marBtm15: {
       marginVertical: 10,
     },
-    cleardatatxt: {
-      fontSize: isTabletDevice ? 20 : 16,
-      // fontFamily: FontFamily.bold,
-      color: BaseColors.secondary,
-      marginTop: 10,
-      // fontFamily: 'Poppins',
-      fontWeight: "bold",
-    },
   });
 };
