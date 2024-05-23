@@ -233,8 +233,8 @@ export default function CommentView(props) {
             showError={textValErr.err}
             errorText={textValErr.txt}
             onChange={(value) => {
+              setTextAreaVal(value);
               if (value) {
-                setTextAreaVal(value);
                 setTextValErr({ err: false, txt: "" });
               }
             }}
