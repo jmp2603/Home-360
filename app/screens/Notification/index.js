@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -14,19 +14,21 @@ import { BaseColors } from "../../config/theme";
 import { createStyles } from "./styles";
 import { StatusBar } from "react-native";
 import { flattenDeep, isEmpty } from "lodash";
-import FastImage from "react-native-fast-image";
-import { Images } from "../../config";
 import Toast from "react-native-simple-toast";
-import { useTheme } from "@react-navigation/native";
-import { NoData } from "../../components";
+import { useIsFocused, useTheme } from "@react-navigation/native";
+import { Button, NoData } from "../../components";
 import { getApiData } from "../../utils/apiHelper";
 import BaseSetting from "../../config/setting";
 import Swipeable from "react-native-swipeable";
 import { CustomIcon } from "../../config/LoadIcons";
 import { Duration, urlParams } from "../../utils/CommonFunc";
-import DeleteModal from "../../components/DeleteModal";
+import moment from "moment";
+import RBSheet from "react-native-raw-bottom-sheet";
 
+const { width, height } = Dimensions.get("window");
 export default function Notification({ navigation, route }) {
+  const isFocused = useIsFocused();
+  const ActionOpenSheet = useRef();
   const IOS = Platform.OS === "ios";
   const colors = useTheme();
   const styles = createStyles(colors);
@@ -37,9 +39,25 @@ export default function Notification({ navigation, route }) {
   const [nextLoading, setNextLoading] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
   const [currentlyOpenSwipeable, setCurrentlyOpenSwipeable] = useState(null);
-  const [visible, setVisible] = useState(false);
   const [btnloader, setBtnLoader] = useState(false);
   const [selectData, setSelectData] = useState();
+  const [showPopover, setShowPopover] = useState(false);
+
+  const backgroundColor = [
+    BaseColors.lightPrimary,
+    BaseColors.lightOrange,
+    BaseColors.lightGreen,
+  ];
+  const iconColor = [
+    BaseColors.primary,
+    BaseColors.yellow,
+    BaseColors.greenColor,
+  ];
+
+  const getColors = (index) => ({
+    backgroundColor: backgroundColor[index % backgroundColor.length],
+    iconColor: iconColor[index % iconColor.length],
+  });
 
   /**
    * Function for Get Task List...
@@ -55,7 +73,13 @@ export default function Notification({ navigation, route }) {
     try {
       const resp = await getApiData(url, "GET");
       if (resp?.status) {
-        let tempPArr = resp?.data;
+        let tempPArr;
+        resp?.data.forEach((notification, index) => {
+          const colors = getColors(index);
+          notification.backgroundColor = colors.backgroundColor;
+          notification.iconColor = colors.iconColor;
+        });
+        tempPArr = resp?.data;
         if (p > 1) {
           tempPArr = flattenDeep([notificationList, tempPArr]);
         }
@@ -110,7 +134,7 @@ export default function Notification({ navigation, route }) {
 
   useEffect(() => {
     getNotificationList(1);
-  }, []);
+  }, [isFocused]);
 
   function onOpen(event, gestureState, swipeable) {
     if (currentlyOpenSwipeable && currentlyOpenSwipeable !== swipeable) {
@@ -127,6 +151,18 @@ export default function Notification({ navigation, route }) {
     setCurrentlyOpenSwipeable(null);
   }
 
+  const readNotificaiton = async (id) => {
+    let url = `${BaseSetting.endpoints.readNotification}?id=${id}`;
+    try {
+      const resp = await getApiData(url, "GET");
+      if (resp.status) {
+        getNotificationList(1, "onEndreached");
+      }
+    } catch (error) {
+      Toast.show("Something went wrong");
+    }
+  };
+
   // Render Item List...
   const renderItem = ({ item, index }) => {
     return (
@@ -135,8 +171,6 @@ export default function Notification({ navigation, route }) {
         rightButtons={[
           <View
             style={{
-              backgroundColor: "#e6ecf0",
-              borderBottomColor: "#e7e9eb",
               justifyContent: "center",
               flex: 1,
               marginTop: 5,
@@ -146,19 +180,20 @@ export default function Notification({ navigation, route }) {
               style={{
                 width: 50,
                 height: 50,
-                backgroundColor: "#EBE9E9",
+                backgroundColor: BaseColors.errorRed,
                 padding: 5,
-                borderRadius: 20,
+                borderRadius: 30,
                 justifyContent: "center",
+                marginHorizontal: 10,
               }}
               onPress={() => {
-                setVisible(true);
+                ActionOpenSheet.current.open();
                 setSelectData(item.id);
               }}
             >
               <CustomIcon
                 name="Delete"
-                color={"red"}
+                color={BaseColors.white}
                 size={20}
                 style={{ alignSelf: "center" }}
               />
@@ -168,25 +203,46 @@ export default function Notification({ navigation, route }) {
         onRightButtonsOpenRelease={onOpen}
         onRightButtonsCloseRelease={onClose}
       >
-        <TouchableOpacity activeOpacity={0.7} style={[styles.mainView]}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => readNotificaiton(item?.id)}
+          style={[
+            styles.mainView,
+            {
+              marginBottom:
+                notifications.length - 1 === index ? height / 11 : 5,
+            },
+          ]}
+        >
+          {item?.is_read === "N" && (
+            <View
+              style={{
+                width: 10,
+                height: 10,
+                backgroundColor: item?.iconColor,
+                position: "absolute",
+                borderRadius: 10,
+                top: 10,
+                left: width / 7.6,
+                zIndex: 1,
+              }}
+            />
+          )}
           <View
             style={{
               justifyContent: "center",
               flexDirection: "row",
-              alignSelf: "center",
+              alignItems: "center",
+              width: 60,
+              height: 60,
+              borderRadius: 30,
+              borderWidth: 1,
+              marginRight: 5,
+              backgroundColor: item?.backgroundColor,
+              borderColor: item?.iconColor,
             }}
           >
-            <FastImage
-              source={Images.Profile}
-              style={{
-                width: 50,
-                height: 50,
-                borderRadius: 20,
-                borderWidth: 1,
-                borderColor: BaseColors.inactive,
-                backgroundColor: BaseColors.inactive,
-              }}
-            />
+            <CustomIcon name="Notification" size={25} color={item?.iconColor} />
           </View>
           <View>
             <View
@@ -195,14 +251,15 @@ export default function Notification({ navigation, route }) {
                 justifyContent: "space-between",
               }}
             >
-              <View>
+              <View style={{ width: width / 1.6 }}>
                 <Text
+                  numberOfLines={1}
                   style={{
-                    color: BaseColors.primary,
-                    fontSize: 14,
+                    color: BaseColors.titleColor,
+                    fontSize: 18,
                     paddingHorizontal: 10,
                     paddingVertical: 5,
-                    fontWeight: "600",
+                    fontWeight: item?.is_read === "N" ? "700" : "500",
                   }}
                 >
                   {item?.title}
@@ -218,11 +275,16 @@ export default function Notification({ navigation, route }) {
                 <Text
                   style={{
                     textAlign: "right",
-                    color: BaseColors.titleColor,
-                    fontSize: 10,
+                    color:
+                      item?.is_read === "N"
+                        ? BaseColors.titleColor
+                        : BaseColors.grey,
+                    fontSize: 14,
+                    fontWeight: item?.is_read === "N" ? "700" : "500",
                   }}
                 >
-                  {Duration(item.created_at)}
+                  {moment(item?.time).format("HH:mm")}
+                  {/* {Duration(item.created_at)} */}
                 </Text>
               </View>
             </View>
@@ -232,10 +294,15 @@ export default function Notification({ navigation, route }) {
               }}
             >
               <Text
+                numberOfLines={1}
                 style={{
                   width: Dimensions.get("window").width / 1.41,
-                  color: BaseColors.msgColor,
-                  fontSize: 12,
+                  color:
+                    item?.is_read === "N"
+                      ? BaseColors.titleColor
+                      : BaseColors.grey,
+                  fontSize: 16,
+                  fontWeight: item?.is_read === "N" ? "500" : "400",
                 }}
               >
                 {item?.message}
@@ -256,7 +323,26 @@ export default function Notification({ navigation, route }) {
       if (resp.status) {
         getNotificationList();
         Toast.show(resp?.message);
-        setVisible(!visible);
+        ActionOpenSheet.current.close();
+      } else {
+        Toast.show(resp?.message);
+      }
+      setBtnLoader(false);
+    } catch (error) {
+      setBtnLoader(false);
+      Toast.show("Something went wrong");
+    }
+  };
+
+  const handleAllnotification = async () => {
+    setBtnLoader(true);
+    let url = `${BaseSetting.endpoints.allNotificationDelete}`;
+    try {
+      const resp = await getApiData(url, "GET");
+      if (resp.status) {
+        getNotificationList();
+        Toast.show(resp?.message);
+        ActionOpenSheet.current.close();
       } else {
         Toast.show(resp?.message);
       }
@@ -271,19 +357,32 @@ export default function Notification({ navigation, route }) {
     <View
       style={{
         flex: 1,
-        backgroundColor: colors.colors.white,
+        backgroundColor: BaseColors.white,
       }}
     >
-      <CHeader title={"Notification"} customIcon rightIcon />
+      <CHeader
+        title={"Notification"}
+        customIcon
+        rightIcon
+        setShowPopover={setShowPopover}
+        showPopover={showPopover}
+        popoverPress={() => {
+          setShowPopover(false);
+          setSelectData("");
+          setTimeout(() => {
+            ActionOpenSheet.current.open();
+          }, 600);
+        }}
+      />
       <View style={{ marginHorizontal: 15, flex: 1 }}>
         <StatusBar
           translucent
-          barStyle="dark-content"
+          barStyle="light-content"
           backgroundColor={BaseColors.transparent}
         />
         {loader ? (
           <ActivityIndicator
-            color={colors.colors.primary}
+            color={BaseColors.primary}
             size={IOS ? "small" : "large"}
             style={{
               flex: 1,
@@ -306,17 +405,86 @@ export default function Notification({ navigation, route }) {
           />
         )}
       </View>
-      <DeleteModal
-        visible={visible}
-        loader={btnloader}
-        setVisible={setVisible}
-        btnNPress={() => {
-          setVisible(!visible);
+      {/* Delete Notification Sheet */}
+      <RBSheet
+        ref={ActionOpenSheet}
+        closeOnDragDown={true}
+        closeOnPressMask={true}
+        dragFromTopOnly={true}
+        height={180}
+        customStyles={{
+          container: {
+            backgroundColor: "#FFF",
+            borderTopRightRadius: 30,
+            borderTopLeftRadius: 30,
+          },
         }}
-        btnYPress={(d) => {
-          handledelete(selectData);
-        }}
-      />
+      >
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            paddingHorizontal: 10,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "700",
+              marginVertical: 15,
+              color: BaseColors.black,
+            }}
+          >
+            Confirm
+          </Text>
+          <Text
+            style={{
+              fontSize: 18,
+              color: BaseColors.titleColor,
+              fontWeight: "500",
+            }}
+          >
+            {`Are you sure you want to ${
+              selectData ? "Delete this" : "Delete All"
+            } notification?`}
+          </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            paddingHorizontal: 10,
+            marginVertical: 10,
+          }}
+        >
+          <Button
+            onBtnClick={() => ActionOpenSheet.current.close()}
+            containerStyle={{
+              width: 160,
+              backgroundColor: BaseColors.yellow,
+            }}
+            style={{ backgroundColor: BaseColors.yellow, borderWidth: 0 }}
+          >
+            CANCEL
+          </Button>
+          <View style={{ marginHorizontal: 10 }}>
+            <Button
+              loading={btnloader}
+              containerStyle={{ width: 160 }}
+              onBtnClick={() => {
+                if (selectData) {
+                  handledelete(selectData);
+                } else {
+                  handleAllnotification();
+                }
+              }}
+            >
+              Submit
+            </Button>
+          </View>
+        </View>
+      </RBSheet>
+      {/* End */}
     </View>
   );
 }

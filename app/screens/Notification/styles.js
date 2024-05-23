@@ -20,6 +20,8 @@ export const createStyles = (colors) => {
       marginTop: 5,
       padding: 5,
       borderRadius: 3,
+      justifyContent: "center",
+      alignItems: "center",
     },
     dotIcon: {
       width: 8,
