@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Platform,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { createStyles } from "./styles";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -17,13 +18,15 @@ import BaseSetting from "../../config/setting";
 import { getApiData } from "../../utils/apiHelper";
 import moment from "moment";
 import FastImage from "react-native-fast-image";
-import { isEmpty } from "lodash";
+import { isArray, isEmpty, isObject, size } from "lodash";
 import { CustomIcon } from "../../config/LoadIcons";
+import Toast from "react-native-simple-toast";
 import CAlert from "../../components/CAlert";
 import ImageCropPicker from "react-native-image-crop-picker";
 import { chatFilesVal } from "../../utils/CommonFunc";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { Button } from "../../components";
+import CommentView from "../../components/CommentView";
 
 const { width, height } = Dimensions.get("window");
 export default function ViewDetails({ navigation, route }) {
@@ -34,9 +37,9 @@ export default function ViewDetails({ navigation, route }) {
   const styles = createStyles(colors);
   const [taskDetail, setTaskDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [imgVisible, setImgVisible] = useState(false);
-  const [selectedImag, setSelectedImag] = useState({});
-  const [commentView, setCommentView] = useState(false);
+  const [uploadedImages, setUploadedImages] = useState([]);
+  const [multipicLoader, setMultipicLoader] = useState(false);
+  const [completedLoader, setCompletedLoader] = useState(false);
 
   // View Vessel Details...
   async function getTaskDetails() {
@@ -46,6 +49,7 @@ export default function ViewDetails({ navigation, route }) {
       const res = await getApiData(url, "GET");
       if (res.status) {
         setTaskDetails(res?.data);
+        setUploadedImages(res?.data?.proof_files);
       }
       setIsLoading(false);
     } catch (err) {
@@ -58,20 +62,51 @@ export default function ViewDetails({ navigation, route }) {
     getTaskDetails();
   }, [detail]);
 
+  /**
+   * Function for Upload Images.
+   * @function uploadImage
+   * @param {Object} imag - Show Image Object for Upload
+   */
+  async function uploadImage(imag) {
+    setMultipicLoader(true);
+    let imagData = {};
+    const name =
+      isObject(imag) && imag.path
+        ? imag.path.substring(imag.path.lastIndexOf("/") + 1)
+        : "";
+    imagData = {
+      type: imag.mime,
+      name,
+      uri: imag.path,
+    };
+    const uploadData = {
+      [`TaskData[proofFile][0]`]: imagData,
+    };
+    const url =
+      BaseSetting.endpoints.uploadImage + `?taskDataId=${detail?.task_data_id}`;
+    try {
+      const resp = await getApiData(url, "POST", uploadData, "", true);
+      if (resp?.status) {
+        setUploadedImages([...uploadedImages, imagData]);
+        ActionSheetRef.current.close();
+      }
+      setMultipicLoader(false);
+    } catch (err) {
+      setMultipicLoader(false);
+    }
+  }
+
   const openGallery = () => {
     ImageCropPicker.openPicker({
       cropping: true,
     }).then((image) => {
-      setLoader(true);
       const fType = image?.mime || "";
       const isValidFile = chatFilesVal(fType, image.size);
       if (isValidFile) {
         uploadImage(image);
-        setLoader(false);
       } else {
         setTimeout(() => {
           setProfileImg(image?.path);
-          setLoader(false);
         }, 2000);
       }
     });
@@ -83,12 +118,10 @@ export default function ViewDetails({ navigation, route }) {
       height: 110,
       // useFrontCamera: true,
     }).then((image) => {
-      setLoader(true);
       const fType = image?.mime || "";
       const isValidFile = chatFilesVal(fType, image.size);
       if (isValidFile) {
         uploadImage(image);
-        setLoader(false);
       } else {
         setTimeout(() => {
           CAlert(
@@ -144,6 +177,42 @@ export default function ViewDetails({ navigation, route }) {
     </TouchableOpacity>,
   ];
 
+  const removeImage = async (id, ind) => {
+    const removeImage = [...uploadedImages];
+    if (removeImage) {
+      if (id) {
+        const url = BaseSetting.endpoints.deleteImage + `?id=${id}`;
+        try {
+          const resp = await getApiData(url, "GET");
+          if (resp.status) {
+            removeImage.splice(ind, 1);
+            Toast.show(resp?.message);
+          }
+        } catch (er) {}
+      } else {
+        removeImage.splice(ind, 1);
+      }
+      setUploadedImages(removeImage);
+    }
+  };
+
+  async function markAsCompleted() {
+    setCompletedLoader(true);
+    const url =
+      BaseSetting.endpoints.markasComplete +
+      `?taskDataId=${detail?.task_data_id}`;
+    try {
+      const resp = await getApiData(url, "GET");
+      if (resp.status) {
+        navigation.goBack();
+      }
+      setCompletedLoader(false);
+      Toast.show(resp?.message);
+    } catch (er) {
+      setCompletedLoader(false);
+    }
+  }
+
   return (
     <View style={{ backgroundColor: BaseColors.white, flex: 1 }}>
       <CHeader
@@ -173,16 +242,16 @@ export default function ViewDetails({ navigation, route }) {
             <View style={[styles.cotent, { paddingVertical: 5 }]}>
               <Text style={styles.dateTxt}>Last completion date : </Text>
               <Text style={styles.value}>
-                {moment(taskDetail?.end_date).format("DD-MM-YYYY") || "-"}
+                {moment(taskDetail?.last_completed).format("DD-MM-YYYY") || "-"}
               </Text>
             </View>
             {taskDetail?.type !== "once" && (
               <View style={styles.cotent}>
                 <Text style={styles.dateTxt}>Next due date: </Text>
                 <Text style={styles.value}>
-                  {taskDetail?.created_at
-                    ? moment.unix(taskDetail?.created_at).format("DD-MM-YYYY")
-                    : "15-05-2024"}
+                  {taskDetail?.end_date
+                    ? moment(taskDetail?.end_date).format("DD-MM-YYYY")
+                    : "-"}
                 </Text>
               </View>
             )}
@@ -209,16 +278,29 @@ export default function ViewDetails({ navigation, route }) {
                   taskDetail?.task_files.map((li) => {
                     return (
                       <TouchableOpacity
-                        activeOpacity={0.7}
-                        onPress={() => {
-                          setImgVisible(true);
-                          setSelectedImag(li);
-                        }}
-                        style={styles.imageContainer}
+                        onPress={() => {}}
+                        style={[
+                          styles.imageContainer,
+                          {
+                            flexDirection: "row",
+                            position: "relative",
+                            marginLeft: 10,
+                            borderRadius: 50,
+                            marginTop: 10,
+                            flexWrap: "wrap",
+                            borderWidth: 1,
+                          },
+                        ]}
+                        activeOpacity={0.8}
                       >
                         <FastImage
-                          style={{ width: "100%", height: "100%" }}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            borderRadius: 50,
+                          }}
                           source={{ uri: li }}
+                          resizeMode={"cover"}
                         />
                       </TouchableOpacity>
                     );
@@ -232,94 +314,143 @@ export default function ViewDetails({ navigation, route }) {
                 paddingVertical: 10,
               }}
             />
-            {/* {!isEmpty(taskDetail?.proof_files) && ( */}
             <View style={{ marginTop: 10 }}>
               <Text style={styles.header}>
                 Upload Photos{" "}
                 {taskDetail.is_required && (
                   <Text style={{ color: BaseColors.redColor }}>*</Text>
                 )}{" "}
-                :
               </Text>
               <Text style={{ color: BaseColors.textColor, fontSize: 16 }}>
                 Maximum 5 photos can be uploaded.
               </Text>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => ActionSheetRef.current.open()}
+              <View
                 style={{
-                  width: 80,
-                  height: 80,
-                  borderRadius: 50,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: BaseColors.lightOrange,
-                  marginVertical: 20,
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  marginTop: 10,
                 }}
               >
-                <CustomIcon
-                  name="Plus"
-                  size={25}
-                  color={BaseColors.orangeColor}
-                />
-              </TouchableOpacity>
-              <View style={{ flexDirection: "row" }}>
-                {taskDetail?.proof_files &&
-                  taskDetail?.proof_files.map((li) => {
-                    return (
-                      <TouchableOpacity
-                        activeOpacity={0.7}
-                        style={styles.imageContainer}
-                        onPress={() => {
-                          setImgVisible(true);
-                          setSelectedImag(li);
-                        }}
-                      >
-                        <FastImage
-                          style={{ width: "100%", height: "100%" }}
-                          source={{ uri: li }}
-                        />
-                      </TouchableOpacity>
-                    );
-                  })}
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  disabled={detail?.status === 1 || size(uploadedImages) === 5}
+                  onPress={() => {
+                    ActionSheetRef.current.open();
+                  }}
+                  style={{
+                    width: 80,
+                    height: 80,
+                    borderRadius: 50,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: BaseColors.lightOrange,
+                    marginTop: 10,
+                    opacity:
+                      detail?.status === 1 || size(uploadedImages) === 5
+                        ? 0.5
+                        : 1,
+                  }}
+                >
+                  <CustomIcon
+                    name="Plus"
+                    size={25}
+                    color={BaseColors.orangeColor}
+                  />
+                </TouchableOpacity>
+                {!isEmpty(uploadedImages) && isArray(uploadedImages)
+                  ? uploadedImages.map((d, index) => {
+                      return (
+                        <TouchableOpacity
+                          style={[
+                            styles.imageContainer,
+                            {
+                              flexDirection: "row",
+                              position: "relative",
+                              marginLeft: 10,
+                              borderRadius: 50,
+                              marginTop: 10,
+                              flexWrap: "wrap",
+                            },
+                          ]}
+                          activeOpacity={0.8}
+                        >
+                          <FastImage
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              borderRadius: 50,
+                            }}
+                            resizeMode={"cover"}
+                            source={{ uri: d?.uri || d?.file }}
+                          />
+                          {size(uploadedImages) > 0 && detail?.status !== 1 && (
+                            <TouchableOpacity
+                              activeOpacity={0.5}
+                              onPress={() => {
+                                Alert.alert(
+                                  "Remove",
+                                  "Are you sure you want to remove this photo?",
+                                  [
+                                    {
+                                      text: "No",
+                                      onPress: () => {},
+                                    },
+                                    {
+                                      text: "Yes",
+                                      onPress: () => {
+                                        removeImage(d.id, index);
+                                      },
+                                    },
+                                  ]
+                                );
+                              }}
+                              style={[
+                                styles.mainViewStyMultiple,
+                                {
+                                  backgroundColor: BaseColors.white,
+                                },
+                              ]}
+                            >
+                              <CustomIcon
+                                name="Close"
+                                color={BaseColors.errorRed}
+                                size={10}
+                              />
+                            </TouchableOpacity>
+                          )}
+                        </TouchableOpacity>
+                      );
+                    })
+                  : null}
               </View>
             </View>
-            {/* )} */}
-            {/* <TouchableOpacity
-              activeOpacity={0.7}
+            <View
               style={{
-                marginHorizontal: 15,
-                marginTop: 10,
-                flexDirection: "row",
-                justifyContent: "space-between",
-                backgroundColor: "#e6ecf0",
+                borderBottomWidth: 1,
+                borderColor: BaseColors.offWhite,
+                paddingVertical: 10,
               }}
-              onPress={() => setCommentView(!commentView)}
-            >
+            />
+            <View>
               <Text
                 style={{
-                  paddingVertical: 6,
+                  paddingVertical: 10,
                   paddingHorizontal: 5,
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: "600",
                 }}
               >
                 Comments
               </Text>
-              <CustomIcon
-                name={"Down-Arrow"}
-                color={BaseColors.textColor}
-                size={11}
-                style={{
-                  justifyContent: "center",
-                  paddingHorizontal: 5,
-                  alignSelf: "center",
-                }}
-              />
-            </TouchableOpacity>
-            {commentView && <CommentView detail={detail} />} */}
+              {<CommentView detail={detail} />}
+            </View>
             <View style={{ marginVertical: 10 }}>
-              <Button txtSty={{ fontSize: 16, textTransform: "uppercase" }}>
+              <Button
+                loading={completedLoader}
+                onBtnClick={() => markAsCompleted()}
+                disabled={detail?.status === 1}
+                txtSty={{ fontSize: 16, textTransform: "uppercase" }}
+              >
                 {" "}
                 MARK COMPLETE
               </Button>
