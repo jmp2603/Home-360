@@ -51,7 +51,6 @@ export const createStyles = (colors) => {
     },
     errTxt: {
       fontSize: 13,
-      color: BaseColors.red,
       paddingVertical: 5,
       fontWeight: "500",
     },

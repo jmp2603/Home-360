@@ -2,8 +2,8 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
-import Aicon from "react-native-vector-icons/AntDesign";
 import { BaseColors } from "../../config/theme";
+import { CustomIcon } from "../../config/LoadIcons";
 
 export default function NoData(props) {
   const { iconSize } = props;
@@ -16,19 +16,16 @@ export default function NoData(props) {
       alignItems: "center",
     },
     cleardatatxt: {
+      marginVertical: 10,
       fontSize: 14,
-      color: BaseColors.secondary,
-      fontWeight: "800",
+      color: "rgba(0, 0, 0, 0.45)",
+      fontWeight: "500",
     },
   });
 
   return (
     <View style={styles.emptydata}>
-      <Aicon
-        name="folder1"
-        size={iconSize || 50}
-        color={BaseColors.secondary}
-      />
+      <CustomIcon name="Empty-File" size={60} color={"rgba(0, 0, 0, 0.25)"} />
       <Text style={styles.cleardatatxt}>No Data</Text>
     </View>
   );
