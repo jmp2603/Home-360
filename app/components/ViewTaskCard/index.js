@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  Platform,
   Text,
   TouchableOpacity,
   View,
@@ -19,6 +20,7 @@ import { urlParams } from "../../utils/CommonFunc";
 import { getApiData } from "../../utils/apiHelper";
 import moment from "moment";
 
+const IOS = Platform.OS === "ios";
 export default function ViewTaskCard(props) {
   const { type, navigation, searchVal, selectedFilter } = props;
   const colors = useTheme();
@@ -326,6 +328,7 @@ export default function ViewTaskCard(props) {
         {screenLoader ? (
           <ActivityIndicator
             color={BaseColors.primary}
+            size={IOS ? "small" : "large"}
             style={{
               flex: 1,
               justifyContent: "center",

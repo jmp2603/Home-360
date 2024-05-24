@@ -48,15 +48,13 @@ export default function ViewTask({ navigation, index }) {
         barStyle="light-content"
         backgroundColor={BaseColors.transparent}
       />
-      <View style={{ marginHorizontal: 10, marginVertical: 10, marginTop: 20 }}>
+      <View style={{ marginHorizontal: 10, marginVertical: 5, marginTop: 15 }}>
         <View style={{ flexDirection: "row" }}>
           <TextInput
             value={searchVal}
             placeholderTextColor={BaseColors.grey}
             placeholder={"Search here..."}
             onChangeText={(val) => setSearchVal(val)}
-            isSuffix
-            isPreffix
             style={{
               minHeight: 50,
               justifyContent: "center",
@@ -157,7 +155,7 @@ export default function ViewTask({ navigation, index }) {
             })}
         </Popover>
       </View>
-      <View style={{ marginHorizontal: 10, marginVertical: 8 }}>
+      <View style={{ marginHorizontal: 10, marginVertical: 10 }}>
         <View
           style={{
             flexDirection: "row",
@@ -188,7 +186,7 @@ export default function ViewTask({ navigation, index }) {
                 color:
                   activeButton === "once"
                     ? BaseColors.white
-                    : colors.colors.textColor,
+                    : BaseColors.titleColor,
                 fontSize: 16,
                 paddingVertical: 4,
                 textAlign: "center",
@@ -218,7 +216,7 @@ export default function ViewTask({ navigation, index }) {
                 color:
                   activeButton === "repeat"
                     ? BaseColors.white
-                    : colors.colors.textColor,
+                    : BaseColors.titleColor,
                 fontSize: 16,
                 paddingVertical: 4,
                 textAlign: "center",

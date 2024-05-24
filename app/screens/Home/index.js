@@ -749,6 +749,7 @@ export default function Home({ navigation, index }) {
         </View>
         {screenLoader ? (
           <ActivityIndicator
+            size={IOS ? "small" : "large"}
             color={BaseColors.primary}
             style={{
               flex: 1,
