@@ -31,7 +31,7 @@ export const createStyles = (colors) => {
       borderColor: colors.colors.white,
     },
     btnText: {
-      fontSize: 15,
+      fontSize: 18,
       textAlign: "center",
       textTransform: "capitalize",
       fontWeight: "700",

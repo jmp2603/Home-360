@@ -523,6 +523,7 @@ export default function Home({ navigation, index }) {
         try {
           const resp = await getApiData(url, "GET");
           if (resp.status) {
+            getTaskList(1, "onEndreached");
             removeImage.splice(ind, 1);
             Toast.show(resp?.message);
           }
@@ -911,6 +912,7 @@ export default function Home({ navigation, index }) {
             onBtnClick={() => ActionUploadRef.current.close()}
             containerStyle={{
               width: 160,
+              paddingVertical: 12,
               backgroundColor: BaseColors.yellow,
             }}
             style={{ backgroundColor: BaseColors.yellow, borderWidth: 0 }}
@@ -919,8 +921,9 @@ export default function Home({ navigation, index }) {
           </Button>
           <View style={{ marginHorizontal: 10 }}>
             <Button
+              disabled={isEmpty(uploadedImages)}
               loading={btnLoading}
-              containerStyle={{ width: 160 }}
+              containerStyle={{ width: 160, paddingVertical: 12 }}
               onBtnClick={() => uploadMultiImage()}
             >
               Submit
@@ -1015,6 +1018,7 @@ export default function Home({ navigation, index }) {
             onBtnClick={() => ActionCompleted.current.close()}
             containerStyle={{
               width: 160,
+              paddingVertical: 12,
               backgroundColor: BaseColors.yellow,
             }}
             style={{ backgroundColor: BaseColors.yellow, borderWidth: 0 }}
@@ -1024,7 +1028,7 @@ export default function Home({ navigation, index }) {
           <View style={{ marginHorizontal: 10 }}>
             <Button
               loading={completedLoader}
-              containerStyle={{ width: 160 }}
+              containerStyle={{ width: 160, paddingVertical: 12 }}
               onBtnClick={() => markAsCompleted()}
             >
               YES

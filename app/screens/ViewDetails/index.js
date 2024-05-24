@@ -232,6 +232,7 @@ export default function ViewDetails({ navigation, route }) {
       />
       {isLoading ? ( // Show loader if isLoading is true
         <ActivityIndicator
+          size={IOS ? "small" : "large"}
           color={BaseColors.primary}
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         />

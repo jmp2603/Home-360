@@ -443,7 +443,7 @@ export default function Notification({ navigation, route }) {
         >
           <Text
             style={{
-              fontSize: 20,
+              fontSize: 22,
               fontWeight: "700",
               marginVertical: 15,
               color: BaseColors.black,
@@ -456,6 +456,7 @@ export default function Notification({ navigation, route }) {
               fontSize: 18,
               color: BaseColors.titleColor,
               fontWeight: "500",
+              paddingHorizontal: 10,
             }}
           >
             {`Are you sure you want to ${
@@ -475,6 +476,7 @@ export default function Notification({ navigation, route }) {
             onBtnClick={() => ActionOpenSheet.current.close()}
             containerStyle={{
               width: 160,
+              paddingVertical: 12,
               backgroundColor: BaseColors.yellow,
             }}
             style={{ backgroundColor: BaseColors.yellow, borderWidth: 0 }}
@@ -484,7 +486,7 @@ export default function Notification({ navigation, route }) {
           <View style={{ marginHorizontal: 10 }}>
             <Button
               loading={btnloader}
-              containerStyle={{ width: 160 }}
+              containerStyle={{ width: 160, paddingVertical: 12 }}
               onBtnClick={() => {
                 if (selectData) {
                   handledelete(selectData);

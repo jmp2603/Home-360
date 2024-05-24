@@ -90,7 +90,6 @@ export default function Button(props) {
       onPress={loading ? () => {} : onBtnClick}
       style={{
         opacity: disabled ? 0.4 : 1,
-        paddingVertical: 3,
         overflow: "hidden",
         ...styles[shape],
         ...styles[type],
@@ -103,7 +102,7 @@ export default function Button(props) {
             ...styles.btnContainer,
             backgroundColor:
               containerStyle.backgroundColor || BaseColors.primary,
-            padding: 10,
+            paddingVertical: 15,
             borderColor: BaseColors.primary,
             ...containerStyle,
           }}
