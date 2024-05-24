@@ -336,9 +336,9 @@ export default function ViewDetails({ navigation, route }) {
             <View style={{ marginTop: 10 }}>
               <Text style={styles.header}>
                 Upload Photos{" "}
-                {taskDetail.proof_needed && (
+                {taskDetail.proof_needed ? (
                   <Text style={{ color: BaseColors.redColor }}>*</Text>
-                )}{" "}
+                ) : null}{" "}
               </Text>
               <Text style={{ color: BaseColors.textColor, fontSize: 16 }}>
                 Maximum 5 photos can be uploaded.

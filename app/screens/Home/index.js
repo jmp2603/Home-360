@@ -261,7 +261,22 @@ export default function Home({ navigation, index }) {
                 justifyContent: "space-between",
               }}
             >
-              <View style={{ flexDirection: "row" }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    width: 8,
+                    height: 8,
+                    backgroundColor: color,
+                    borderRadius: 10,
+                    marginRight: 5,
+                  }}
+                />
                 <Text
                   style={{
                     color: color,

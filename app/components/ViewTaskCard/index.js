@@ -172,7 +172,7 @@ export default function ViewTaskCard(props) {
                 numberOfLines={1}
                 style={{
                   color: BaseColors.black,
-                  fontSize: 16,
+                  fontSize: 18,
                   paddingVertical: 3,
                   fontWeight: "600",
                 }}
@@ -205,12 +205,28 @@ export default function ViewTaskCard(props) {
                   justifyContent: "space-between",
                 }}
               >
-                <View style={{ flexDirection: "row" }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      width: 8,
+                      height: 8,
+                      backgroundColor: color,
+                      borderRadius: 10,
+                      marginRight: 5,
+                    }}
+                  />
                   <Text
                     style={{
                       color: color,
                       paddingVertical: 3,
-                      fontSize: 18,
+                      fontSize: 16,
+                      fontWeight: "400",
                     }}
                   >
                     {item?.status === 0
