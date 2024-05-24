@@ -19,7 +19,7 @@ import { urlParams } from "../../utils/CommonFunc";
 import { getApiData } from "../../utils/apiHelper";
 
 export default function ViewTaskCard(props) {
-  const { type, navigation } = props;
+  const { type, navigation, searchVal, selectedFilter } = props;
   const colors = useTheme();
   const styles = createStyles(colors);
   const [screenLoader, setScreenLoader] = useState(false);
@@ -35,9 +35,9 @@ export default function ViewTaskCard(props) {
    * @param {Number} p - Set for Page Number
    * @param {String} ty - Type for loader.
    */
-  const getTaskList = async (p = 1, ty) => {
+  const getTaskList = async (p = 1, ty, selected) => {
     setScreenLoader(ty == "onEndreached" ? false : true);
-    const data = { type: type, page: p };
+    const data = { type: type, page: p, title: searchVal, status: selected };
     const string = urlParams(data);
     const url = BaseSetting.endpoints.taskList + string?._j;
     try {
@@ -97,8 +97,9 @@ export default function ViewTaskCard(props) {
   };
 
   useEffect(() => {
-    getTaskList(1);
-  }, [type]);
+    const type = !isEmpty(searchVal) ? "onEndreached" : "";
+    getTaskList(1, type, selectedFilter);
+  }, [type, searchVal, selectedFilter]);
 
   const getMarkedDates = (dates, color) => {
     const markedDates = {};

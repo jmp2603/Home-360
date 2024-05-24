@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import CHeader from "../../components/Header";
 import { BaseColors } from "../../config/theme";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Text,
@@ -12,13 +12,24 @@ import {
 import { createStyles } from "./styles";
 import { useTheme } from "@react-navigation/native";
 import ViewTaskCard from "../../components/ViewTaskCard";
-import TextInput from "../../components/TextInput";
 import { CustomIcon } from "../../config/LoadIcons";
+import Popover from "react-native-popover-view";
+import { TextInput } from "react-native";
 
 export default function ViewTask({ navigation, index }) {
   const colors = useTheme();
+  const touchable = useRef();
   const styles = createStyles(colors);
   const [activeButton, setActiveButton] = useState("once");
+  const [searchVal, setSearchVal] = useState("");
+  const [showPopover, setShowPopover] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState("all");
+
+  const filterArr = [
+    { title: "All", val: "all" },
+    { title: "Pending", val: 0 },
+    { title: "Completed", val: 1 },
+  ];
 
   return (
     <View
@@ -38,16 +49,100 @@ export default function ViewTask({ navigation, index }) {
         backgroundColor={BaseColors.transparent}
       />
       <View style={{ marginHorizontal: 15, marginVertical: 10, marginTop: 20 }}>
-        {/* <CustomIcon name="Chat" style={{ right: 10, top: 10 }} /> */}
-        <TextInput
-          placeholderText={"Search here..."}
-          textInputStyle={{
-            minHeight: 50,
-            backgroundColor: BaseColors.offWhite,
-            borderRadius: 10,
-            borderColor: BaseColors.offWhite,
-          }}
-        />
+        <View style={{ flexDirection: "row" }}>
+          <TextInput
+            value={searchVal}
+            placeholderTextColor={BaseColors.grey}
+            placeholder={"Search here..."}
+            onChangeText={(val) => setSearchVal(val)}
+            isSuffix
+            isPreffix
+            style={{
+              minHeight: 50,
+              justifyContent: "center",
+              alignSelf: "center",
+              borderWidth: 1,
+              borderColor: BaseColors.offWhite,
+              backgroundColor: BaseColors.offWhite,
+              fontSize: 14,
+              width: "100%",
+              color: BaseColors.textColor,
+              paddingHorizontal: 7,
+              borderRadius: 5,
+            }}
+          />
+          <View
+            style={{
+              position: "absolute",
+              height: 50,
+              backgroundColor: BaseColors.whiteSmoke,
+              borderRadius: 5,
+              justifyContent: "center",
+              paddingHorizontal: 10,
+              right: 1,
+              top: 1,
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                textAlign: "center",
+                color: BaseColors.grey,
+                fontSize: 25,
+                fontWeight: "200",
+                paddingHorizontal: 5,
+              }}
+            >
+              {"|"}
+            </Text>
+            <CustomIcon
+              ref={touchable}
+              name="Filter"
+              onPress={() => setShowPopover(true)}
+              size={25}
+              color={BaseColors.primary}
+            />
+          </View>
+        </View>
+        <Popover
+          from={touchable}
+          isVisible={showPopover}
+          statusBarTranslucent={true}
+          popoverStyle={{ width: 120, borderRadius: 5, paddingHorizontal: 10 }} // Adjust as needed
+          arrowSize={{ height: 0, width: 0 }}
+          onRequestClose={() => setShowPopover(false)}
+        >
+          {filterArr &&
+            filterArr.map((li, ind) => {
+              return (
+                <TouchableOpacity
+                  onPress={() => {
+                    setSelectedFilter(li.val);
+                    setShowPopover(false);
+                  }}
+                  activeOpacity={0.8}
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderBottomWidth: filterArr.length - 1 === ind ? 0 : 1,
+                    borderColor: BaseColors.offWhite,
+                    paddingHorizontal: 2,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: BaseColors.titleColor,
+                      fontSize: 18,
+                      paddingVertical: 10,
+                    }}
+                  >
+                    {li.title}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+        </Popover>
       </View>
       <View style={{ marginHorizontal: 15, marginVertical: 8 }}>
         <View
@@ -122,7 +217,14 @@ export default function ViewTask({ navigation, index }) {
           </TouchableOpacity>
         </View>
       </View>
-      {<ViewTaskCard type={activeButton} navigation={navigation} />}
+      {
+        <ViewTaskCard
+          type={activeButton}
+          searchVal={searchVal}
+          navigation={navigation}
+          selectedFilter={selectedFilter}
+        />
+      }
     </View>
   );
 }
