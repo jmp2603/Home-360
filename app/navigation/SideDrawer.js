@@ -64,20 +64,12 @@ export default function SideDrawer({ navigation }) {
   ];
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.container} bounces={false}>
       <View style={styles.closeIconContainer}>
         <TouchableOpacity
           onPress={() => navigation.closeDrawer()}
-          style={{
-            width: 40,
-            height: 40,
-            borderWidth: 1,
-            borderRadius: 20,
-            justifyContent: "center",
-            alignItems: "center",
-            borderColor: BaseColors.yellow,
-            backgroundColor: BaseColors.yellow,
-          }}
+          activeOpacity={0.8}
+          style={styles.closeIconStyle}
         >
           <CustomIcon name="Close" size={15} color="white" />
         </TouchableOpacity>
@@ -116,6 +108,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: BaseColors.primary,
     paddingTop: getStatusBarHeight() + (IOS ? 40 : 20),
+    borderTopStartRadius: 50,
+    borderBottomStartRadius: 50,
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
   },
   closeIconContainer: {
     alignItems: "flex-start",
@@ -129,17 +125,31 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
     marginVertical: 10,
+    marginHorizontal: 18,
     fontWeight: "700",
+    textAlign: "right",
   },
   drawerItemLabel: {
     color: "white",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "400",
+    textAlign: "right",
+    marginHorizontal: 6,
   },
   drawerHeader: {
     fontSize: 16,
     fontWeight: "bold",
     marginVertical: 5,
     marginLeft: 10,
+  },
+  closeIconStyle: {
+    width: 40,
+    height: 40,
+    borderWidth: 1,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: BaseColors.yellow,
+    backgroundColor: BaseColors.yellow,
   },
 });

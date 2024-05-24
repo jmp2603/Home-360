@@ -18,6 +18,7 @@ import Notification from "../screens/Notification";
 import ViewDetails from "../screens/ViewDetails";
 import SideDrawer from "./SideDrawer";
 import ViewTask from "../screens/ViewTask";
+import { BaseColors } from "../config/theme";
 
 const intitialNotificationState = {
   notification: null,
@@ -89,10 +90,17 @@ function App() {
     <Drawer.Navigator
       initialRouteName="BottomTabsNavigator"
       detachInactiveScreens={IOS ? true : false}
-      drawerPosition="right"
+      drawerContentOptions={{
+        drawerType: "front",
+        drawerPosition: "right",
+      }}
       screenOptions={{
         headerShown: false,
-        drawerStyle: { width: "80%" },
+        drawerStyle: {
+          width: "60%",
+          borderTopStartRadius: 50,
+          borderBottomStartRadius: 50,
+        },
       }}
       drawerContent={(props) => <SideDrawer {...props} />}
       defaultStatus="closed"
