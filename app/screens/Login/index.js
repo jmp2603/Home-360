@@ -292,7 +292,6 @@ export default function Login({ navigation }) {
             <Button
               containerStyle={{
                 backgroundColor: BaseColors.primary,
-                height: 45,
               }}
               disabled={isEmpty(phone) || isEmpty(password)}
               style={{ marginTop: 30 }}
