@@ -185,6 +185,7 @@ export default function Notification({ navigation, route }) {
             }}
           >
             <TouchableOpacity
+              activeOpacity={0.7}
               style={{
                 width: 50,
                 height: 50,

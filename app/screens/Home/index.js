@@ -587,6 +587,7 @@ export default function Home({ navigation, index }) {
             </View>
           </View>
           <TouchableOpacity
+            activeOpacity={0.8}
             onPress={() => navigation.toggleDrawer()}
             style={{
               backgroundColor: BaseColors.orangeColor,

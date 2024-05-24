@@ -116,7 +116,7 @@ export default function CHeader(props) {
         {leftIcon ? (
           <TouchableOpacity
             disabled={disabled}
-            activeOpacity={0.5}
+            activeOpacity={0.7}
             onPress={onLeftPress}
             style={[
               styles.defaultLesticonSty,
