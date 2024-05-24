@@ -61,6 +61,7 @@ export default function ViewTask({ navigation, index }) {
               minHeight: 50,
               justifyContent: "center",
               alignSelf: "center",
+              paddingRight: 50,
               borderWidth: 1,
               borderColor: BaseColors.offWhite,
               backgroundColor: BaseColors.offWhite,
@@ -75,7 +76,6 @@ export default function ViewTask({ navigation, index }) {
             style={{
               position: "absolute",
               height: 50,
-              backgroundColor: BaseColors.whiteSmoke,
               borderRadius: 5,
               justifyContent: "center",
               paddingHorizontal: 10,

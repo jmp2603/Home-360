@@ -17,6 +17,7 @@ import { Calendar } from "react-native-calendars";
 import BaseSetting from "../../config/setting";
 import { urlParams } from "../../utils/CommonFunc";
 import { getApiData } from "../../utils/apiHelper";
+import moment from "moment";
 
 export default function ViewTaskCard(props) {
   const { type, navigation, searchVal, selectedFilter } = props;
@@ -37,7 +38,12 @@ export default function ViewTaskCard(props) {
    */
   const getTaskList = async (p = 1, ty, selected) => {
     setScreenLoader(ty == "onEndreached" ? false : true);
-    const data = { type: type, page: p, title: searchVal, status: selected };
+    const data = {
+      type: type,
+      page: p,
+      title: searchVal,
+      status: selected === "all" ? null : selected,
+    };
     const string = urlParams(data);
     const url = BaseSetting.endpoints.taskList + string?._j;
     try {
@@ -181,7 +187,7 @@ export default function ViewTaskCard(props) {
                   paddingVertical: 3,
                 }}
               >
-                Assigned By : {item?.assignedBy}
+                Assigned By : {item?.assignedBy || "Admin"}
               </Text>
               <Text
                 style={{
@@ -190,7 +196,8 @@ export default function ViewTaskCard(props) {
                   fontSize: 14,
                 }}
               >
-                Next Due Date : {item?.nextDueDate || "-"}
+                Next Due Date :{" "}
+                {moment(item?.end_date).format("DD-MM-YYYY") || "-"}
               </Text>
               <View
                 style={{

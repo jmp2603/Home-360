@@ -249,12 +249,15 @@ export default function ViewDetails({ navigation, route }) {
             <View style={styles.cotent}>
               <Text style={styles.title}>{taskDetail?.title || "-"}</Text>
             </View>
-            <View style={[styles.cotent, { paddingVertical: 5 }]}>
-              <Text style={styles.dateTxt}>Last completion date : </Text>
-              <Text style={styles.value}>
-                {moment(taskDetail?.last_completed).format("DD-MM-YYYY") || "-"}
-              </Text>
-            </View>
+            {taskDetail?.last_completed && (
+              <View style={[styles.cotent, { paddingVertical: 5 }]}>
+                <Text style={styles.dateTxt}>Last completion date : </Text>
+                <Text style={styles.value}>
+                  {moment(taskDetail?.last_completed).format("DD-MM-YYYY") ||
+                    "-"}
+                </Text>
+              </View>
+            )}
             {taskDetail?.type !== "once" && (
               <View style={styles.cotent}>
                 <Text style={styles.dateTxt}>Next due date: </Text>

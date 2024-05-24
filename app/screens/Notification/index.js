@@ -13,7 +13,7 @@ import CHeader from "../../components/Header";
 import { BaseColors } from "../../config/theme";
 import { createStyles } from "./styles";
 import { StatusBar } from "react-native";
-import { flattenDeep, isEmpty } from "lodash";
+import { flattenDeep, isEmpty, size } from "lodash";
 import Toast from "react-native-simple-toast";
 import { useIsFocused, useTheme } from "@react-navigation/native";
 import { Button, NoData } from "../../components";
@@ -210,7 +210,7 @@ export default function Notification({ navigation, route }) {
             styles.mainView,
             {
               marginBottom:
-                notifications.length - 1 === index ? height / 11 : 5,
+                size(notificationList) - 1 === index ? height / 11 : 5,
             },
           ]}
         >
