@@ -54,6 +54,7 @@ export default function Notification({ navigation, route }) {
     BaseColors.greenColor,
   ];
 
+  // get Sequencly Color.
   const getColors = (index) => ({
     backgroundColor: backgroundColor[index % backgroundColor.length],
     iconColor: iconColor[index % iconColor.length],
@@ -151,6 +152,11 @@ export default function Notification({ navigation, route }) {
     setCurrentlyOpenSwipeable(null);
   }
 
+  /**
+   * Function for Read Notification..
+   * @function readNotificaiton
+   * @param {String} id - Task Id.
+   */
   const readNotificaiton = async (id) => {
     let url = `${BaseSetting.endpoints.readNotification}?id=${id}`;
     try {
@@ -174,6 +180,8 @@ export default function Notification({ navigation, route }) {
               justifyContent: "center",
               flex: 1,
               marginTop: 5,
+              marginBottom:
+                size(notificationList) - 1 === index ? height / 11 : 5,
             }}
           >
             <TouchableOpacity
@@ -315,6 +323,11 @@ export default function Notification({ navigation, route }) {
   };
   // End
 
+  /**
+   * Function for Delete Notification..
+   * @function handledelete
+   * @param {String} id - Task Id
+   */
   const handledelete = async (id) => {
     setBtnLoader(true);
     let url = `${BaseSetting.endpoints.deleteNotification}?id=${id}`;
