@@ -1,131 +1,13 @@
 import DeviceInfo from "react-native-device-info";
 import { BaseColors } from "../../config/theme";
 import { Dimensions, Platform, StyleSheet } from "react-native";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 const IOS = Platform.OS === "ios";
 const isTabletDevice = DeviceInfo.isTablet();
 
 export const createStyles = (colors) => {
   return StyleSheet.create({
-    marBtm15: {
-      marginBottom: 20,
-      width: "100%",
-    },
-    btnView: {
-      display: "flex",
-      flexDirection: "row",
-      marginTop: 20,
-    },
-    titleTxt: {
-      opacity: 1,
-      fontSize: 16,
-      paddingBottom: IOS ? 10 : 5,
-      color: "#464E5F",
-    },
-    mainView: {
-      marginHorizontal: 20,
-      flex: 1,
-    },
-    container: {
-      flex: 1,
-      backgroundColor: BaseColors.white,
-      marginHorizontal: 10,
-      marginBottom: 20,
-    },
-    dropdown: {
-      height: 50,
-      paddingHorizontal: 8,
-      borderBottomWidth: 0.5,
-      borderColor: BaseColors.inactive,
-      backgroundColor: "white",
-      elevation: 4,
-      marginBottom: 10,
-    },
-    imageStyle: {
-      width: 25,
-      resizeMode: "contain",
-    },
-    placeholderStyle: {
-      fontSize: 16,
-    },
-    selectedTextStyle: {
-      fontSize: 14,
-      marginLeft: 8,
-    },
-    titlesty: {
-      fontSize: 16,
-      // fontFamily: 'Poppins',
-      fontWeight: "500",
-      marginHorizontal: 10,
-    },
-    chartViewBox: {
-      borderWidth: 1,
-      backgroundColor: "white",
-      borderColor: "white",
-      marginBottom: 20,
-      flex: 1,
-      height: Dimensions.get("window").height / 2.8,
-      shadowColor: "#000",
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.2,
-      shadowRadius: 4,
-      elevation: 4,
-      borderRadius: 10,
-    },
-    BtnViewSty: {
-      padding: 6,
-      backgroundColor: "green",
-      width: "50%",
-      justifyContent: "center",
-      alignSelf: "center",
-      borderRadius: 5,
-    },
-    detailviewsty: {
-      marginHorizontal: 20,
-      flexDirection: "row",
-      marginTop: 10,
-    },
-    titletxtsty: {
-      width: "50%",
-    },
-    discriptiontxtsty: {
-      width: "50%",
-    },
-    emptydata: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      marginBottom: 10,
-    },
-    filterView: {
-      flex: 1,
-      justifyContent: "center",
-      alignContent: "center",
-      backgroundColor: "hsla(360, 20%,2%, 0.6)",
-    },
-    background: {
-      // marginTop: '30%',
-      backgroundColor: BaseColors.white,
-      paddingHorizontal: 30,
-      paddingVertical: 20,
-      elevation: 10,
-      width: "90%",
-      justifyContent: "center",
-      alignSelf: "center",
-      shadowColor: BaseColors.transparent,
-      borderRadius: 10,
-    },
-    TextStyle: {
-      // fontFamily: 'Poppins',
-      fontSize: isTabletDevice ? 18 : 14,
-      fontWeight: "500",
-      color: colors.colors.primary,
-      paddingBottom: 5,
-    },
-    disTextStyle: {
-      color: BaseColors.textColor,
-      fontSize: isTabletDevice ? 18 : 14,
-    },
     cardSty: {
       marginVertical: 4,
       width: "100%",
@@ -156,29 +38,6 @@ export const createStyles = (colors) => {
       fontWeight: "600",
       color: BaseColors.primary,
     },
-    eventItem: {
-      backgroundColor: "#f9f9f9",
-      padding: 15,
-      marginVertical: 5,
-      borderRadius: 5,
-      shadowColor: "#000",
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.3,
-      shadowRadius: 1,
-      elevation: 2,
-    },
-    eventName: {
-      fontSize: 16,
-    },
-    eventTime: {
-      color: "gray",
-    },
-    noEventsText: {
-      textAlign: "center",
-      marginTop: 20,
-      fontSize: 16,
-      color: "gray",
-    },
     attechStyle: {
       width: 25,
       height: 25,
@@ -203,7 +62,13 @@ export const createStyles = (colors) => {
     },
     imageContainer: {
       padding: 5,
-      borderRadius: 20,
+      width: 85,
+      height: 85,
+      flexDirection: "row",
+      position: "relative",
+      marginLeft: 10,
+      borderRadius: 50,
+      flexWrap: "wrap",
       justifyContent: "center",
       marginVertical: 5,
       borderColor: BaseColors.inactive,
@@ -228,6 +93,75 @@ export const createStyles = (colors) => {
       },
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
+    },
+    barStyle: {
+      width: 3,
+      height: 50,
+      borderRadius: 8,
+      justifyContent: "center",
+    },
+    titleStyle: {
+      color: BaseColors.black,
+      fontSize: 16,
+      paddingVertical: 3,
+      fontWeight: "600",
+    },
+    descriptionStyle: {
+      color: BaseColors.textColor,
+      fontSize: 14,
+      paddingVertical: 3,
+    },
+    dotStyle: {
+      width: 8,
+      height: 8,
+      borderRadius: 10,
+      marginRight: 5,
+    },
+    headerStyle: {
+      backgroundColor: BaseColors.primary,
+      paddingTop: getStatusBarHeight() + (IOS ? 50 : 30),
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginHorizontal: 20,
+    },
+    profileImage: {
+      width: 50,
+      height: 50,
+      borderRadius: 30,
+      marginRight: 15,
+    },
+    sideDrawerContainer: {
+      backgroundColor: BaseColors.orangeColor,
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      justifyContent: "center",
+    },
+    upcomingContaner: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      paddingHorizontal: 20,
+      backgroundColor: BaseColors.greenColor,
+      paddingVertical: 15,
+      borderRadius: 5,
+    },
+    upcomingText: {
+      color: BaseColors.white,
+      fontSize: 16,
+      fontWeight: "700",
+    },
+    todayTaskContaner: {
+      flexDirection: "row",
+      alignContent: "center",
+      justifyContent: "space-between",
+      marginBottom: 10,
+    },
+    informativeDotStyle: {
+      width: 15,
+      height: 15,
+      borderRadius: 10,
+      backgroundColor: BaseColors.redColor,
+      marginHorizontal: 5,
     },
   });
 };

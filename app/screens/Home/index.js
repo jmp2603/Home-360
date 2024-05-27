@@ -60,23 +60,7 @@ export default function Home({ navigation, index }) {
   const [selectItem, setSelectItem] = useState({});
   const [completedLoader, setCompletedLoader] = useState(false);
 
-  useEffect(() => {
-    generateDatesForCurrentMonth();
-  }, []);
-
-  useEffect(() => {
-    if (dates.length > 0) {
-      const currentDate = moment().format("YYYY-MM-DD");
-      const currentDateIndex = dates.indexOf(currentDate);
-      if (currentDateIndex !== -1 && flatListRef.current) {
-        flatListRef.current.scrollToIndex({
-          index: currentDateIndex,
-          animated: true,
-        });
-      }
-    }
-  }, [dates]);
-
+  // Current Months Date Array..
   const generateDatesForCurrentMonth = () => {
     const startOfMonth = moment().startOf("month");
     const endOfMonth = moment().endOf("month");
@@ -91,6 +75,9 @@ export default function Home({ navigation, index }) {
     setDates(datesArray);
   };
 
+  useEffect(() => {
+    generateDatesForCurrentMonth();
+  }, []);
   const renderDayHeader = ({ item }) => {
     const isSelected = item === selectedDate;
     return (
@@ -151,7 +138,7 @@ export default function Home({ navigation, index }) {
       setNextLoading(true);
       const tempPage = page + 1;
       setPage(tempPage);
-      getTaskList(tempPage, "", "onEndreached");
+      getTaskList(tempPage, "onEndreached");
     }
   };
   const renderListFooter = () => {
@@ -181,6 +168,7 @@ export default function Home({ navigation, index }) {
     getTaskList(1);
   }, [isFocused]);
 
+  // Render Task List Item...
   const renderItem = ({ item, index }) => {
     const background =
       item?.status === 0
@@ -211,13 +199,12 @@ export default function Home({ navigation, index }) {
             }}
           >
             <View
-              style={{
-                width: 3,
-                height: 50,
-                borderRadius: 8,
-                backgroundColor: color,
-                justifyContent: "center",
-              }}
+              style={[
+                styles.barStyle,
+                {
+                  backgroundColor: color,
+                },
+              ]}
             />
           </View>
           <View
@@ -227,15 +214,7 @@ export default function Home({ navigation, index }) {
               width: "100%",
             }}
           >
-            <Text
-              numberOfLines={1}
-              style={{
-                color: BaseColors.black,
-                fontSize: 16,
-                paddingVertical: 3,
-                fontWeight: "600",
-              }}
-            >
+            <Text numberOfLines={1} style={styles.titleStyle}>
               {item?.title}{" "}
               {item?.status === 2 && (
                 <CustomIcon
@@ -245,14 +224,7 @@ export default function Home({ navigation, index }) {
                 />
               )}
             </Text>
-            <Text
-              numberOfLines={1}
-              style={{
-                color: BaseColors.textColor,
-                fontSize: 14,
-                paddingVertical: 3,
-              }}
-            >
+            <Text numberOfLines={1} style={styles.descriptionStyle}>
               {item?.description}
             </Text>
             <View
@@ -269,13 +241,12 @@ export default function Home({ navigation, index }) {
                 }}
               >
                 <View
-                  style={{
-                    width: 8,
-                    height: 8,
-                    backgroundColor: color,
-                    borderRadius: 10,
-                    marginRight: 5,
-                  }}
+                  style={[
+                    styles.dotStyle,
+                    {
+                      backgroundColor: color,
+                    },
+                  ]}
                 />
                 <Text
                   style={{
@@ -425,6 +396,7 @@ export default function Home({ navigation, index }) {
     });
   };
 
+  // Option for Upload Image Container..
   const options = [
     <TouchableOpacity
       onPress={() => openGallery()}
@@ -469,6 +441,10 @@ export default function Home({ navigation, index }) {
     </TouchableOpacity>,
   ];
 
+  /**
+   * Function for Uplaod Image API..
+   * @function uploadMultiImage
+   */
   async function uploadMultiImage() {
     setBtnLoading(true);
     let uploadImg = {};
@@ -496,6 +472,10 @@ export default function Home({ navigation, index }) {
     }
   }
 
+  /**
+   * Function for Mark as Completed..
+   * @function markasComplete
+   */
   async function markAsCompleted() {
     setCompletedLoader(true);
     const url =
@@ -515,6 +495,12 @@ export default function Home({ navigation, index }) {
     }
   }
 
+  /**
+   * Function for Remove Image.
+   * @function removeImage
+   * @param {String} id - Image Id
+   * @param {Number} ind - Index of Image
+   */
   const removeImage = async (id, ind) => {
     const removeImage = [...uploadedImages];
     if (removeImage) {
@@ -568,25 +554,9 @@ export default function Home({ navigation, index }) {
           borderRadius: 20,
         }}
       >
-        <View
-          style={{
-            backgroundColor: BaseColors.primary,
-            paddingTop: getStatusBarHeight() + (IOS ? 50 : 30),
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginHorizontal: 20,
-          }}
-        >
+        <View style={styles.headerStyle}>
           <View style={{ flexDirection: "row" }}>
-            <FastImage
-              source={Images.Profile}
-              style={{
-                width: 50,
-                height: 50,
-                borderRadius: 30,
-                marginRight: 15,
-              }}
-            />
+            <FastImage source={Images.Profile} style={styles.profileImage} />
             <View>
               <Text style={{ color: BaseColors.white, fontSize: 18 }}>
                 Hello! 👋
@@ -594,7 +564,7 @@ export default function Home({ navigation, index }) {
               <Text
                 style={{
                   color: BaseColors.white,
-                  fontSize: 18,
+                  fontSize: 20,
                   fontWeight: "600",
                 }}
               >
@@ -605,13 +575,7 @@ export default function Home({ navigation, index }) {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => navigation.toggleDrawer()}
-            style={{
-              backgroundColor: BaseColors.orangeColor,
-              width: 40,
-              height: 40,
-              borderRadius: 20,
-              justifyContent: "center",
-            }}
+            style={styles.sideDrawerContainer}
           >
             <CustomIcon
               name="Side-Menu"
@@ -641,16 +605,22 @@ export default function Home({ navigation, index }) {
           />
         </View>
       </View>
-      <View style={{ marginHorizontal: 10, flex: 1 }}>
-        <View
-          ref={touchable}
-          style={{
-            flexDirection: "row",
-            alignContent: "center",
-            justifyContent: "space-between",
-            marginBottom: 10,
-          }}
-        >
+      <View style={{ marginHorizontal: 10, flex: 1, marginTop: 10 }}>
+        <TouchableOpacity activeOpacity={0.7} style={styles.upcomingContaner}>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={[styles.upcomingText, { paddingRight: 10 }]}>
+              Upcoming Events
+            </Text>
+            <CustomIcon
+              name="Right-Arrow"
+              color={BaseColors.white}
+              size={16}
+              style={{ marginTop: 3 }}
+            />
+          </View>
+          <Text style={[styles.upcomingText]}>10</Text>
+        </TouchableOpacity>
+        <View ref={touchable} style={styles.todayTaskContaner}>
           <View style={{ flexDirection: "row" }}>
             <Text
               style={{
@@ -696,15 +666,7 @@ export default function Home({ navigation, index }) {
                     paddingVertical: 5,
                   }}
                 >
-                  <View
-                    style={{
-                      width: 15,
-                      height: 15,
-                      borderRadius: 10,
-                      backgroundColor: BaseColors.redColor,
-                      marginHorizontal: 5,
-                    }}
-                  />
+                  <View style={styles.informativeDotStyle} />
                   <Text
                     style={{
                       color: BaseColors.titleColor,
@@ -721,13 +683,10 @@ export default function Home({ navigation, index }) {
                   }}
                 >
                   <View
-                    style={{
-                      width: 15,
-                      height: 15,
-                      borderRadius: 10,
-                      backgroundColor: BaseColors.grey,
-                      marginHorizontal: 5,
-                    }}
+                    style={[
+                      styles.informativeDotStyle,
+                      { backgroundColor: BaseColors.grey },
+                    ]}
                   />
                   <Text
                     style={{
@@ -776,6 +735,7 @@ export default function Home({ navigation, index }) {
           />
         )}
       </View>
+      {/* Upload Image Sheet */}
       <RBSheet
         ref={ActionUploadRef}
         closeOnDragDown={true}
@@ -812,7 +772,7 @@ export default function Home({ navigation, index }) {
         </View>
         <View style={{ flexDirection: "row", flexWrap: "wrap", marginTop: 10 }}>
           <TouchableOpacity
-            activeOpacity={0.7}
+            activeOpacity={0.8}
             disabled={size(uploadedImages) === 5}
             onPress={() => {
               if (ActionSheetRef.current) {
@@ -840,18 +800,7 @@ export default function Home({ navigation, index }) {
             ? uploadedImages.map((d, index) => {
                 return (
                   <TouchableOpacity
-                    style={[
-                      styles.imageContainer,
-                      {
-                        width: 85,
-                        height: 85,
-                        flexDirection: "row",
-                        position: "relative",
-                        marginLeft: 10,
-                        borderRadius: 50,
-                        flexWrap: "wrap",
-                      },
-                    ]}
+                    style={[styles.imageContainer]}
                     activeOpacity={0.8}
                   >
                     <FastImage
@@ -884,12 +833,7 @@ export default function Home({ navigation, index }) {
                             ]
                           );
                         }}
-                        style={[
-                          styles.mainViewStyMultiple,
-                          {
-                            backgroundColor: BaseColors.white,
-                          },
-                        ]}
+                        style={[styles.mainViewStyMultiple]}
                       >
                         <CustomIcon name="Close" color={BaseColors.errorRed} />
                       </TouchableOpacity>
@@ -930,6 +874,8 @@ export default function Home({ navigation, index }) {
           </View>
         </View>
       </RBSheet>
+      {/* End */}
+      {/* Upload Option Sheet */}
       <RBSheet
         ref={ActionSheetRef}
         closeOnDragDown={true}
@@ -970,6 +916,8 @@ export default function Home({ navigation, index }) {
           })}
         </View>
       </RBSheet>
+      {/* End */}
+      {/* Complete Task Confirmation */}
       <RBSheet
         ref={ActionCompleted}
         closeOnDragDown={true}
@@ -1035,6 +983,7 @@ export default function Home({ navigation, index }) {
           </View>
         </View>
       </RBSheet>
+      {/* End */}
     </View>
   );
 }
