@@ -52,7 +52,47 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
             <CustomIcon
               name={isFocused ? "Home-Filled" : "Home"}
               size={24}
-              color={isFocused ? "white" : "white"}
+              color={"white"}
+            />
+          </View>
+        );
+      case "ClockInNavigator":
+        return (
+          <View
+            style={[
+              styles.tabIconView,
+              isFocused && {
+                backgroundColor: BaseColors.orangeColor,
+                padding: 15,
+                borderRadius: 30,
+                justifyContent: "center",
+              },
+            ]}
+          >
+            <CustomIcon
+              name={isFocused ? "Clock-In-Filled" : "Clock-In"}
+              size={24}
+              color={"white"}
+            />
+          </View>
+        );
+      case "ChatNavigator":
+        return (
+          <View
+            style={[
+              styles.tabIconView,
+              isFocused && {
+                backgroundColor: BaseColors.orangeColor,
+                padding: 15,
+                borderRadius: 30,
+                justifyContent: "center",
+              },
+            ]}
+          >
+            <CustomIcon
+              name={isFocused ? "Chat-Filled" : "Bottom-Chat"}
+              size={24}
+              color={"white"}
             />
           </View>
         );
@@ -109,7 +149,7 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
             <CustomIcon
               name={isFocused ? "notification-filled" : "Notification"}
               size={24}
-              color={isFocused ? "white" : "white"}
+              color={"white"}
             />
           </View>
         );
@@ -225,7 +265,7 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
 const styles = StyleSheet.create({
   tabContainer: {
     position: "absolute",
-    width: 150,
+    width: Dimensions.get("window").width / 1.2,
     bottom: 15,
     justifyContent: "center",
     alignSelf: "center",

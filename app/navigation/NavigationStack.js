@@ -19,6 +19,8 @@ import ViewDetails from "../screens/ViewDetails";
 import SideDrawer from "./SideDrawer";
 import ViewTask from "../screens/ViewTask";
 import { BaseColors } from "../config/theme";
+import ClockIn from "../screens/ClockIn";
+import Chat from "../screens/Chat";
 
 const intitialNotificationState = {
   notification: null,
@@ -41,6 +43,8 @@ function App() {
   const Drawer = createDrawerNavigator();
   const HomeStack = createStackNavigator();
   const NotificationStack = createStackNavigator();
+  const ClockInStack = createStackNavigator();
+  const ChatStack = createStackNavigator();
 
   const HomeStackNavigator = () => {
     return (
@@ -51,6 +55,28 @@ function App() {
           options={{ headerShown: false }}
         />
       </HomeStack.Navigator>
+    );
+  };
+  const ClockInNavigator = () => {
+    return (
+      <ClockInStack.Navigator>
+        <ClockInStack.Screen
+          name="ClockIn"
+          component={ClockIn}
+          options={{ headerShown: false }}
+        />
+      </ClockInStack.Navigator>
+    );
+  };
+  const ChatNavigator = () => {
+    return (
+      <ChatStack.Navigator>
+        <ChatStack.Screen
+          name="Chat"
+          component={Chat}
+          options={{ headerShown: false }}
+        />
+      </ChatStack.Navigator>
     );
   };
 
@@ -78,6 +104,8 @@ function App() {
         }}
       >
         <Tab.Screen name="HomeStackNavigator" component={HomeStackNavigator} />
+        <Tab.Screen name="ClockInNavigator" component={ClockInNavigator} />
+        <Tab.Screen name="ChatNavigator" component={ChatNavigator} />
         <Tab.Screen
           name="NotificationStackNavigator"
           component={NotificationStackNavigator}
