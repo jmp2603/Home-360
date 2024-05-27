@@ -606,7 +606,11 @@ export default function Home({ navigation, index }) {
         </View>
       </View>
       <View style={{ marginHorizontal: 10, flex: 1, marginTop: 10 }}>
-        <TouchableOpacity activeOpacity={0.7} style={styles.upcomingContaner}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.upcomingContaner}
+          onPress={() => navigation.navigate("UpcomingTask")}
+        >
           <View style={{ flexDirection: "row" }}>
             <Text style={[styles.upcomingText, { paddingRight: 10 }]}>
               Upcoming Events
