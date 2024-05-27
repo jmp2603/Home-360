@@ -535,6 +535,21 @@ export default function Home({ navigation, index }) {
     }
   };
 
+  // To get Current Index...
+  const getCurrentDateIndex = () => {
+    const today = moment().format("YYYY-MM-DD");
+    return dates.findIndex((item) => item === today);
+  };
+
+  useEffect(() => {
+    const index = getCurrentDateIndex();
+    if (index !== -1 && flatListRef.current) {
+      setTimeout(() => {
+        flatListRef.current.scrollToIndex({ index, animated: true });
+      }, 100);
+    }
+  }, [dates]);
+
   return (
     <View
       style={{
@@ -622,22 +637,6 @@ export default function Home({ navigation, index }) {
                 index,
               }) // Assuming each item has a width of 60
             }
-            onScrollToIndexFailed={(info) => {
-              if (flatListRef.current) {
-                flatListRef.current.scrollToOffset({
-                  offset: info.averageItemLength * info.index,
-                  animated: true,
-                });
-                setTimeout(() => {
-                  if (flatListRef.current) {
-                    flatListRef.current.scrollToIndex({
-                      index: info.index,
-                      animated: true,
-                    });
-                  }
-                }, 100);
-              }
-            }}
             style={{ marginBottom: 10 }}
           />
         </View>
