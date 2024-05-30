@@ -30,6 +30,7 @@ import { chatFilesVal, urlParams } from "../../utils/CommonFunc";
 import RBSheet from "react-native-raw-bottom-sheet";
 import CAlert from "../../components/CAlert";
 import ImagePicker from "react-native-image-crop-picker";
+import TextInput from "../../components/TextInput";
 
 const IOS = Platform.OS === "ios";
 const { width, height } = Dimensions.get("window");
@@ -59,7 +60,7 @@ export default function Home({ navigation, index }) {
   const [btnLoading, setBtnLoading] = useState(false);
   const [selectItem, setSelectItem] = useState({});
   const [completedLoader, setCompletedLoader] = useState(false);
-
+  const renderItemRef = useRef();
   // Current Months Date Array..
   const generateDatesForCurrentMonth = () => {
     const startOfMonth = moment().startOf("month");
@@ -275,6 +276,88 @@ export default function Home({ navigation, index }) {
                 )}
               </View>
               <View style={{ flexDirection: "row" }}>
+                <Popover
+                  from={(sourceRef) => (
+                    <TouchableOpacity
+                      ref={sourceRef}
+                      activeOpacity={0.7}
+                      onPress={() => {
+                        setSelectItem(item);
+                        setShowPopover(true);
+                      }}
+                      style={[
+                        styles.attechStyle,
+                        {
+                          marginHorizontal: 10,
+                          backgroundColor: BaseColors.yellow,
+                        },
+                      ]}
+                    >
+                      <CustomIcon
+                        name="Voice"
+                        size={18}
+                        color={BaseColors.white}
+                      />
+                    </TouchableOpacity>
+                  )}
+                  isVisible={showPopover && selectItem?.id === item.id}
+                  statusBarTranslucent={true}
+                  popoverStyle={{ width: 600, borderRadius: 8 }} // Adjust as needed
+                  placement={PopoverPlacement.BOTTOM}
+                  onRequestClose={() => setShowPopover(false)}
+                >
+                  <View
+                    style={{
+                      paddingVertical: 10,
+                      paddingHorizontal: 10,
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <View style={{ width: "84%" }}>
+                      <TextInput
+                        placeholderText="Type message..."
+                        // value={textAreaVal}
+                        textInputStyle={{
+                          minHeight: 50,
+                          backgroundColor: "#F0F0F0",
+                          borderRadius: 10,
+                          // borderColor: BaseColors.offWhite,
+                        }}
+                        // showError={textValErr.err}
+                        // errorText={textValErr.txt}
+                        onChange={(value) => {
+                          // setTextAreaVal(value);
+                          // if (value) {
+                          //   setTextValErr({ err: false, txt: "" });
+                          // }
+                        }}
+                      />
+                    </View>
+                    <View style={{ marginBottom: 0 }}>
+                      <TouchableOpacity
+                        activeOpacity={0.7}
+                        // onPress={() => validation()}
+                        style={{
+                          width: "20%",
+                          marginHorizontal: 10,
+                          width: 50,
+                          height: 50,
+                          borderRadius: 30,
+                          justifyContent: "center",
+                          alignItems: "center",
+                          backgroundColor: BaseColors.primary,
+                        }}
+                      >
+                        <CustomIcon
+                          name="Send"
+                          size={20}
+                          color={BaseColors.white}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </Popover>
                 {item?.status !== 1 && (
                   <TouchableOpacity
                     activeOpacity={0.7}
@@ -724,6 +807,7 @@ export default function Home({ navigation, index }) {
           <NoData />
         ) : (
           <FlatList
+            ref={renderItemRef}
             bounces={false}
             showsVerticalScrollIndicator={false}
             data={taskList}
