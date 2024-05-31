@@ -1,32 +1,33 @@
-import React, {Component} from 'react';
+import { BaseColors } from "../../config/theme";
+import React, { Component } from "react";
 import {
   View,
   Dimensions,
   ActivityIndicator,
   StyleSheet,
   Text,
-} from 'react-native';
+} from "react-native";
 
 const styles = StyleSheet.create({
   wrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: Dimensions.get('window').width,
-    backgroundColor: '#EEE',
-    borderTopColor: '#CCC',
+    alignItems: "center",
+    justifyContent: "center",
+    width: Dimensions.get("window").width,
+    backgroundColor: "#EEE",
+    borderTopColor: "#CCC",
     borderTopWidth: 1,
   },
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   textContainer: {
-    height: 'auto',
+    height: "auto",
     padding: 20,
   },
   text: {
     fontSize: 10,
-    color: '#000',
+    color: "#000",
     paddingTop: 10,
   },
 });
@@ -36,11 +37,11 @@ const styles = StyleSheet.create({
  */
 export class CTopNotify extends Component {
   render() {
-    const {title} = this.props;
+    const { title } = this.props;
     return (
       <View style={styles.wrapper}>
         <View style={[styles.container, styles.textContainer]}>
-          <ActivityIndicator />
+          <ActivityIndicator color={BaseColors.primary} />
           {title && <Text style={styles.text}>{title}</Text>}
         </View>
       </View>

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "react-native-gesture-handler";
 import { ActivityIndicator, Text, TextInput, LogBox } from "react-native";
 import DatePicker from "react-native-date-picker";
-// import codePush from 'react-native-code-push';
+import codePush from "react-native-code-push";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/es/integration/react";
 import { ThemeProvider } from "@react-navigation/native";
@@ -23,16 +23,16 @@ const isTabletDevice = DeviceInfo.isTablet();
 // const IOS = Platform.OS === 'ios';
 LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
 LogBox.ignoreAllLogs();
-// const codePushOptions = {s
-//   installMode: codePush.InstallMode.IMMEDIATE,
-//   checkFrequency: codePush.CheckFrequency.ON_APP_START,
+const codePushOptions = {
+  installMode: codePush.InstallMode.IMMEDIATE,
+  checkFrequency: codePush.CheckFrequency.ON_APP_START,
 
-//   updateDialog: {
-//     appendReleaseDescription: true,
-//     descriptionPrefix: "\n\nWhat's New:",
-//     mandatoryContinueButtonLabel: 'Install',
-//   },
-// };
+  updateDialog: {
+    appendReleaseDescription: true,
+    descriptionPrefix: "\n\nWhat's New:",
+    mandatoryContinueButtonLabel: "Install",
+  },
+};
 
 /**
  * @class EntryPoint
@@ -53,7 +53,40 @@ class index extends Component {
     if (isTabletDevice) {
       store.dispatch(AuthAction.setIsTabletDevice(true));
     }
+    codePush.notifyAppReady();
+    codePush.sync(codePushOptions, this.handleCodePushStatus);
   }
+
+  /**
+   * Function for Code push Status
+   * @function handleCodePushStatus
+   * @param {String} status - Status of Code push
+   */
+  handleCodePushStatus = (status) => {
+    switch (status) {
+      case codePush.SyncStatus.CHECKING_FOR_UPDATE:
+        console.log("Checking for updates.");
+        break;
+      case codePush.SyncStatus.DOWNLOADING_PACKAGE:
+        console.log("Downloading package.");
+        this.setState({ processing: true });
+        break;
+      case codePush.SyncStatus.INSTALLING_UPDATE:
+        console.log("Installing update.");
+        this.setState({ processing: false });
+        break;
+      case codePush.SyncStatus.UP_TO_DATE:
+        console.log("Up-to-date.");
+        this.setState({ processing: false });
+        break;
+      case codePush.SyncStatus.UPDATE_INSTALLED:
+        console.log("Update installed.");
+        this.setState({ processing: false });
+        break;
+      default:
+        break;
+    }
+  };
 
   showToast = (message) => {
     if (this.notifyToast?.current) {
@@ -119,8 +152,8 @@ DatePicker.defaultProps = DatePicker.defaultProps || {};
 DatePicker.defaultProps.allowFontScaling = false;
 
 let indexExport = index;
-// if (!__DEV__) {
-//   indexExport = codePush(codePushOptions)(index);
-// }
+if (!__DEV__) {
+  indexExport = codePush(codePushOptions)(index);
+}
 
 export default indexExport;
