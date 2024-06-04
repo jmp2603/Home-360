@@ -21,7 +21,7 @@ import { getApiData } from "../../utils/apiHelper";
 import BaseSetting from "../../config/setting";
 import Swipeable from "react-native-swipeable";
 import { CustomIcon } from "../../config/LoadIcons";
-import { Duration, urlParams } from "../../utils/CommonFunc";
+import { urlParams } from "../../utils/CommonFunc";
 import moment from "moment";
 import RBSheet from "react-native-raw-bottom-sheet";
 
@@ -136,6 +136,7 @@ export default function Notification({ navigation, route }) {
   useEffect(() => {
     getNotificationList(1);
   }, [isFocused]);
+  // End
 
   function onOpen(event, gestureState, swipeable) {
     if (currentlyOpenSwipeable && currentlyOpenSwipeable !== swipeable) {
@@ -169,7 +170,13 @@ export default function Notification({ navigation, route }) {
     }
   };
 
-  // Render Item List...
+  /**
+   * Function for Render Item of Notification.
+   * @function renderItem
+   * @param {Object} Item - Object of Item
+   * @param {Number} index - Index fo Item
+   * @returns
+   */
   const renderItem = ({ item, index }) => {
     return (
       <Swipeable
@@ -348,6 +355,10 @@ export default function Notification({ navigation, route }) {
     }
   };
 
+  /**
+   * Function for Remove All Notification.
+   * @function handleAllnotification
+   */
   const handleAllnotification = async () => {
     setBtnLoader(true);
     let url = `${BaseSetting.endpoints.allNotificationDelete}`;

@@ -1,6 +1,6 @@
 /* eslint-disable handle-callback-err */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../../components";
 import TextInput from "../../components/TextInput";
 import { Images } from "../../config";
@@ -37,12 +37,7 @@ export default function Login({ navigation }) {
   const [phoneErr, setPhoneErr] = useState({ err: false, txt: "" });
   const [passwordErr, setPasswordErr] = useState({ err: false, txt: "" });
   const [btnLoader, setBtnLoader] = useState(false);
-  const [hidePassword, setHidePassword] = useState(true);
   const [visible, setVisible] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setHidePassword(!hidePassword);
-  };
 
   /**
    * Function for Check Validation..
@@ -222,15 +217,14 @@ export default function Login({ navigation }) {
                 height: 50,
                 backgroundColor: BaseColors.transparent,
               }}
-              textInputStyle={{
-                paddingHorizontal: 80,
-                minHeight: 50,
-                backgroundColor: BaseColors.offWhite,
-                borderRadius: 10,
-                borderColor: phoneErr.err
-                  ? BaseColors.errorRed
-                  : BaseColors.offWhite,
-              }}
+              textInputStyle={[
+                styles.textInputStyle,
+                {
+                  borderColor: phoneErr.err
+                    ? BaseColors.errorRed
+                    : BaseColors.offWhite,
+                },
+              ]}
               onChange={(value) => {
                 setPhone(value.replace(/  +/g, " "));
                 if (value) {
@@ -262,7 +256,7 @@ export default function Login({ navigation }) {
             <OTPInputView
               style={{ width: "100%", height: 10 }}
               pinCount={6}
-              code={password} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
+              code={password}
               onCodeChanged={(code) => {
                 setPassword(code);
               }}

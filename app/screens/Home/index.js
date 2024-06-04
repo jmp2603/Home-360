@@ -60,23 +60,7 @@ export default function Home({ navigation, index }) {
   const [selectItem, setSelectItem] = useState({});
   const [completedLoader, setCompletedLoader] = useState(false);
 
-  useEffect(() => {
-    generateDatesForCurrentMonth();
-  }, []);
-
-  useEffect(() => {
-    if (dates.length > 0) {
-      const currentDate = moment().format("YYYY-MM-DD");
-      const currentDateIndex = dates.indexOf(currentDate);
-      if (currentDateIndex !== -1 && flatListRef.current) {
-        flatListRef.current.scrollToIndex({
-          index: currentDateIndex,
-          animated: true,
-        });
-      }
-    }
-  }, [dates]);
-
+  // Function for Generate current months and Render Header..
   const generateDatesForCurrentMonth = () => {
     const startOfMonth = moment().startOf("month");
     const endOfMonth = moment().endOf("month");
@@ -90,7 +74,6 @@ export default function Home({ navigation, index }) {
     }
     setDates(datesArray);
   };
-
   const renderDayHeader = ({ item }) => {
     const isSelected = item === selectedDate;
     return (
@@ -108,6 +91,23 @@ export default function Home({ navigation, index }) {
       </View>
     );
   };
+
+  useEffect(() => {
+    generateDatesForCurrentMonth();
+  }, []);
+  useEffect(() => {
+    if (dates.length > 0) {
+      const currentDate = moment().format("YYYY-MM-DD");
+      const currentDateIndex = dates.indexOf(currentDate);
+      if (currentDateIndex !== -1 && flatListRef.current) {
+        flatListRef.current.scrollToIndex({
+          index: currentDateIndex,
+          animated: true,
+        });
+      }
+    }
+  }, [dates]);
+  // End
 
   /**
    * Function for Get Task List...
@@ -180,7 +180,15 @@ export default function Home({ navigation, index }) {
   useEffect(() => {
     getTaskList(1);
   }, [isFocused]);
+  // End
 
+  /**
+   * Function for Render Item of Flat list..
+   * @function renderItem
+   * @param {Object} item - Item of Object
+   * @param {Number} index - Index of Array
+   * @returns
+   */
   const renderItem = ({ item, index }) => {
     const background =
       item?.status === 0
@@ -469,6 +477,10 @@ export default function Home({ navigation, index }) {
     </TouchableOpacity>,
   ];
 
+  /**
+   * Function for Upload Images
+   * @function uploadMultiImage
+   */
   async function uploadMultiImage() {
     setBtnLoading(true);
     let uploadImg = {};
@@ -496,6 +508,10 @@ export default function Home({ navigation, index }) {
     }
   }
 
+  /**
+   * Function for Mark As Completed Task.
+   * @function markasCompleted
+   */
   async function markAsCompleted() {
     setCompletedLoader(true);
     const url =
@@ -515,6 +531,12 @@ export default function Home({ navigation, index }) {
     }
   }
 
+  /**
+   * Function for Remove Image from selected data.
+   * @function removeImage
+   * @param {String} id - Image ID
+   * @param {Number} ind - Index of Image
+   */
   const removeImage = async (id, ind) => {
     const removeImage = [...uploadedImages];
     if (removeImage) {
@@ -776,6 +798,7 @@ export default function Home({ navigation, index }) {
           />
         )}
       </View>
+      {/* Upload Images Container*/}
       <RBSheet
         ref={ActionUploadRef}
         closeOnDragDown={true}
@@ -930,6 +953,8 @@ export default function Home({ navigation, index }) {
           </View>
         </View>
       </RBSheet>
+      {/* End */}
+      {/* Upload Images Option */}
       <RBSheet
         ref={ActionSheetRef}
         closeOnDragDown={true}
@@ -970,6 +995,8 @@ export default function Home({ navigation, index }) {
           })}
         </View>
       </RBSheet>
+      {/* End */}
+      {/* Conformation Message for Mark as Completed */}
       <RBSheet
         ref={ActionCompleted}
         closeOnDragDown={true}
@@ -1035,6 +1062,7 @@ export default function Home({ navigation, index }) {
           </View>
         </View>
       </RBSheet>
+      {/* End */}
     </View>
   );
 }

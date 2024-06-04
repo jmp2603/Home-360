@@ -61,4 +61,10 @@ export default StyleSheet.create({
     color: BaseColors.black,
     borderRadius: 10,
   },
+  textInputStyle: {
+    paddingHorizontal: 80,
+    minHeight: 50,
+    backgroundColor: BaseColors.offWhite,
+    borderRadius: 10,
+  },
 });
