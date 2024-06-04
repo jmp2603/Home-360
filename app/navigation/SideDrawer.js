@@ -1,6 +1,5 @@
 // CustomDrawerContent.js
 import * as React from "react";
-// import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { View, Text, StyleSheet, FlatList, Platform } from "react-native";
 import { BaseColors } from "../config/theme";
 import { TouchableOpacity } from "react-native";
@@ -10,7 +9,6 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 
 const IOS = Platform.OS === "ios";
 export default function SideDrawer({ navigation }) {
-  // drawerItems.js
   const drawerItems = [
     {
       category: "General",
@@ -22,45 +20,45 @@ export default function SideDrawer({ navigation }) {
             navigation.closeDrawer();
           },
         },
-        // {
-        //   label: "View Attendance",
-        //   onPress: () => console.log("View Attendance Pressed"),
-        // },
-        // {
-        //   label: "Leave Application",
-        //   onPress: () => console.log("Leave Application Pressed"),
-        // },
+        {
+          label: "View Attendance",
+          onPress: () => console.log("View Attendance Pressed"),
+        },
+        {
+          label: "Leave Application",
+          onPress: () => console.log("Leave Application Pressed"),
+        },
       ],
     },
-    // {
-    //   category: "Finance",
-    //   items: [
-    //     {
-    //       label: "View Salary History",
-    //       onPress: () => console.log("View Salary History Pressed"),
-    //     },
-    //     {
-    //       label: "Add Expenses",
-    //       onPress: () => console.log("Add Expenses Pressed"),
-    //     },
-    //     {
-    //       label: "Link UPI Account",
-    //       onPress: () => console.log("Link UPI Account Pressed"),
-    //     },
-    //     { label: "Loan", onPress: () => console.log("Loan Pressed") },
-    //   ],
-    // },
-    // {
-    //   category: "Settings",
-    //   items: [
-    //     { label: "Profile", onPress: () => console.log("Profile Pressed") },
-    //     {
-    //       label: "App Language",
-    //       onPress: () => console.log("App Language Pressed"),
-    //     },
-    //     { label: "Tutorials", onPress: () => console.log("Tutorials Pressed") },
-    //   ],
-    // },
+    {
+      category: "Finance",
+      items: [
+        {
+          label: "View Salary History",
+          onPress: () => console.log("View Salary History Pressed"),
+        },
+        {
+          label: "Add Expenses",
+          onPress: () => console.log("Add Expenses Pressed"),
+        },
+        {
+          label: "Link UPI Account",
+          onPress: () => console.log("Link UPI Account Pressed"),
+        },
+        { label: "Loan", onPress: () => console.log("Loan Pressed") },
+      ],
+    },
+    {
+      category: "Settings",
+      items: [
+        { label: "Profile", onPress: () => console.log("Profile Pressed") },
+        {
+          label: "App Language",
+          onPress: () => console.log("App Language Pressed"),
+        },
+        { label: "Tutorials", onPress: () => console.log("Tutorials Pressed") },
+      ],
+    },
   ];
 
   return (

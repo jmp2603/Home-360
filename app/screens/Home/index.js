@@ -44,6 +44,7 @@ export default function Home({ navigation, index }) {
   const ActionUploadRef = useRef();
   const ActionCompleted = useRef();
   const [showPopover, setShowPopover] = useState(false);
+  const [micPopover, setMicPopover] = useState(false);
   const { userData } = useSelector((state) => state.auth);
   const [taskList, setTaskList] = useState([]);
   const [nextPage, setNextPage] = useState(false);
@@ -283,7 +284,7 @@ export default function Home({ navigation, index }) {
                       activeOpacity={0.7}
                       onPress={() => {
                         setSelectItem(item);
-                        setShowPopover(true);
+                        setMicPopover(true);
                       }}
                       style={[
                         styles.attechStyle,
@@ -300,11 +301,11 @@ export default function Home({ navigation, index }) {
                       />
                     </TouchableOpacity>
                   )}
-                  isVisible={showPopover && selectItem?.id === item.id}
+                  isVisible={micPopover && selectItem?.id === item.id}
                   statusBarTranslucent={true}
                   popoverStyle={{ width: 600, borderRadius: 8 }} // Adjust as needed
                   placement={PopoverPlacement.BOTTOM}
-                  onRequestClose={() => setShowPopover(false)}
+                  onRequestClose={() => setMicPopover(false)}
                 >
                   <View
                     style={{
@@ -317,21 +318,12 @@ export default function Home({ navigation, index }) {
                     <View style={{ width: "84%" }}>
                       <TextInput
                         placeholderText="Type message..."
-                        // value={textAreaVal}
                         textInputStyle={{
                           minHeight: 50,
                           backgroundColor: "#F0F0F0",
                           borderRadius: 10,
-                          // borderColor: BaseColors.offWhite,
                         }}
-                        // showError={textValErr.err}
-                        // errorText={textValErr.txt}
-                        onChange={(value) => {
-                          // setTextAreaVal(value);
-                          // if (value) {
-                          //   setTextValErr({ err: false, txt: "" });
-                          // }
-                        }}
+                        onChange={(value) => {}}
                       />
                     </View>
                     <View style={{ marginBottom: 0 }}>
