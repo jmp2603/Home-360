@@ -184,6 +184,12 @@ export default function ViewDetails({ navigation, route }) {
     </TouchableOpacity>,
   ];
 
+  /**
+   * Function for remove Image..
+   * @function removeImage
+   * @param {String} id - Image Id
+   * @param {Number} ind - Index of Image Array
+   */
   const removeImage = async (id, ind) => {
     const removeImage = [...uploadedImages];
     if (removeImage) {
@@ -206,6 +212,9 @@ export default function ViewDetails({ navigation, route }) {
     }
   };
 
+  /**
+   * Function to mark a task as completed.
+   */
   async function markAsCompleted() {
     setCompletedLoader(true);
     const url =

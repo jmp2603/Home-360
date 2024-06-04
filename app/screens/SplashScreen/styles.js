@@ -1,7 +1,4 @@
-import { Dimensions, Platform, StyleSheet } from "react-native";
-import { BaseColors } from "../../config/theme";
-
-const IOS = Platform.OS === "ios";
+import { Dimensions, StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   mainView: {
