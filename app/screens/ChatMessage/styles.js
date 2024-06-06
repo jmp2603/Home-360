@@ -38,14 +38,5 @@ export const createStyles = (colors) => {
       justifyContent: "center",
       alignItems: "center",
     },
-    deleteContainer: {
-      width: 40,
-      height: 40,
-      backgroundColor: BaseColors.errorRed,
-      padding: 5,
-      borderRadius: 30,
-      justifyContent: "center",
-      marginHorizontal: 10,
-    },
   });
 };

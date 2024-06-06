@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import { createStyles } from "./styles";
 import { useTheme } from "@react-navigation/native";
+import PersonalChat from "./PersonalChat";
+import TaskEvent from "./TaskEvent";
 
 const IOS = Platform.OS === "ios";
 const { width, height } = Dimensions.get("window");
@@ -31,7 +33,7 @@ export default function Chat({ navigation, index }) {
         barStyle="light-content"
         backgroundColor={BaseColors.transparent}
       />
-      <View style={{ marginHorizontal: 10, marginVertical: 10 }}>
+      <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
         <View
           style={{
             flexDirection: "row",
@@ -69,7 +71,7 @@ export default function Chat({ navigation, index }) {
                 fontWeight: activeButton === "once" ? "600" : "400",
               }}
             >
-              {"One-time Tasks"}
+              {"Personal"}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -99,11 +101,13 @@ export default function Chat({ navigation, index }) {
                 fontWeight: activeButton === "repeat" ? "600" : "400",
               }}
             >
-              {"Recurring Tasks"}
+              {"Tasks and Events"}
             </Text>
           </TouchableOpacity>
         </View>
       </View>
+      {activeButton === "once" && <PersonalChat navigation={navigation} />}
+      {activeButton === "repeat" && <TaskEvent navigation={navigation} />}
     </View>
   );
 }

@@ -18,10 +18,10 @@ import Notification from "../screens/Notification";
 import ViewDetails from "../screens/ViewDetails";
 import SideDrawer from "./SideDrawer";
 import ViewTask from "../screens/ViewTask";
-import { BaseColors } from "../config/theme";
 import ClockIn from "../screens/ClockIn";
 import Chat from "../screens/Chat";
 import UpcomingTask from "../screens/UpcomingTask";
+import ChatMessage from "../screens/ChatMessage";
 
 const intitialNotificationState = {
   notification: null,
@@ -186,6 +186,11 @@ function App() {
           <Stack.Screen
             name="UpcomingTask"
             component={UpcomingTask}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ChatMessage"
+            component={ChatMessage}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
