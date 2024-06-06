@@ -22,7 +22,10 @@ export default function SideDrawer({ navigation }) {
         },
         {
           label: "View Attendance",
-          onPress: () => console.log("View Attendance Pressed"),
+          onPress: () => {
+            navigation.navigate("ViewAttendance");
+            navigation.closeDrawer();
+          },
         },
         {
           label: "Leave Application",

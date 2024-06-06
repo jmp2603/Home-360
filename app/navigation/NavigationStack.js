@@ -22,6 +22,7 @@ import ClockIn from "../screens/ClockIn";
 import Chat from "../screens/Chat";
 import UpcomingTask from "../screens/UpcomingTask";
 import ChatMessage from "../screens/ChatMessage";
+import ViewAttendance from "../screens/ViewAttendance";
 
 const intitialNotificationState = {
   notification: null,
@@ -191,6 +192,11 @@ function App() {
           <Stack.Screen
             name="ChatMessage"
             component={ChatMessage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ViewAttendance"
+            component={ViewAttendance}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
