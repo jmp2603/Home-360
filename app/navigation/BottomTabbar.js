@@ -70,7 +70,7 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
             ]}
           >
             <CustomIcon
-              name={isFocused ? "Clock-In-Filled" : "Clock-In"}
+              name={isFocused ? "Clock-Out-Filled" : "Clock-In"}
               size={24}
               color={"white"}
             />
