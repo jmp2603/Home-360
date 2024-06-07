@@ -41,7 +41,10 @@ export default function SideDrawer({ navigation }) {
       items: [
         {
           label: "View Salary History",
-          onPress: () => console.log("View Salary History Pressed"),
+          onPress: () => {
+            navigation.navigate("SalaryHistory");
+            navigation.closeDrawer();
+          },
         },
         {
           label: "Add Expenses",

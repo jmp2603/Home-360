@@ -25,6 +25,7 @@ import ChatMessage from "../screens/ChatMessage";
 import ViewAttendance from "../screens/ViewAttendance";
 import LeaveApplication from "../screens/LeaveApplication";
 import AppliedLeave from "../screens/AppliedLeave";
+import SalaryHistory from "../screens/SalaryHistory";
 
 const intitialNotificationState = {
   notification: null,
@@ -209,6 +210,11 @@ function App() {
           <Stack.Screen
             name="AppliedLeave"
             component={AppliedLeave}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SalaryHistory"
+            component={SalaryHistory}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
