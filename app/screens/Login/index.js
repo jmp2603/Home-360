@@ -214,6 +214,7 @@ export default function Login({ navigation }) {
           <View style={{ paddingVertical: 15 }}>
             <TextInput
               isSuffix
+              countryPicker
               phoneNumber={true}
               keyBoardType="number-pad"
               title={"Mobile Number"}

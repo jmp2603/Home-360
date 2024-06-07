@@ -68,6 +68,8 @@ function CInput(props, ref) {
     codeTxtSty,
     placeholderStyle,
     suffixStyle,
+    countryPicker,
+    suffixIcon,
     ...rest
   } = props;
 
@@ -250,32 +252,44 @@ function CInput(props, ref) {
                       ...suffixStyle,
                     }}
                   >
-                    <CountryPicker
-                      theme={myTheme}
-                      containerButtonStyle={{}}
-                      {...{
-                        countryCode,
-                        withCallingCode: true,
-                        withFilter: true,
-                        withAlphaFilter: true,
-                        onSelect,
-                        modalProps: {
-                          visible: isVisible,
-                        },
-                      }}
-                    />
-                    <Icon name="angle-down" color="#6D7177" size={12} />
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        fontWeight: "200",
-                        paddingHorizontal: 5,
-                        color: "#6D7177",
-                      }}
-                    >
-                      {" "}
-                      |{" "}
-                    </Text>
+                    {countryPicker ? (
+                      <>
+                        <CountryPicker
+                          theme={myTheme}
+                          containerButtonStyle={{}}
+                          {...{
+                            countryCode,
+                            withCallingCode: true,
+                            withFilter: true,
+                            withAlphaFilter: true,
+                            onSelect,
+                            modalProps: {
+                              visible: isVisible,
+                            },
+                          }}
+                        />
+                        <Icon name="angle-down" color="#6D7177" size={12} />
+                        <Text
+                          style={{
+                            fontSize: 20,
+                            fontWeight: "200",
+                            paddingHorizontal: 5,
+                            color: "#6D7177",
+                          }}
+                        >
+                          {" "}
+                          |{" "}
+                        </Text>
+                      </>
+                    ) : (
+                      <CustomIcon
+                        onPress={() => console.log("degtail")}
+                        style={{ top: 5, left: 8 }}
+                        name={suffixIcon}
+                        size={20}
+                        color={BaseColors.titleColor}
+                      />
+                    )}
                   </View>
                 )}
                 <TextInput
@@ -299,9 +313,9 @@ function CInput(props, ref) {
                   returnKeyType={returnKeyType}
                   isSuffix={isSuffix}
                   style={{
-                    height: textArea ? 55 : 50,
-                    minHeight: 50,
-                    maxHeight: textArea ? 82 : 40,
+                    height: textArea ? 90 : 50,
+                    minHeight: textArea ? 90 : 50,
+                    maxHeight: textArea ? 90 : 40,
                     justifyContent: "center",
                     alignSelf: "center",
                     borderWidth: 1,

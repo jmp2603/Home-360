@@ -31,10 +31,9 @@ export const createStyles = (colors) => {
       borderColor: colors.colors.white,
     },
     btnText: {
-      fontSize: 18,
+      fontSize: 16,
       textAlign: "center",
-      textTransform: "capitalize",
-      fontWeight: "700",
+      fontWeight: "600",
     },
     shadow: {
       shadowColor: "#000",

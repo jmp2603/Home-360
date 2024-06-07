@@ -23,6 +23,8 @@ import Chat from "../screens/Chat";
 import UpcomingTask from "../screens/UpcomingTask";
 import ChatMessage from "../screens/ChatMessage";
 import ViewAttendance from "../screens/ViewAttendance";
+import LeaveApplication from "../screens/LeaveApplication";
+import AppliedLeave from "../screens/AppliedLeave";
 
 const intitialNotificationState = {
   notification: null,
@@ -197,6 +199,16 @@ function App() {
           <Stack.Screen
             name="ViewAttendance"
             component={ViewAttendance}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="LeaveApplication"
+            component={LeaveApplication}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AppliedLeave"
+            component={AppliedLeave}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

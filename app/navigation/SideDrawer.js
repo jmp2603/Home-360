@@ -29,7 +29,10 @@ export default function SideDrawer({ navigation }) {
         },
         {
           label: "Leave Application",
-          onPress: () => console.log("Leave Application Pressed"),
+          onPress: () => {
+            navigation.navigate("LeaveApplication");
+            navigation.closeDrawer();
+          },
         },
       ],
     },
