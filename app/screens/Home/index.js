@@ -13,7 +13,6 @@ import {
 } from "react-native";
 import { createStyles } from "./styles";
 import { useIsFocused, useTheme } from "@react-navigation/native";
-import { getStatusBarHeight } from "react-native-status-bar-height";
 import FastImage from "react-native-fast-image";
 import { Images } from "../../config";
 import { CustomIcon } from "../../config/LoadIcons";
@@ -64,19 +63,26 @@ export default function Home({ navigation, index }) {
     generateDatesForCurrentMonth();
   }, []);
 
+  // Auto Scroll to Current Index.
   useEffect(() => {
     if (dates.length > 0) {
       const currentDate = moment().format("YYYY-MM-DD");
       const currentDateIndex = dates.indexOf(currentDate);
       if (currentDateIndex !== -1 && flatListRef.current) {
-        flatListRef.current.scrollToIndex({
-          index: currentDateIndex,
-          animated: true,
-        });
+        const position =
+          currentDateIndex > 12 ? 0.2 : currentDateIndex > 21 ? 0.5 : 0.4;
+        setTimeout(() => {
+          flatListRef.current.scrollToIndex({
+            index: currentDateIndex,
+            animated: true,
+            viewPosition: position,
+          });
+        }, 400);
       }
     }
   }, [dates]);
 
+  // Generate Current month Array..
   const generateDatesForCurrentMonth = () => {
     const startOfMonth = moment().startOf("month");
     const endOfMonth = moment().endOf("month");
@@ -91,6 +97,12 @@ export default function Home({ navigation, index }) {
     setDates(datesArray);
   };
 
+  /**
+   * Function for Render Day..
+   * @function renderDayHeader
+   * @param {Object} param0 - Item of Day List.
+   * @returns
+   */
   const renderDayHeader = ({ item }) => {
     const isSelected = item === selectedDate;
     return (
@@ -176,11 +188,19 @@ export default function Home({ navigation, index }) {
     }
     return null;
   };
+  // End
 
   useEffect(() => {
     getTaskList(1);
   }, [isFocused]);
 
+  /**
+   * Function for Render Item..
+   *@function renderItem
+   * @param {Object} Item - Item of Task List
+   * @param {Number} index - Index Of Task List.
+   * @returns
+   */
   const renderItem = ({ item, index }) => {
     const background =
       item?.status === 0
@@ -469,6 +489,7 @@ export default function Home({ navigation, index }) {
     </TouchableOpacity>,
   ];
 
+  // Upload Image API Integration
   async function uploadMultiImage() {
     setBtnLoading(true);
     let uploadImg = {};
@@ -495,7 +516,12 @@ export default function Home({ navigation, index }) {
       setBtnLoading(false);
     }
   }
+  // End
 
+  /**
+   * Function for Mark As Completed API Integration
+   * @function markAsCompleted
+   */
   async function markAsCompleted() {
     setCompletedLoader(true);
     const url =
@@ -515,6 +541,12 @@ export default function Home({ navigation, index }) {
     }
   }
 
+  /**
+   * Function for Remove Uploaded Image.
+   * @function removeImage
+   * @param {String} id - Image ID
+   * @param {Number} ind - Selected Image Index
+   */
   const removeImage = async (id, ind) => {
     const removeImage = [...uploadedImages];
     if (removeImage) {
@@ -551,52 +583,25 @@ export default function Home({ navigation, index }) {
   }, [dates]);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: BaseColors.white,
-      }}
-    >
+    <View style={styles.mainContainer}>
       <StatusBar
         translucent
         barStyle="light-content"
         backgroundColor={BaseColors.primary}
       />
-      <View
-        style={{
-          backgroundColor: BaseColors.primary,
-          borderRadius: 20,
-        }}
-      >
-        <View
-          style={{
-            backgroundColor: BaseColors.primary,
-            paddingTop: getStatusBarHeight() + (IOS ? 50 : 30),
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginHorizontal: 20,
-          }}
-        >
+      <View style={styles.headerContainer}>
+        <View style={styles.profileImgContainer}>
           <View style={{ flexDirection: "row" }}>
-            <FastImage
-              source={Images.Profile}
-              style={{
-                width: 50,
-                height: 50,
-                borderRadius: 30,
-                marginRight: 15,
-              }}
-            />
+            <FastImage source={Images.Profile} style={styles.imageStyle} />
             <View>
-              <Text style={{ color: BaseColors.white, fontSize: 18 }}>
-                Hello! 👋
-              </Text>
+              <Text style={styles.nameStyle}>Hello! 👋</Text>
               <Text
-                style={{
-                  color: BaseColors.white,
-                  fontSize: 18,
-                  fontWeight: "600",
-                }}
+                style={[
+                  styles.nameStyle,
+                  {
+                    fontWeight: "600",
+                  },
+                ]}
               >
                 {userData?.name || "-"}
               </Text>
@@ -605,13 +610,7 @@ export default function Home({ navigation, index }) {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => navigation.toggleDrawer()}
-            style={{
-              backgroundColor: BaseColors.orangeColor,
-              width: 40,
-              height: 40,
-              borderRadius: 20,
-              justifyContent: "center",
-            }}
+            style={styles.sideDrawerSty}
           >
             <CustomIcon
               name="Side-Menu"
@@ -630,38 +629,19 @@ export default function Home({ navigation, index }) {
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.dateList}
-            getItemLayout={
-              (data, index) => ({
-                length: 60,
-                offset: 60 * index,
-                index,
-              }) // Assuming each item has a width of 60
-            }
+            getItemLayout={(data, index) => ({
+              length: 60,
+              offset: 60 * index,
+              index,
+            })}
             style={{ marginBottom: 10 }}
           />
         </View>
       </View>
       <View style={{ marginHorizontal: 10, flex: 1 }}>
-        <View
-          ref={touchable}
-          style={{
-            flexDirection: "row",
-            alignContent: "center",
-            justifyContent: "space-between",
-            marginBottom: 10,
-          }}
-        >
+        <View ref={touchable} style={styles.listContainer}>
           <View style={{ flexDirection: "row" }}>
-            <Text
-              style={{
-                fontSize: 20,
-                marginTop: 10,
-                fontWeight: "600",
-                color: BaseColors.titleColor,
-              }}
-            >
-              Today’s Task
-            </Text>
+            <Text style={styles.taskText}>Today’s Task</Text>
             <TouchableOpacity
               ref={touchable}
               style={{ marginTop: IOS ? 8 : 10, marginHorizontal: 5 }}
@@ -690,21 +670,14 @@ export default function Home({ navigation, index }) {
                 }}
               >
                 <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    paddingVertical: 5,
-                  }}
+                  style={[
+                    styles.popTextContainer,
+                    {
+                      paddingVertical: 5,
+                    },
+                  ]}
                 >
-                  <View
-                    style={{
-                      width: 15,
-                      height: 15,
-                      borderRadius: 10,
-                      backgroundColor: BaseColors.redColor,
-                      marginHorizontal: 5,
-                    }}
-                  />
+                  <View style={styles.popoverDot} />
                   <Text
                     style={{
                       color: BaseColors.titleColor,
@@ -714,20 +687,14 @@ export default function Home({ navigation, index }) {
                     Indicates task requires photo verification.
                   </Text>
                 </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
+                <View style={styles.popTextContainer}>
                   <View
-                    style={{
-                      width: 15,
-                      height: 15,
-                      borderRadius: 10,
-                      backgroundColor: BaseColors.grey,
-                      marginHorizontal: 5,
-                    }}
+                    style={[
+                      styles.popoverDot,
+                      {
+                        backgroundColor: BaseColors.grey,
+                      },
+                    ]}
                   />
                   <Text
                     style={{
@@ -791,24 +758,8 @@ export default function Home({ navigation, index }) {
         }}
       >
         <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: "600",
-              marginVertical: 15,
-              color: BaseColors.black,
-            }}
-          >
-            Upload Proof
-          </Text>
-          <Text
-            style={{
-              fontSize: 14,
-              color: BaseColors.textColor,
-            }}
-          >
-            Maximum 5 photos can be uploaded.
-          </Text>
+          <Text style={styles.uploadText}>Upload Proof</Text>
+          <Text style={styles.noteText}>Maximum 5 photos can be uploaded.</Text>
         </View>
         <View style={{ flexDirection: "row", flexWrap: "wrap", marginTop: 10 }}>
           <TouchableOpacity
@@ -822,17 +773,12 @@ export default function Home({ navigation, index }) {
                 ActionUploadRef.current.close();
               }
             }}
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: 50,
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: BaseColors.lightOrange,
-              marginTop: 10,
-              marginLeft: 20,
-              opacity: size(uploadedImages) === 5 ? 0.5 : 1,
-            }}
+            style={[
+              styles.plusContainer,
+              {
+                opacity: size(uploadedImages) === 5 ? 0.5 : 1,
+              },
+            ]}
           >
             <CustomIcon name="Plus" size={25} color={BaseColors.orangeColor} />
           </TouchableOpacity>
@@ -840,26 +786,11 @@ export default function Home({ navigation, index }) {
             ? uploadedImages.map((d, index) => {
                 return (
                   <TouchableOpacity
-                    style={[
-                      styles.imageContainer,
-                      {
-                        width: 85,
-                        height: 85,
-                        flexDirection: "row",
-                        position: "relative",
-                        marginLeft: 10,
-                        borderRadius: 50,
-                        flexWrap: "wrap",
-                      },
-                    ]}
+                    style={styles.imageContainer}
                     activeOpacity={0.8}
                   >
                     <FastImage
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        borderRadius: 50,
-                      }}
+                      style={styles.uploadedImg}
                       resizeMode={"cover"}
                       source={{ uri: d?.file || d?.uri }}
                     />
@@ -899,14 +830,7 @@ export default function Home({ navigation, index }) {
               })
             : null}
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            paddingHorizontal: 10,
-            marginVertical: 10,
-          }}
-        >
+        <View style={styles.btnContainer}>
           <Button
             onBtnClick={() => ActionUploadRef.current.close()}
             containerStyle={{
@@ -945,24 +869,8 @@ export default function Home({ navigation, index }) {
         }}
       >
         <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: "600",
-              marginVertical: 10,
-              color: BaseColors.black,
-            }}
-          >
-            Upload Proof
-          </Text>
-          <Text
-            style={{
-              fontSize: 14,
-              color: BaseColors.textColor,
-            }}
-          >
-            Maximum 5 photos can be uploaded.
-          </Text>
+          <Text style={styles.uploadText}>Upload Proof</Text>
+          <Text style={styles.noteText}>Maximum 5 photos can be uploaded.</Text>
         </View>
         <View>
           {options?.map((item) => {
@@ -985,16 +893,7 @@ export default function Home({ navigation, index }) {
         }}
       >
         <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: "700",
-              marginVertical: 10,
-              color: BaseColors.black,
-            }}
-          >
-            Confirm
-          </Text>
+          <Text style={styles.confirmText}>Confirm</Text>
           <Text
             style={{
               fontSize: 16,
@@ -1005,14 +904,7 @@ export default function Home({ navigation, index }) {
             Are you sure you want to complete this task?
           </Text>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            paddingHorizontal: 10,
-            marginVertical: 10,
-          }}
-        >
+        <View style={styles.btnContainer}>
           <Button
             onBtnClick={() => ActionCompleted.current.close()}
             containerStyle={{
