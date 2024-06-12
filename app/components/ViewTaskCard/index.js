@@ -109,10 +109,16 @@ export default function ViewTaskCard(props) {
     getTaskList(1, type, selectedFilter);
   }, [type, searchVal, selectedFilter]);
 
-  const getMarkedDates = (dates, color) => {
+  const getMarkedDates = (dates) => {
     const markedDates = {};
     dates &&
       dates.forEach((dateItem) => {
+        const color =
+          dateItem?.status === 0
+            ? BaseColors.yellow
+            : dateItem?.status === 1
+            ? BaseColors.primary
+            : BaseColors.redColor;
         markedDates[dateItem.end_date] = {
           selected: true,
           selectedColor: color,
@@ -137,7 +143,10 @@ export default function ViewTaskCard(props) {
     const markedDate =
       type === "repeat" &&
       !isEmpty(item?.task_data) &&
-      getMarkedDates(item?.task_data, color);
+      getMarkedDates(item?.task_data);
+    if (openCalender) {
+      console.log("item?.task_data", item?.task_data);
+    }
     return (
       <View key={index}>
         <View

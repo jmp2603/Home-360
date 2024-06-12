@@ -66,16 +66,14 @@ export default function Home({ navigation, index }) {
   // Auto Scroll to Current Index.
   useEffect(() => {
     if (dates.length > 0) {
-      const currentDate = moment().format("YYYY-MM-DD");
+      const currentDate = moment(selectedDate).format("YYYY-MM-DD");
       const currentDateIndex = dates.indexOf(currentDate);
       if (currentDateIndex !== -1 && flatListRef.current) {
-        const position =
-          currentDateIndex > 12 ? 0.2 : currentDateIndex > 21 ? 0.5 : 0.4;
         setTimeout(() => {
           flatListRef.current.scrollToIndex({
             index: currentDateIndex,
             animated: true,
-            viewPosition: position,
+            viewPosition: IOS ? 0.33 : 0.34,
           });
         }, 400);
       }
@@ -84,15 +82,22 @@ export default function Home({ navigation, index }) {
 
   // Generate Current month Array..
   const generateDatesForCurrentMonth = () => {
-    const startOfMonth = moment().startOf("month");
-    const endOfMonth = moment().endOf("month");
     const datesArray = [];
-    for (
-      let date = startOfMonth;
-      date.isBefore(endOfMonth);
-      date.add(1, "days")
-    ) {
-      datesArray.push(date.clone().format("YYYY-MM-DD"));
+    const currentDate = moment(selectedDate, "YYYY-MM-DD");
+
+    // Add previous three dates
+    for (let i = 3; i > 0; i--) {
+      datesArray.push(
+        currentDate.clone().subtract(i, "days").format("YYYY-MM-DD")
+      );
+    }
+
+    // Add current date
+    datesArray.push(currentDate.format("YYYY-MM-DD"));
+
+    // Add next three dates
+    for (let i = 1; i <= 3; i++) {
+      datesArray.push(currentDate.clone().add(i, "days").format("YYYY-MM-DD"));
     }
     setDates(datesArray);
   };
@@ -192,7 +197,7 @@ export default function Home({ navigation, index }) {
 
   useEffect(() => {
     getTaskList(1);
-  }, [isFocused]);
+  }, [isFocused, selectedDate]);
 
   /**
    * Function for Render Item..
@@ -622,6 +627,7 @@ export default function Home({ navigation, index }) {
         </View>
         <View style={{ marginVertical: 20 }}>
           <FlatList
+            scrollEnabled={false}
             ref={flatListRef}
             data={dates}
             renderItem={renderDayHeader}
@@ -630,8 +636,8 @@ export default function Home({ navigation, index }) {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.dateList}
             getItemLayout={(data, index) => ({
-              length: 60,
-              offset: 60 * index,
+              length: 50,
+              offset: 50 * index,
               index,
             })}
             style={{ marginBottom: 10 }}

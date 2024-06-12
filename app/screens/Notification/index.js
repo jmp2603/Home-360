@@ -374,20 +374,7 @@ export default function Notification({ navigation, route }) {
         backgroundColor: BaseColors.white,
       }}
     >
-      <CHeader
-        title={"Notification"}
-        customIcon
-        rightIcon
-        setShowPopover={setShowPopover}
-        showPopover={showPopover}
-        popoverPress={() => {
-          setShowPopover(false);
-          setSelectData("");
-          setTimeout(() => {
-            ActionOpenSheet.current.open();
-          }, 600);
-        }}
-      />
+      <CHeader title={"Notification"} />
       <View style={{ marginHorizontal: 15, flex: 1 }}>
         <StatusBar
           translucent
@@ -488,11 +475,7 @@ export default function Notification({ navigation, route }) {
               loading={btnloader}
               containerStyle={{ width: 160, paddingVertical: 12 }}
               onBtnClick={() => {
-                if (selectData) {
-                  handledelete(selectData);
-                } else {
-                  handleAllnotification();
-                }
+                handledelete(selectData);
               }}
             >
               Submit
