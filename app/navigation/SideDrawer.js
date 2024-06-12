@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   StyleSheet,
@@ -11,45 +11,43 @@ import {
   Dimensions,
   ScrollView,
   StatusBar,
-} from 'react-native';
-import Image from 'react-native-fast-image';
-import {useDispatch, useSelector} from 'react-redux';
-import {CustomIcon} from '../config/LoadIcons';
-import {logout} from '../utils/CommonFunc';
-import {BaseColors} from '../config//theme';
-import authActions from '../redux/reducers/auth/actions';
-import Aicon from 'react-native-vector-icons/AntDesign';
-import AlertModal from '../components/AlertModal';
-import BaseSetting from '../config/setting';
-import {getApiData} from '../utils/apiHelper';
-import SwitchComponent from '../components/SwitchComponent';
-import {translate} from '../lang/Translate';
-import {useIsFocused, useTheme} from '@react-navigation/native';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {EventRegister} from 'react-native-event-listeners';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {isEmpty} from 'lodash';
-import {Images} from '../config';
-import DeviceInfo from 'react-native-device-info';
+} from "react-native";
+import Image from "react-native-fast-image";
+import { useDispatch, useSelector } from "react-redux";
+import { CustomIcon } from "../config/LoadIcons";
+import { logout } from "../utils/CommonFunc";
+import { BaseColors } from "../config//theme";
+import authActions from "../redux/reducers/auth/actions";
+import Aicon from "react-native-vector-icons/AntDesign";
+import BaseSetting from "../config/setting";
+import { getApiData } from "../utils/apiHelper";
+import { translate } from "../lang/Translate";
+import { useIsFocused, useTheme } from "@react-navigation/native";
+import { getStatusBarHeight } from "react-native-status-bar-height";
+import { EventRegister } from "react-native-event-listeners";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { isEmpty } from "lodash";
+import { Images } from "../config";
+import DeviceInfo from "react-native-device-info";
 
 const isTabletDevice = DeviceInfo.isTablet();
-const IOS = Platform.OS === 'ios';
+const IOS = Platform.OS === "ios";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: BaseColors.primary,
-    paddingTop: Dimensions.get('window').height / 9,
+    paddingTop: Dimensions.get("window").height / 9,
   },
   profileView: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingTop: Dimensions.get('window').height / 20,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    paddingTop: Dimensions.get("window").height / 20,
     paddingBottom: 30,
   },
   usrImgSty: {
-    width: '100%',
+    width: "100%",
     height: 65,
     borderRadius: 10,
   },
@@ -57,7 +55,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     letterSpacing: 1,
     color: BaseColors.white,
-    alignContent: 'center',
+    alignContent: "center",
   },
   usrPhoneTxt: {
     fontSize: 12,
@@ -66,26 +64,26 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     flex: 1,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
     paddingVertical: 12,
-    paddingLeft: Dimensions.get('window').width / 35,
+    paddingLeft: Dimensions.get("window").width / 35,
   },
   listItem: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignContent: "center",
   },
   listIconView: {
     minWidth: 45,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: 4,
   },
   subIconSty: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: Dimensions.get('window').width / 20,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: Dimensions.get("window").width / 20,
     color: BaseColors.white,
   },
   listIconSty: {
@@ -94,14 +92,14 @@ const styles = StyleSheet.create({
   listItemTxt: {
     fontSize: isTabletDevice ? 20 : 14,
     color: BaseColors.white,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   heading: {
     fontSize: 20,
     color: BaseColors.sidebartext,
   },
   barView: {
-    width: '100%',
+    width: "100%",
     height: 1,
     marginVertical: 25,
     opacity: 0.4,
@@ -125,38 +123,28 @@ const styles = StyleSheet.create({
  *
  */
 
-export default function SideDrawer({navigation}) {
+export default function SideDrawer({ navigation }) {
   const isFocused = useIsFocused();
   const colors = useTheme();
   const [clicked, setClickID] = useState(null);
   const [btnloader, setButtonLoader] = useState(false);
-  const dispatch = useDispatch();
-  const {setDarkmode} = authActions;
-  const {userData, subscriptionArr, darkmode, userPermission, isDemo} =
-    useSelector(state => state.auth);
-  const {fcmToken} = useSelector(state => state.notification);
-  const {isOnline} = useSelector(state => state.offline);
+  const { userData, subscriptionArr, darkmode, userPermission, isDemo } =
+    useSelector((state) => state.auth);
+  const { fcmToken } = useSelector((state) => state.notification);
+  const { isOnline } = useSelector((state) => state.offline);
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
   const [safetymenusUpdated, setSafetyMenusUpdated] = useState(false);
   const [safetymenus, setSafetyMenus] = useState([]);
   const [open, setOpen] = useState(false);
   const [cAlert, setCAlert] = useState({
-    title: '',
-    message: '',
+    title: "",
+    message: "",
     showAlert: false,
   });
   const iconSize = isTabletDevice ? 27 : 20;
-  const isOpen = id => id === open;
+  const isOpen = (id) => id === open;
   const [isLightMode, setIsLightMode] = useState(darkmode);
   const [clickedEvent, setIsClickedEvent] = useState(false);
-  const toggleMode = val => {
-    setIsLightMode(prevMode => !prevMode);
-    if (EventRegister) {
-      EventRegister.emit('changeAppTheme', val);
-    }
-    dispatch(setDarkmode(val));
-  };
-
   const signOut = async () => {
     try {
       await GoogleSignin.signOut();
@@ -170,9 +158,9 @@ export default function SideDrawer({navigation}) {
   // Side drawer Array...
   const drawerData = [
     {
-      id: 'dashboard',
-      role: 'dashboard',
-      title: translate('dashboardtitle'),
+      id: "dashboard",
+      role: "dashboard",
+      title: translate("dashboardtitle"),
       icon: (
         <View style={styles.listIconView}>
           <CustomIcon size={iconSize} name="home" style={styles.listIconSty} />
@@ -180,22 +168,22 @@ export default function SideDrawer({navigation}) {
       ),
       submenu: [
         {
-          id: 'dashboard/compliance',
-          role: 'view_compliance',
-          title: 'Compliance',
+          id: "dashboard/compliance",
+          role: "view_compliance",
+          title: "Compliance",
           action: () => {
-            navigation.navigate('HomeStackNavigator');
+            navigation.navigate("HomeStackNavigator");
             navigation.closeDrawer();
           },
         },
         ...(isOnline
           ? [
               {
-                id: 'dashboard/map',
-                role: 'view_map',
-                title: 'Voyage',
+                id: "dashboard/map",
+                role: "view_map",
+                title: "Voyage",
                 action: () => {
-                  navigation.navigate('MapDashboard');
+                  navigation.navigate("MapDashboard");
                   navigation.closeDrawer();
                 },
               },
@@ -203,38 +191,38 @@ export default function SideDrawer({navigation}) {
           : []),
 
         {
-          id: 'dashboard/vessels',
-          role: 'view_vessels',
-          title: 'Vessels',
+          id: "dashboard/vessels",
+          role: "view_vessels",
+          title: "Vessels",
           action: () => {
-            navigation.navigate('VesselsDashboard');
+            navigation.navigate("VesselsDashboard");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'dashboard/personnel',
-          role: 'view_personnel',
-          title: 'Personnel',
+          id: "dashboard/personnel",
+          role: "view_personnel",
+          title: "Personnel",
           action: () => {
-            navigation.navigate('PersonnelDashboard');
+            navigation.navigate("PersonnelDashboard");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'dashboard/hseq',
-          role: 'view_hseq',
-          title: 'HSEQ',
+          id: "dashboard/hseq",
+          role: "view_hseq",
+          title: "HSEQ",
           action: () => {
-            navigation.navigate('HseqDashboard');
+            navigation.navigate("HseqDashboard");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'dashboard/lms',
-          role: 'view_lms',
-          title: 'LMS',
+          id: "dashboard/lms",
+          role: "view_lms",
+          title: "LMS",
           action: () => {
-            navigation.navigate('LMSDashboard');
+            navigation.navigate("LMSDashboard");
             navigation.closeDrawer();
           },
         },
@@ -242,9 +230,9 @@ export default function SideDrawer({navigation}) {
     },
 
     {
-      id: 'users',
-      role: 'users',
-      title: translate('Users'),
+      id: "users",
+      role: "users",
+      title: translate("Users"),
       icon: (
         <View style={styles.listIconView}>
           <CustomIcon
@@ -255,15 +243,15 @@ export default function SideDrawer({navigation}) {
         </View>
       ),
       action: () => {
-        navigation.navigate('UserManagement');
+        navigation.navigate("UserManagement");
         navigation.closeDrawer();
       },
     },
 
     {
-      id: 'trips',
-      role: 'trips',
-      title: translate('Voyage Management'),
+      id: "trips",
+      role: "trips",
+      title: translate("Voyage Management"),
       icon: (
         <View style={styles.listIconView}>
           <CustomIcon
@@ -275,29 +263,29 @@ export default function SideDrawer({navigation}) {
       ),
       submenu: [
         {
-          id: 'schedule-a-trip',
-          role: 'schedule_trip',
-          title: translate('Schedule a Voyage'),
+          id: "schedule-a-trip",
+          role: "schedule_trip",
+          title: translate("Schedule a Voyage"),
           action: () => {
-            navigation.navigate('ScheduleTrip');
+            navigation.navigate("ScheduleTrip");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'my-trip',
-          role: 'my_trip',
-          title: translate('My Voyages'),
+          id: "my-trip",
+          role: "my_trip",
+          title: translate("My Voyages"),
           action: () => {
-            navigation.navigate('MyTrip');
+            navigation.navigate("MyTrip");
             navigation.closeDrawer();
           },
         },
       ],
     },
     {
-      id: 'vessels-management',
-      role: 'vessels_management',
-      title: translate('VesselsManagementtitle'),
+      id: "vessels-management",
+      role: "vessels_management",
+      title: translate("VesselsManagementtitle"),
       icon: (
         <View style={styles.listIconView}>
           <CustomIcon
@@ -309,65 +297,65 @@ export default function SideDrawer({navigation}) {
       ),
       submenu: [
         {
-          id: 'vessles-type',
-          role: 'vm_vessles_type',
-          title: translate('vesselsTypes'),
+          id: "vessles-type",
+          role: "vm_vessles_type",
+          title: translate("vesselsTypes"),
           action: () => {
-            navigation.navigate('VesselType');
+            navigation.navigate("VesselType");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'vessles',
-          role: 'vessles',
-          title: translate('sidebarvessels'),
+          id: "vessles",
+          role: "vessles",
+          title: translate("sidebarvessels"),
           action: () => {
-            navigation.navigate('Vessels');
+            navigation.navigate("Vessels");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'drills',
-          role: 'drills',
-          title: translate('sidebardrills'),
+          id: "drills",
+          role: "drills",
+          title: translate("sidebardrills"),
           action: () => {
-            navigation.navigate('Drills');
+            navigation.navigate("Drills");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'audit',
-          role: 'audit_and_inspection_report',
-          title: translate('SidebarAudit'),
+          id: "audit",
+          role: "audit_and_inspection_report",
+          title: translate("SidebarAudit"),
           action: () => {
-            navigation.navigate('Audit');
+            navigation.navigate("Audit");
             navigation.closeDrawer();
           },
         },
         {
           id: 54,
-          title: translate('inspections'),
-          role: 'audit_and_inspection_report',
+          title: translate("inspections"),
+          role: "audit_and_inspection_report",
           action: () => {
-            navigation.navigate('Inspection');
+            navigation.navigate("Inspection");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'punch-list',
-          role: 'punch_list',
-          title: translate('sidebarpuchList'),
+          id: "punch-list",
+          role: "punch_list",
+          title: translate("sidebarpuchList"),
           action: () => {
-            navigation.navigate('Deficiencies');
+            navigation.navigate("Deficiencies");
             navigation.closeDrawer();
           },
         },
       ],
     },
     {
-      id: 'voyage-reporting',
-      role: 'voyage_reporting',
-      title: translate('VoyageReportingtitle'),
+      id: "voyage-reporting",
+      role: "voyage_reporting",
+      title: translate("VoyageReportingtitle"),
       icon: (
         <View style={styles.listIconView}>
           <CustomIcon
@@ -379,15 +367,15 @@ export default function SideDrawer({navigation}) {
       ),
 
       action: () => {
-        navigation.navigate('VoyageReporting');
+        navigation.navigate("VoyageReporting");
         navigation.closeDrawer();
       },
     },
     {
       // id: 8,
-      id: 'personnel',
-      role: 'personnel',
-      title: translate('personneltitle'),
+      id: "personnel",
+      role: "personnel",
+      title: translate("personneltitle"),
       icon: (
         <View style={styles.listIconView}>
           <CustomIcon
@@ -401,49 +389,49 @@ export default function SideDrawer({navigation}) {
         ...(isOnline
           ? [
               {
-                id: 'view_working_hours',
-                role: 'view_working_hours',
-                title: 'View Working Hours',
+                id: "view_working_hours",
+                role: "view_working_hours",
+                title: "View Working Hours",
                 action: () => {
-                  navigation.navigate('ViewWorkingHours');
+                  navigation.navigate("ViewWorkingHours");
                   navigation.closeDrawer();
                 },
               },
             ]
           : []),
         {
-          id: 'sea-time-tracker',
-          role: 'sea_time_tracker',
-          title: translate('sidebarsea_time_tracker'),
+          id: "sea-time-tracker",
+          role: "sea_time_tracker",
+          title: translate("sidebarsea_time_tracker"),
           action: () => {
-            navigation.navigate('SeaTimeTracker');
+            navigation.navigate("SeaTimeTracker");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'training-tracker',
-          role: 'training_tracker',
-          title: translate('sidebartraining_tracker'),
+          id: "training-tracker",
+          role: "training_tracker",
+          title: translate("sidebartraining_tracker"),
           action: () => {
-            navigation.navigate('TrainingTracker');
+            navigation.navigate("TrainingTracker");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'drill-tracker',
-          role: 'drill_tracker',
-          title: translate('Drill Tracker'),
+          id: "drill-tracker",
+          role: "drill_tracker",
+          title: translate("Drill Tracker"),
           action: () => {
-            navigation.navigate('DrillTracker');
+            navigation.navigate("DrillTracker");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'certificates',
-          role: 'certificates',
-          title: translate('sidebarcertificates'),
+          id: "certificates",
+          role: "certificates",
+          title: translate("sidebarcertificates"),
           action: () => {
-            navigation.navigate('PersonalCertificates');
+            navigation.navigate("PersonalCertificates");
             navigation.closeDrawer();
           },
         },
@@ -454,9 +442,9 @@ export default function SideDrawer({navigation}) {
       },
     },
     {
-      id: 'hseq_sms',
-      role: 'hseq',
-      title: translate('hseqtitle'),
+      id: "hseq_sms",
+      role: "hseq",
+      title: translate("hseqtitle"),
       icon: (
         <View style={styles.listIconView}>
           <CustomIcon
@@ -468,20 +456,20 @@ export default function SideDrawer({navigation}) {
       ),
       submenu: [
         {
-          id: 'safety-management-system',
-          role: 'safety_management',
-          title: translate('sidebarsms_viewer'),
+          id: "safety-management-system",
+          role: "safety_management",
+          title: translate("sidebarsms_viewer"),
           action: () => {
-            navigation.navigate('SmsEditor', {type: 'viewer'});
+            navigation.navigate("SmsEditor", { type: "viewer" });
             // navigation.closeDrawer();
           },
         },
       ],
     },
     {
-      id: 'learning_management',
-      role: 'learning_management',
-      title: 'Learning Management',
+      id: "learning_management",
+      role: "learning_management",
+      title: "Learning Management",
       icon: (
         <View style={styles.listIconView}>
           <CustomIcon
@@ -493,56 +481,56 @@ export default function SideDrawer({navigation}) {
       ),
       submenu: [
         {
-          id: 'all-courses',
-          role: 'learning_management',
-          title: 'All Courses',
+          id: "all-courses",
+          role: "learning_management",
+          title: "All Courses",
           action: () => {
-            navigation.navigate('AllCourse');
+            navigation.navigate("AllCourse");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'my-learning',
-          role: 'learning_management',
-          title: 'My Learnings',
+          id: "my-learning",
+          role: "learning_management",
+          title: "My Learnings",
           action: () => {
-            navigation.navigate('MyLearning');
+            navigation.navigate("MyLearning");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'training-metrix',
-          role: 'training_metrix',
-          title: 'Training Metrix',
+          id: "training-metrix",
+          role: "training_metrix",
+          title: "Training Metrix",
           action: () => {
-            navigation.navigate('TrainingMetrix');
+            navigation.navigate("TrainingMetrix");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'performance-evalution',
-          role: 'performance_evalution',
-          title: 'Performance Evaluations',
+          id: "performance-evalution",
+          role: "performance_evalution",
+          title: "Performance Evaluations",
           action: () => {
-            navigation.navigate('PerformanceEvaluations');
+            navigation.navigate("PerformanceEvaluations");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'my-evalution',
-          role: 'my_evalution',
-          title: 'My Evaluations',
+          id: "my-evalution",
+          role: "my_evalution",
+          title: "My Evaluations",
           action: () => {
-            navigation.navigate('MyEvaluations');
+            navigation.navigate("MyEvaluations");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'goal',
-          role: 'goal',
-          title: 'Goals',
+          id: "goal",
+          role: "goal",
+          title: "Goals",
           action: () => {
-            navigation.navigate('Goals');
+            navigation.navigate("Goals");
             navigation.closeDrawer();
           },
         },
@@ -554,9 +542,9 @@ export default function SideDrawer({navigation}) {
     },
 
     {
-      id: 'activity-logs',
-      role: 'activity_log',
-      title: translate('ActivityLogstitle'),
+      id: "activity-logs",
+      role: "activity_log",
+      title: translate("ActivityLogstitle"),
       icon: (
         <View style={styles.listIconView}>
           <CustomIcon
@@ -567,14 +555,14 @@ export default function SideDrawer({navigation}) {
         </View>
       ),
       action: () => {
-        navigation.navigate('ActivityLog');
+        navigation.navigate("ActivityLog");
         navigation.closeDrawer();
       },
     },
     {
-      id: 'forms',
-      role: 'forms',
-      title: translate('Formstitle'),
+      id: "forms",
+      role: "forms",
+      title: translate("Formstitle"),
       icon: (
         <View style={styles.listIconView}>
           <CustomIcon size={iconSize} name="Forms" style={styles.listIconSty} />
@@ -582,96 +570,96 @@ export default function SideDrawer({navigation}) {
       ),
       submenu: [
         {
-          id: 'schedule-trip-form',
-          role: 'trip_form',
-          title: translate('Voyage Form'),
+          id: "schedule-trip-form",
+          role: "trip_form",
+          title: translate("Voyage Form"),
           action: () => {
-            navigation.navigate('DynamicFormView', {
-              slug: 'schedule_a_trip',
+            navigation.navigate("DynamicFormView", {
+              slug: "schedule_a_trip",
             });
             navigation.closeDrawer();
           },
         },
         {
-          id: 'safety-form',
-          role: 'safety_forms',
-          title: translate('safetyformstitle'),
+          id: "safety-form",
+          role: "safety_forms",
+          title: translate("safetyformstitle"),
           action: () => {
-            navigation.navigate('SafteyForm');
+            navigation.navigate("SafteyForm");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'goals-forms',
-          role: 'goals_forms',
-          title: translate('Goal Forms'),
+          id: "goals-forms",
+          role: "goals_forms",
+          title: translate("Goal Forms"),
           action: () => {
-            navigation.navigate('GoalForm');
+            navigation.navigate("GoalForm");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'evalution-forms',
-          role: 'evalution_forms',
-          title: translate('Evalution Forms'),
+          id: "evalution-forms",
+          role: "evalution_forms",
+          title: translate("Evalution Forms"),
           action: () => {
-            navigation.navigate('EvalutionForms');
+            navigation.navigate("EvalutionForms");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'create-vessel-form',
-          role: 'create_vessel_form',
-          title: translate('CreateVesseltitle'),
+          id: "create-vessel-form",
+          role: "create_vessel_form",
+          title: translate("CreateVesseltitle"),
           action: () => {
-            navigation.navigate('DynamicFormView', {
-              slug: 'vessel_custom_form',
+            navigation.navigate("DynamicFormView", {
+              slug: "vessel_custom_form",
             });
             navigation.closeDrawer();
           },
         },
         {
-          id: 'voyage-reporting-form/audit-report',
-          role: 'audit_report',
-          title: translate('sidebarauditReport'),
+          id: "voyage-reporting-form/audit-report",
+          role: "audit_report",
+          title: translate("sidebarauditReport"),
           action: () => {
-            navigation.navigate('AuditForm');
+            navigation.navigate("AuditForm");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'voyage-reporting-form/inspection-report',
-          role: 'inspection_report',
-          title: translate('sidebarinspectionReport'),
+          id: "voyage-reporting-form/inspection-report",
+          role: "inspection_report",
+          title: translate("sidebarinspectionReport"),
           action: () => {
-            navigation.navigate('InspectionForm');
+            navigation.navigate("InspectionForm");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'voyage-reporting-form/deficiency-forms',
-          role: 'deficiency_forms',
-          title: translate('sidebardeficiencyForms'),
+          id: "voyage-reporting-form/deficiency-forms",
+          role: "deficiency_forms",
+          title: translate("sidebardeficiencyForms"),
           action: () => {
-            navigation.navigate('DeficiencyFormlList');
+            navigation.navigate("DeficiencyFormlList");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'voyage-reporting-form/drills-report',
-          role: 'drill_forms',
-          title: translate('sidebardrillsReport'),
+          id: "voyage-reporting-form/drills-report",
+          role: "drill_forms",
+          title: translate("sidebardrillsReport"),
           action: () => {
-            navigation.navigate('DrillReportForm');
+            navigation.navigate("DrillReportForm");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'voyage-reporting-form/voyage-report',
-          role: 'voyage_forms',
-          title: translate('sidebarvoyageReport'),
+          id: "voyage-reporting-form/voyage-report",
+          role: "voyage_forms",
+          title: translate("sidebarvoyageReport"),
           action: () => {
-            navigation.navigate('VoyageForm');
+            navigation.navigate("VoyageForm");
             navigation.closeDrawer();
           },
         },
@@ -683,9 +671,9 @@ export default function SideDrawer({navigation}) {
     },
 
     {
-      id: 'how-to-videos',
-      role: 'how_to_videos',
-      title: translate('Howtovideostitle'),
+      id: "how-to-videos",
+      role: "how_to_videos",
+      title: translate("Howtovideostitle"),
       icon: (
         <View style={styles.listIconView}>
           <CustomIcon
@@ -696,15 +684,15 @@ export default function SideDrawer({navigation}) {
         </View>
       ),
       action: () => {
-        navigation.navigate('HowtoVideo');
+        navigation.navigate("HowtoVideo");
         navigation.closeDrawer();
       },
     },
 
     {
-      id: 'eLOG-preference',
-      role: 'elog_preference_gear_types',
-      title: translate('ELOGPreferencetitle'),
+      id: "eLOG-preference",
+      role: "elog_preference_gear_types",
+      title: translate("ELOGPreferencetitle"),
       icon: (
         <View style={styles.listIconView}>
           <CustomIcon
@@ -716,11 +704,11 @@ export default function SideDrawer({navigation}) {
       ),
       submenu: [
         {
-          id: 'ports',
-          role: 'ports',
-          title: translate('sidebarports'),
+          id: "ports",
+          role: "ports",
+          title: translate("sidebarports"),
           action: () => {
-            navigation.navigate('Ports');
+            navigation.navigate("Ports");
             navigation.closeDrawer();
           },
         },
@@ -731,9 +719,9 @@ export default function SideDrawer({navigation}) {
       },
     },
     {
-      id: 'role-manage',
-      role: 'role',
-      title: translate('rolemanagetitle'),
+      id: "role-manage",
+      role: "role",
+      title: translate("rolemanagetitle"),
       icon: (
         <View style={styles.listIconView}>
           <CustomIcon
@@ -744,14 +732,14 @@ export default function SideDrawer({navigation}) {
         </View>
       ),
       action: () => {
-        navigation.navigate('RoleManagement');
+        navigation.navigate("RoleManagement");
         navigation.closeDrawer();
       },
     },
     {
-      id: 'configuration',
-      role: 'configuration',
-      title: translate('Configurationtitle'),
+      id: "configuration",
+      role: "configuration",
+      title: translate("Configurationtitle"),
       icon: (
         <View style={styles.listIconView}>
           <CustomIcon
@@ -763,58 +751,58 @@ export default function SideDrawer({navigation}) {
       ),
       submenu: [
         {
-          id: 'position',
-          role: 'positions',
-          title: translate('sidebarposition'),
+          id: "position",
+          role: "positions",
+          title: translate("sidebarposition"),
           action: () => {
-            navigation.navigate('ManagePostion');
+            navigation.navigate("ManagePostion");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'department',
-          role: 'departments',
-          title: translate('sidebardepartment'),
+          id: "department",
+          role: "departments",
+          title: translate("sidebardepartment"),
           action: () => {
-            navigation.navigate('ManageDepartment');
+            navigation.navigate("ManageDepartment");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'location',
-          role: 'locations',
-          title: translate('sidebarlocation'),
+          id: "location",
+          role: "locations",
+          title: translate("sidebarlocation"),
           action: () => {
-            navigation.navigate('ManageLocation');
+            navigation.navigate("ManageLocation");
             navigation.closeDrawer();
           },
         },
         {
-          id: 'notification',
-          role: 'notification',
-          title: translate('sidebarnotification'),
+          id: "notification",
+          role: "notification",
+          title: translate("sidebarnotification"),
           action: () => {
-            navigation.navigate('ManageNotification');
+            navigation.navigate("ManageNotification");
             navigation.closeDrawer();
           },
         },
       ],
       action: () => {
-        navigation.navigate('Configuration');
+        navigation.navigate("Configuration");
         navigation.closeDrawer();
       },
     },
     {
-      id: 'signature',
-      role: 'signature',
-      title: 'Signature',
+      id: "signature",
+      role: "signature",
+      title: "Signature",
       icon: (
         <View style={styles.listIconView}>
           <Aicon size={iconSize} name="form" style={styles.listIconSty} />
         </View>
       ),
       action: () => {
-        navigation.navigate('Signature');
+        navigation.navigate("Signature");
         navigation.closeDrawer();
       },
     },
@@ -823,51 +811,9 @@ export default function SideDrawer({navigation}) {
 
   const updateSideBar = [
     {
-      id: 16,
-      role: 'light_mode',
-      title: translate('LightMode'),
-      icon: (
-        <View style={styles.listIconView}>
-          <CustomIcon
-            size={iconSize}
-            name="LightMode"
-            style={styles.listIconSty}
-          />
-        </View>
-      ),
-      submenu: [
-        {
-          id: 43,
-          role: 'light_mode',
-          component: (
-            <View
-              style={{marginVertical: Dimensions.get('window').height / 100}}>
-              <SwitchComponent
-                onValueChange={toggleMode}
-                value={isLightMode}
-                leftText={'Light'}
-                rightText={'Dark'}
-                textSty={{color: 'white'}}
-                backgroundActive={'#dce2e6'}
-                backgroundInactive={'#dce2e6'}
-                circleActiveColor={'#40a372'}
-                circleInActiveColor={'#40a372'}
-              />
-            </View>
-          ),
-          action: () => {
-            navigation.closeDrawer();
-          },
-        },
-      ],
-      action: () => {
-        navigation.closeDrawer();
-      },
-    },
-    {
       id: 17,
-      role: 'logout',
-      title: translate('topbarlogout'),
+      role: "logout",
+      title: translate("topbarlogout"),
       icon: (
         <View style={styles.listIconView}>
           <Aicon size={iconSize} name="logout" style={[styles.listIconSty]} />
@@ -875,10 +821,10 @@ export default function SideDrawer({navigation}) {
       ),
       action: () => {
         setCAlert({
-          title: 'Confirm',
-          message: 'Are you sure you want to logout?',
+          title: "Confirm",
+          message: "Are you sure you want to logout?",
           showAlert: true,
-          type: 'logout',
+          type: "logout",
         });
       },
     },
@@ -888,7 +834,7 @@ export default function SideDrawer({navigation}) {
   const getMenus = async () => {
     const url = BaseSetting.endpoints.safteyFormList + `?allData=1`;
     try {
-      const res = await getApiData(url, 'GET');
+      const res = await getApiData(url, "GET");
       setSafetyMenusUpdated(true);
       if (res.status) {
         setSafetyMenus(res.data);
@@ -906,23 +852,23 @@ export default function SideDrawer({navigation}) {
     // setCAlert(false);
     await getApiData(
       BaseSetting.endpoints.logout,
-      'POST',
-      {token: fcmToken},
-      '',
-      true,
+      "POST",
+      { token: fcmToken },
+      "",
+      true
     )
-      .then(async resp => {
+      .then(async (resp) => {
         if (resp?.status) {
           setButtonLoader(false);
           setCAlert(false);
           logout();
           signOut();
-          navigation.replace('Login');
+          navigation.replace("Login");
         } else {
           setButtonLoader(false);
         }
       })
-      .catch(err => {});
+      .catch((err) => {});
   };
 
   const handlePress = (item, index) => {
@@ -937,8 +883,8 @@ export default function SideDrawer({navigation}) {
       } else {
         setOpen(item.id); // open the clicked submenu
       }
-    } else if (item.title === 'Switch') {
-      setIsLightMode(isLightMode === 'dark' ? 'light' : 'dark');
+    } else if (item.title === "Switch") {
+      setIsLightMode(isLightMode === "dark" ? "light" : "dark");
     } else {
       item.action();
       setIsClickedEvent(true);
@@ -953,35 +899,35 @@ export default function SideDrawer({navigation}) {
     // Sort the indexesToRemove array in descending order to avoid index shifting
     indexesToRemove.sort((a, b) => b - a);
     // Remove elements by index using splice
-    indexesToRemove.forEach(index => {
+    indexesToRemove.forEach((index) => {
       array.splice(index, 1);
     });
     return array;
   }
 
-  const renderItem = menus => {
+  const renderItem = (menus) => {
     if (!isEmpty(userPermission)) {
       const index = userPermission.findIndex(
-        li => li === 'logout' || li === 'light_mode',
+        (li) => li === "logout" || li === "light_mode"
       );
       if (index === -1) {
-        userPermission.splice(0, 0, 'logout', 'light_mode');
+        userPermission.splice(0, 0, "logout", "light_mode");
       }
     }
     const nArray =
-      (subscriptionArr && String(subscriptionArr).split(',')) || [];
-    const commonArray = menus.filter(val => nArray.includes(val.role));
+      (subscriptionArr && String(subscriptionArr).split(",")) || [];
+    const commonArray = menus.filter((val) => nArray.includes(val.role));
     const menuArray = !isEmpty(commonArray) ? commonArray : menus;
     const newArr = menuArray.concat(updateSideBar);
     let updatedArr = [];
     if (isOnline) {
       updatedArr = newArr;
     } else {
-      const signatureIndex = newArr.findIndex(li => li.role === 'signature');
+      const signatureIndex = newArr.findIndex((li) => li.role === "signature");
       const lmsIndex = newArr.findIndex(
-        li => li.role === 'learning_management',
+        (li) => li.role === "learning_management"
       );
-      const formIndex = newArr.findIndex(li => li.role === 'forms');
+      const formIndex = newArr.findIndex((li) => li.role === "forms");
       updatedArr = removeElementsByIndex(newArr, [
         lmsIndex,
         signatureIndex,
@@ -990,25 +936,25 @@ export default function SideDrawer({navigation}) {
     }
     return updatedArr.map((item, index) => {
       // Here we check if key Editor the we get the menus
-      if (item.id === 'hseq_sms' && !isEmpty(safetymenus)) {
-        safetymenus.map(data => {
+      if (item.id === "hseq_sms" && !isEmpty(safetymenus)) {
+        safetymenus.map((data) => {
           const haveMenu = item.submenu.findIndex(
-            i => i.key === `sms-menu/${data.id}`,
+            (i) => i.key === `sms-menu/${data.id}`
           );
           if (haveMenu < 0) {
             item.submenu.push({
               id: `sms-menu/${data.id}`,
               title: data.menu_name,
-              role: 'safety_management_forms',
+              role: "safety_management_forms",
               action: () => {
-                navigation.navigate('SmsMenu', {id: data.id});
+                navigation.navigate("SmsMenu", { id: data.id });
                 navigation.closeDrawer();
               },
             });
           }
         });
       }
-      const fIndex = userPermission.find(li => li === item.role);
+      const fIndex = userPermission.find((li) => li === item.role);
 
       return (
         <View key={item.id}>
@@ -1016,14 +962,15 @@ export default function SideDrawer({navigation}) {
             <TouchableOpacity
               activeOpacity={0.7}
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
+                flexDirection: "row",
+                alignItems: "center",
                 backgroundColor:
                   selectedItemIndex === index ? BaseColors.white10 : null,
               }}
-              onPress={index => {
+              onPress={(index) => {
                 // setSelectedItemIndex(index);
-              }}>
+              }}
+            >
               <TouchableOpacity
                 activeOpacity={0.7}
                 disabled={clickedEvent}
@@ -1033,14 +980,16 @@ export default function SideDrawer({navigation}) {
                     handlePress(item, index);
                   }, 199);
                 }}
-                style={[styles.itemContainer]}>
+                style={[styles.itemContainer]}
+              >
                 <View style={styles.listItem}>
                   <TouchableOpacity
                     disabled={clickedEvent}
                     activeOpacity={0.7}
                     onPress={() => {
                       handlePress(item);
-                    }}>
+                    }}
+                  >
                     {item.icon}
                   </TouchableOpacity>
                   <View>
@@ -1052,7 +1001,7 @@ export default function SideDrawer({navigation}) {
                 {item.submenu && (
                   <CustomIcon
                     style={styles.subIconSty}
-                    name={clicked === index ? 'up' : 'Down-Vector'}
+                    name={clicked === index ? "up" : "Down-Vector"}
                     size={
                       clicked === index
                         ? isTabletDevice
@@ -1080,9 +1029,9 @@ export default function SideDrawer({navigation}) {
               data={item.submenu}
               bounces={false}
               key={`${item.id}`}
-              renderItem={({item: submenuItem}) => {
+              renderItem={({ item: submenuItem }) => {
                 const submenuRole = userPermission.find(
-                  li => li === submenuItem.role,
+                  (li) => li === submenuItem.role
                 );
                 if (submenuRole === submenuItem?.role) {
                   return (
@@ -1091,17 +1040,19 @@ export default function SideDrawer({navigation}) {
                       onPress={() => {
                         submenuItem.action();
                         setIsClickedEvent(true);
-                      }}>
+                      }}
+                    >
                       <View
                         style={{
                           paddingLeft: isTabletDevice
-                            ? Dimensions.get('window').width * 0.08
-                            : Dimensions.get('window').width / 8,
-                          justifyContent: 'flex-start',
-                          paddingTop: Dimensions.get('window').height / 100,
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                        }}>
+                            ? Dimensions.get("window").width * 0.08
+                            : Dimensions.get("window").width / 8,
+                          justifyContent: "flex-start",
+                          paddingTop: Dimensions.get("window").height / 100,
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
                         {submenuItem.component ? (
                           submenuItem.component
                         ) : (
@@ -1116,7 +1067,8 @@ export default function SideDrawer({navigation}) {
                                 color: BaseColors.white,
                                 paddingLeft: 10,
                                 fontSize: isTabletDevice ? 17 : null,
-                              }}>
+                              }}
+                            >
                               {submenuItem.title}
                             </Text>
                           </>
@@ -1126,7 +1078,7 @@ export default function SideDrawer({navigation}) {
                   );
                 }
               }}
-              keyExtractor={submenuItem => submenuItem.id.toString()}
+              keyExtractor={(submenuItem) => submenuItem.id.toString()}
             />
           )}
         </View>
@@ -1153,16 +1105,18 @@ export default function SideDrawer({navigation}) {
         style={{
           backgroundColor: colors.colors.white,
           paddingTop: isTabletDevice ? 20 : 0,
-        }}>
+        }}
+      >
         <View
           style={{
-            alignItems: 'center',
+            alignItems: "center",
             paddingTop: isTabletDevice ? 0 : height / 2,
-          }}>
+          }}
+        >
           <Image
             source={
               userData?.company_logo_url
-                ? {uri: userData?.company_logo_url}
+                ? { uri: userData?.company_logo_url }
                 : Images.logo
             }
             style={styles.profilePic}
@@ -1172,24 +1126,26 @@ export default function SideDrawer({navigation}) {
             style={{
               paddingVertical: isTabletDevice ? 20 : 10,
               fontSize: isTabletDevice ? 21 : 16,
-              textAlign: 'center',
-              width: '90%',
+              textAlign: "center",
+              width: "90%",
               color: colors.colors.textColor,
             }}
-            numberOfLines={1}>
-            {userData?.company_name || ''}
+            numberOfLines={1}
+          >
+            {userData?.company_name || ""}
           </Text>
           {isDemo ? (
-            <View style={{backgroundColor: '#FFCBCB', marginVertical: 5}}>
+            <View style={{ backgroundColor: "#FFCBCB", marginVertical: 5 }}>
               <Text
                 style={{
                   paddingVertical: isTabletDevice ? 20 : 5,
                   paddingHorizontal: 10,
                   fontSize: isTabletDevice ? 18 : 14,
-                  textAlign: 'center',
-                  fontWeight: '600',
-                  color: '#FF0000',
-                }}>
+                  textAlign: "center",
+                  fontWeight: "600",
+                  color: "#FF0000",
+                }}
+              >
                 Demo
               </Text>
             </View>
@@ -1199,12 +1155,13 @@ export default function SideDrawer({navigation}) {
       <ScrollView
         bounces={false}
         showsVerticalScrollIndicator={false}
-        style={{backgroundColor: BaseColors.primary}}
+        style={{ backgroundColor: BaseColors.primary }}
         contentContainerStyle={{
           flexGrow: 1,
           backgroundColor: colors.colors.white,
           // overflow: "hidden",
-        }}>
+        }}
+      >
         <ScrollView
           bounces={false}
           style={{
@@ -1213,26 +1170,12 @@ export default function SideDrawer({navigation}) {
             borderTopLeftRadius: 30,
             // borderRadius: 30,
             backgroundColor: colors.colors.drawerPrimary,
-            height: '100%',
-          }}>
+            height: "100%",
+          }}
+        >
           <View style={styles.listWrapper}>{renderItem(drawerData)}</View>
         </ScrollView>
       </ScrollView>
-      {cAlert.showAlert && (
-        <AlertModal
-          prompt
-          title={cAlert.title}
-          visible={cAlert.showAlert}
-          setVisible={setCAlert}
-          description={cAlert.message || ''}
-          modalHeading={cAlert.title || ''}
-          loader={btnloader}
-          btnYTitle={cAlert?.type === 'logout' ? 'YES' : 'OK'}
-          btnOkPress={() => {
-            logOutNew();
-          }}
-        />
-      )}
     </>
   );
 }

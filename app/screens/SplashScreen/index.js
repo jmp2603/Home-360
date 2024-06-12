@@ -1,60 +1,54 @@
 // import { Images } from "../../config";
-import {Images} from '../../config';
-import {BaseColors} from '../../config/theme';
-import React, {useEffect} from 'react';
-import {BackHandler, View, StatusBar, Text, Dimensions} from 'react-native';
+import { Images } from "../../config";
+import { BaseColors } from "../../config/theme";
+import React, { useEffect } from "react";
+import { BackHandler, View, StatusBar, Text, Dimensions } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
   withTiming,
-} from 'react-native-reanimated';
-import {useSelector} from 'react-redux';
-import styles from './styles';
-import FastImage from 'react-native-fast-image';
-import {Svg, SvgUri, Circle, Image} from 'react-native-svg';
-import DeviceInfo from 'react-native-device-info';
+} from "react-native-reanimated";
+import { useSelector } from "react-redux";
+import styles from "./styles";
+import FastImage from "react-native-fast-image";
+import DeviceInfo from "react-native-device-info";
 
 let backPressed = 0;
 
-const SplashScreen = ({navigation}) => {
-  const {introScreens, accessToken} = useSelector(state => state.auth);
+const SplashScreen = ({ navigation }) => {
+  const { introScreens, accessToken } = useSelector((state) => state.auth);
   const scale = useSharedValue(0);
   const transform = useSharedValue(0);
   const aniImgLogo = useAnimatedStyle(() => {
     return {
-      transform: [{scale: scale.value}],
+      transform: [{ scale: scale.value }],
     };
   });
   const version = DeviceInfo.getVersion();
-  const Screen = Images.SplashScreenImg;
-  const svgSource = {
-    uri: `https://example.com/${Images.splashScreenImg}`,
-    cache: FastImage.cacheControl.web,
-  };
 
   useEffect(() => {
-    scale.value = withTiming(1, {duration: 2000});
-    transform.value = withSpring(200, {duration: 2000});
+    scale.value = withTiming(1, { duration: 2000 });
+    transform.value = withSpring(200, { duration: 2000 });
     setTimeout(() => {
       if (introScreens) {
         if (accessToken) {
-          navigation.replace('Dashbaord');
+          navigation.replace("Dashbaord");
         } else {
-          navigation.replace('Login');
+          navigation.replace("Login");
         }
       } else {
-        navigation.replace('Intro');
+        navigation.replace("Login");
       }
     }, 3000);
   }, []);
 
   useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
     return () => {
       BackHandler.removeEventListener(
-        'hardwareBackPress',
-        handleBackButtonClick,
+        "hardwareBackPress",
+        handleBackButtonClick
       );
     };
   }, []);
@@ -92,10 +86,11 @@ const SplashScreen = ({navigation}) => {
         </Animated.View>
         <View
           style={{
-            alignItems: 'center',
-            marginBottom: Dimensions.get('window').height / 8,
-          }}>
-          <Text style={{color: '#464E5F'}}>{`Version: ${version}`}</Text>
+            alignItems: "center",
+            marginBottom: Dimensions.get("window").height / 8,
+          }}
+        >
+          <Text style={{ color: "#464E5F" }}>{`Version: ${version}`}</Text>
         </View>
       </View>
     </>

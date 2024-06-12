@@ -23,15 +23,17 @@ export default StyleSheet.create({
     // width: 103,
   },
   titletxt: {
-    paddingTop: 20,
+    paddingTop: isTabletDevice ? 40 : 20,
     textAlign: "center",
-    fontSize: 25,
-    fontWeight: "700",
+    fontSize: isTabletDevice ? 30 : 20,
+    fontWeight: "500",
     color: BaseColors.primary,
   },
   txtsty: {
-    fontSize: 14,
-    color: BaseColors.textGrey,
+    fontSize: isTabletDevice ? 26 : 16,
+    color: BaseColors.primary,
+    fontWeight: "400",
+    // fontFamily: 'Poppins',
     textAlign: "center",
     paddingBottom: 20,
   },
@@ -42,14 +44,14 @@ export default StyleSheet.create({
     flexDirection: "row",
   },
   checkboxTxt: {
-    fontSize: 14,
+    fontSize: isTabletDevice ? 24 : 14,
     // fontFamily: FontFamily.regular,
     color: BaseColors.white,
     maxWidth: 197,
   },
   checkIcon: {
     alignSelf: "flex-start",
-    fontSize: 25,
+    fontSize: isTabletDevice ? 35 : 25,
     color: BaseColors.white,
   },
 
@@ -85,10 +87,11 @@ export default StyleSheet.create({
     alignSelf: "center",
   },
   notetxtSty: {
-    fontSize: 12,
+    fontSize: isTabletDevice ? 20 : 12,
     fontWeight: "400",
     paddingHorizontal: 10,
-    color: "red",
+    color: "#464E5F",
+    paddingTop: isTabletDevice ? 3 : 0,
     // fontFamily: 'Poppins',
   },
   bordersty: {

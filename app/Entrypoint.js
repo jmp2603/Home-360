@@ -1,26 +1,27 @@
-import React, {Component} from 'react';
-import 'react-native-gesture-handler';
-import {ActivityIndicator, Text, TextInput, LogBox} from 'react-native';
-import DatePicker from 'react-native-date-picker';
+import React, { Component } from "react";
+import "react-native-gesture-handler";
+import { ActivityIndicator, Text, TextInput, LogBox } from "react-native";
+import DatePicker from "react-native-date-picker";
 // import codePush from 'react-native-code-push';
-import {Provider} from 'react-redux';
-import {PersistGate} from 'redux-persist/es/integration/react';
-import {ThemeProvider} from '@react-navigation/native';
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/es/integration/react";
+import { ThemeProvider } from "@react-navigation/native";
 // import NToast from 'react-native-toast-message';
-import Toast from './components/Toast';
-import CTopNotify from './components/CTopNotify';
-import CStatusBar from './components/CStatusBar';
-import {persistor, store} from './redux/store/configureStore';
-import Navigator from './navigation/index';
-import {initTranslate} from './lang/Translate';
-import AuthAction from './redux/reducers/auth/actions';
-import Orientation, {OrientationLocker} from 'react-native-orientation-locker';
-import {InAppNotificationProvider} from './libs/react-native-in-app-notification';
-import DeviceInfo from 'react-native-device-info';
+import Toast from "./components/Toast";
+import CTopNotify from "./components/CTopNotify";
+import CStatusBar from "./components/CStatusBar";
+import { persistor, store } from "./redux/store/configureStore";
+import Navigator from "./navigation/index";
+import AuthAction from "./redux/reducers/auth/actions";
+import Orientation, {
+  OrientationLocker,
+} from "react-native-orientation-locker";
+import { InAppNotificationProvider } from "./libs/react-native-in-app-notification";
+import DeviceInfo from "react-native-device-info";
 const isTabletDevice = DeviceInfo.isTablet();
 
 // const IOS = Platform.OS === 'ios';
-LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
 LogBox.ignoreAllLogs();
 // const codePushOptions = {s
 //   installMode: codePush.InstallMode.IMMEDIATE,
@@ -54,7 +55,7 @@ class index extends Component {
     }
   }
 
-  showToast = message => {
+  showToast = (message) => {
     if (this.notifyToast?.current) {
       this.notifyToast?.current?.show(message, 2000);
     }
@@ -62,7 +63,6 @@ class index extends Component {
 
   onBeforeLift = () => {
     if (store) {
-      initTranslate(store);
       this.setState({
         loading: false,
       });
@@ -70,7 +70,7 @@ class index extends Component {
   };
 
   render() {
-    const {processing, loading} = this.state;
+    const { processing, loading } = this.state;
 
     return (
       <ThemeProvider>
@@ -79,14 +79,15 @@ class index extends Component {
             <PersistGate
               loading={<ActivityIndicator />}
               persistor={persistor}
-              onBeforeLift={this.onBeforeLift}>
+              onBeforeLift={this.onBeforeLift}
+            >
               <CStatusBar />
               {loading ? (
                 <ActivityIndicator />
               ) : (
                 <>
                   <OrientationLocker
-                    orientation={isTabletDevice ? 'PORTRAIT' : 'PORTRAIT'}
+                    orientation={isTabletDevice ? "PORTRAIT" : "PORTRAIT"}
                   />
                   <Navigator />
                 </>
