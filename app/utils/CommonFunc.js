@@ -10,13 +10,10 @@ import {
   isObject,
   isUndefined,
   omitBy,
-  size,
 } from "lodash";
 import { Platform, processColor } from "react-native";
 import ReactNativeBlobUtil from "react-native-blob-util";
 import { MMKV } from "react-native-mmkv";
-import CryptoJS from "react-native-crypto-js";
-import BaseSetting from "../config/setting";
 
 const mmkv = new MMKV();
 
@@ -28,51 +25,6 @@ export const logout = () => {
   // store.dispatch(FavouriteAction.clearData());
 };
 
-const CryptoJSAesJson = {
-  stringify: function (cipherParams) {
-    var j = { ct: cipherParams.ciphertext.toString(CryptoJS.enc.Base64) };
-    if (cipherParams.iv) j.iv = cipherParams.iv.toString();
-    if (cipherParams.salt) j.s = cipherParams.salt.toString();
-    return JSON.stringify(j);
-  },
-  parse: function (jsonStr) {
-    var j = JSON.parse(jsonStr);
-    var cipherParams = CryptoJS.lib.CipherParams.create({
-      ciphertext: CryptoJS.enc.Base64.parse(j.ct),
-    });
-    if (j.iv) cipherParams.iv = CryptoJS.enc.Hex.parse(j.iv);
-    if (j.s) cipherParams.salt = CryptoJS.enc.Hex.parse(j.s);
-    return cipherParams;
-  },
-};
-
-// For encrypt data we create below function
-export const encryptRequestData = (request) => {
-  try {
-    const cipherText = CryptoJS.AES.encrypt(request, BaseSetting.passphrase, {
-      format: CryptoJSAesJson,
-    });
-    return JSON.parse(cipherText.toString());
-  } catch (error) {
-    console.error("Encryption error:", error);
-    return null;
-  }
-};
-// End
-
-// For decrypt data we create a below function
-export const decryptResponseData = (response) => {
-  let bytes;
-  try {
-    bytes = CryptoJS.AES.decrypt(response, BaseSetting.passphrase, {
-      format: CryptoJSAesJson,
-    }).toString(CryptoJS.enc.Utf8);
-    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-    return JSON.parse(decrypted);
-  } catch (err) {
-    console.log("UNABLE TO DECIPHER", err);
-  }
-};
 export function chatFilesVal(type, size) {
   const fTypes = isObject(fileTypes) ? fileTypes : {};
   if (has(fTypes, type)) {
