@@ -10,6 +10,8 @@ import {
   ActivityIndicator,
   Dimensions,
   Alert,
+  AppState,
+  TouchableOpacity,
 } from "react-native";
 import { createStyles } from "./styles";
 import { useIsFocused, useTheme } from "@react-navigation/native";
@@ -17,7 +19,6 @@ import FastImage from "react-native-fast-image";
 import { Images } from "../../config";
 import { CustomIcon } from "../../config/LoadIcons";
 import Popover, { PopoverPlacement } from "react-native-popover-view";
-import { TouchableOpacity } from "react-native";
 import moment from "moment";
 import Toast from "react-native-simple-toast";
 import { useSelector } from "react-redux";
@@ -198,6 +199,24 @@ export default function Home({ navigation, index }) {
   useEffect(() => {
     getTaskList(1);
   }, [isFocused, selectedDate]);
+
+  // From Backhead to ForeHead API Calls..
+  useEffect(() => {
+    const subscription = AppState.addEventListener(
+      "change",
+      handleAppStateChange
+    );
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  const handleAppStateChange = (nextAppState) => {
+    if (nextAppState === "active") {
+      // Call your API here
+      getTaskList();
+    }
+  };
 
   /**
    * Function for Render Item..
