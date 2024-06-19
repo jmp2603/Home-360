@@ -121,8 +121,7 @@ export default function ViewDetails({ navigation, route }) {
 
   const openCamera = () => {
     ImageCropPicker.openCamera({
-      width: 110,
-      height: 110,
+      cropping: true,
       // useFrontCamera: true,
     }).then((image) => {
       const fType = image?.mime || "";
@@ -250,14 +249,27 @@ export default function ViewDetails({ navigation, route }) {
             <View style={styles.cotent}>
               <Text style={styles.title}>{taskDetail?.title || "-"}</Text>
             </View>
-            {taskDetail?.last_completed && (
+            {taskDetail?.type === "once" ? (
               <View style={[styles.cotent, { paddingVertical: 5 }]}>
-                <Text style={styles.dateTxt}>Last completion date : </Text>
+                <Text style={styles.dateTxt}>Due date : </Text>
                 <Text style={styles.value}>
-                  {moment(taskDetail?.last_completed).format("DD-MM-YYYY") ||
-                    "-"}
+                  {moment(
+                    taskDetail?.last_completed
+                      ? taskDetail?.last_completed
+                      : taskDetail?.end_date
+                  ).format("DD-MM-YYYY") || "-"}
                 </Text>
               </View>
+            ) : (
+              taskDetail?.last_completed && (
+                <View style={[styles.cotent, { paddingVertical: 5 }]}>
+                  <Text style={styles.dateTxt}>Last completion date : </Text>
+                  <Text style={styles.value}>
+                    {moment(taskDetail?.last_completed).format("DD-MM-YYYY") ||
+                      "-"}
+                  </Text>
+                </View>
+              )
             )}
             {taskDetail?.type !== "once" && (
               <View style={styles.cotent}>

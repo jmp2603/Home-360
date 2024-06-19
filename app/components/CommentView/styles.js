@@ -68,4 +68,15 @@ export default StyleSheet.create({
     fontWeight: "400",
     width: Dimensions.get("window").width / 1,
   },
+  emptydata: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  cleardatatxt: {
+    marginVertical: 10,
+    fontSize: 14,
+    color: "rgba(0, 0, 0, 0.45)",
+    fontWeight: "500",
+  },
 });

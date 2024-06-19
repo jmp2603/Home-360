@@ -57,6 +57,7 @@ export default function ViewTaskCard(props) {
         }
         setPage(Number(resp?.pagination?.currentPage));
         setTaskList(tempPArr);
+        setOpenCalender(null);
         if (resp?.pagination?.isMore) {
           setNextPage(true);
         } else {
@@ -144,9 +145,15 @@ export default function ViewTaskCard(props) {
       type === "repeat" &&
       !isEmpty(item?.task_data) &&
       getMarkedDates(item?.task_data);
-    if (openCalender) {
-      console.log("item?.task_data", item?.task_data);
-    }
+    const onceDateText =
+      item?.status === 0
+        ? "Next Due Date"
+        : item?.status === 1
+        ? "Last Completion Date"
+        : "Due Date";
+    const repeatDayText = item?.next_date_available
+      ? "Next Due Date"
+      : "Last Completion Date";
     return (
       <View key={index}>
         <View
@@ -200,16 +207,29 @@ export default function ViewTaskCard(props) {
               >
                 Assigned By : {item?.assignedBy || "Admin"}
               </Text>
-              <Text
-                style={{
-                  color: BaseColors.black,
-                  paddingVertical: 3,
-                  fontSize: 14,
-                }}
-              >
-                Next Due Date :{" "}
-                {moment(item?.end_date).format("DD-MM-YYYY") || "-"}
-              </Text>
+              {type === "repeat" ? (
+                <Text
+                  style={{
+                    color: BaseColors.black,
+                    paddingVertical: 3,
+                    fontSize: 14,
+                  }}
+                >
+                  {repeatDayText} :{" "}
+                  {moment(item?.end_date).format("DD-MM-YYYY") || "-"}
+                </Text>
+              ) : (
+                <Text
+                  style={{
+                    color: BaseColors.black,
+                    paddingVertical: 3,
+                    fontSize: 14,
+                  }}
+                >
+                  {onceDateText} :{" "}
+                  {moment(item?.end_date).format("DD-MM-YYYY") || "-"}
+                </Text>
+              )}
               <View
                 style={{
                   flexDirection: "row",

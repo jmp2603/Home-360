@@ -450,8 +450,7 @@ export default function Home({ navigation, index }) {
 
   const openCamera = () => {
     ImagePicker.openCamera({
-      width: 110,
-      height: 110,
+      cropping: true,
       // useFrontCamera: true,
     }).then((image) => {
       const fType = image?.mime || "";

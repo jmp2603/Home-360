@@ -269,7 +269,14 @@ export default function CommentView(props) {
           }}
         />
       ) : isEmpty(commentList) ? (
-        <NoData />
+        <View style={styles.emptydata}>
+          <CustomIcon
+            name="Clear-Chat"
+            size={50}
+            color={"rgba(0, 0, 0, 0.25)"}
+          />
+          <Text style={styles.cleardatatxt}>No Comments Found</Text>
+        </View>
       ) : (
         <FlatList
           nestedScrollEnabled

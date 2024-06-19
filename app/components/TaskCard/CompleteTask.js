@@ -154,8 +154,7 @@ export default function CreateTask(props) {
 
   const openCamera = () => {
     ImagePicker.openCamera({
-      width: 110,
-      height: 110,
+      cropping: true,
       // useFrontCamera: true,
     }).then((image) => {
       setLoader(true);
