@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native";
 import { createStyles } from "./styles";
-import { useTheme } from "@react-navigation/native";
+import { useIsFocused, useTheme } from "@react-navigation/native";
 import { NoData } from "../../components";
 import { flattenDeep, isEmpty } from "lodash";
 import { CustomIcon } from "../../config/LoadIcons";
@@ -23,6 +23,7 @@ import moment from "moment";
 const IOS = Platform.OS === "ios";
 export default function ViewTaskCard(props) {
   const { type, navigation, searchVal, selectedFilter } = props;
+  const isFocused = useIsFocused();
   const colors = useTheme();
   const styles = createStyles(colors);
   const [screenLoader, setScreenLoader] = useState(false);
@@ -108,7 +109,7 @@ export default function ViewTaskCard(props) {
   useEffect(() => {
     const type = !isEmpty(searchVal) ? "onEndreached" : "";
     getTaskList(1, type, selectedFilter);
-  }, [type, searchVal, selectedFilter]);
+  }, [type, searchVal, selectedFilter, isFocused]);
 
   const getMarkedDates = (dates) => {
     const markedDates = {};
@@ -151,7 +152,7 @@ export default function ViewTaskCard(props) {
         : item?.status === 1
         ? "Last Completion Date"
         : "Due Date";
-    const repeatDayText = item?.next_date_available
+    const repeatDayText = item?.next_due_date
       ? "Next Due Date"
       : "Last Completion Date";
     return (
@@ -159,7 +160,6 @@ export default function ViewTaskCard(props) {
         <View
           style={{
             ...styles.cardSty,
-            borderRadius: 10,
             backgroundColor: background,
           }}
         >
@@ -172,7 +172,7 @@ export default function ViewTaskCard(props) {
               <View
                 style={{
                   width: 3,
-                  height: 50,
+                  height: 85,
                   borderRadius: 8,
                   backgroundColor: color,
                   justifyContent: "center",
@@ -181,8 +181,7 @@ export default function ViewTaskCard(props) {
             </View>
             <View
               style={{
-                paddingVertical: 8,
-                paddingHorizontal: 10,
+                padding: 10,
                 width: "100%",
               }}
             >
@@ -216,7 +215,11 @@ export default function ViewTaskCard(props) {
                   }}
                 >
                   {repeatDayText} :{" "}
-                  {moment(item?.end_date).format("DD-MM-YYYY") || "-"}
+                  {moment(
+                    item?.next_due_date
+                      ? item?.next_due_date
+                      : item?.last_completed
+                  ).format("DD-MM-YYYY") || "-"}
                 </Text>
               ) : (
                 <Text

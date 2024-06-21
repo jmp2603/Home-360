@@ -249,7 +249,7 @@ export default function ViewDetails({ navigation, route }) {
             <View style={styles.cotent}>
               <Text style={styles.title}>{taskDetail?.title || "-"}</Text>
             </View>
-            {taskDetail?.type === "once" ? (
+            {taskDetail?.type === "once" && taskDetail?.status !== 1 ? (
               <View style={[styles.cotent, { paddingVertical: 5 }]}>
                 <Text style={styles.dateTxt}>Due date : </Text>
                 <Text style={styles.value}>
@@ -271,7 +271,7 @@ export default function ViewDetails({ navigation, route }) {
                 </View>
               )
             )}
-            {taskDetail?.type !== "once" && (
+            {taskDetail?.next_due_date && taskDetail?.type !== "once" && (
               <View style={styles.cotent}>
                 <Text style={styles.dateTxt}>Next due date: </Text>
                 <Text style={styles.value}>
@@ -415,41 +415,42 @@ export default function ViewDetails({ navigation, route }) {
                             resizeMode={"cover"}
                             source={{ uri: d?.uri || d?.file }}
                           />
-                          {size(uploadedImages) > 0 && detail?.status !== 1 && (
-                            <TouchableOpacity
-                              activeOpacity={0.5}
-                              onPress={() => {
-                                Alert.alert(
-                                  "Remove",
-                                  "Are you sure you want to remove this photo?",
-                                  [
-                                    {
-                                      text: "No",
-                                      onPress: () => {},
-                                    },
-                                    {
-                                      text: "Yes",
-                                      onPress: () => {
-                                        removeImage(d.id, index);
+                          {size(uploadedImages) > 0 &&
+                            taskDetail?.status !== 1 && (
+                              <TouchableOpacity
+                                activeOpacity={0.5}
+                                onPress={() => {
+                                  Alert.alert(
+                                    "Remove",
+                                    "Are you sure you want to remove this photo?",
+                                    [
+                                      {
+                                        text: "No",
+                                        onPress: () => {},
                                       },
-                                    },
-                                  ]
-                                );
-                              }}
-                              style={[
-                                styles.mainViewStyMultiple,
-                                {
-                                  backgroundColor: BaseColors.white,
-                                },
-                              ]}
-                            >
-                              <CustomIcon
-                                name="Close"
-                                color={BaseColors.errorRed}
-                                size={10}
-                              />
-                            </TouchableOpacity>
-                          )}
+                                      {
+                                        text: "Yes",
+                                        onPress: () => {
+                                          removeImage(d.id, index);
+                                        },
+                                      },
+                                    ]
+                                  );
+                                }}
+                                style={[
+                                  styles.mainViewStyMultiple,
+                                  {
+                                    backgroundColor: BaseColors.white,
+                                  },
+                                ]}
+                              >
+                                <CustomIcon
+                                  name="Close"
+                                  color={BaseColors.errorRed}
+                                  size={10}
+                                />
+                              </TouchableOpacity>
+                            )}
                         </TouchableOpacity>
                       );
                     })

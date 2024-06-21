@@ -257,7 +257,7 @@ export default function Home({ navigation, index }) {
             <View
               style={{
                 width: 3,
-                height: 50,
+                height: 85,
                 borderRadius: 8,
                 backgroundColor: color,
                 justifyContent: "center",
@@ -266,7 +266,7 @@ export default function Home({ navigation, index }) {
           </View>
           <View
             style={{
-              paddingVertical: 8,
+              paddingVertical: 12,
               paddingHorizontal: 10,
               width: "100%",
             }}
@@ -299,6 +299,26 @@ export default function Home({ navigation, index }) {
             >
               {item?.description}
             </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                paddingVertical: 5,
+              }}
+            >
+              <Text style={{ fontSize: 16, color: BaseColors.grey }}>
+                Start time :{" "}
+                <Text style={{ color: BaseColors.titleColor }}>
+                  {item?.start_time || "--"}
+                </Text>
+              </Text>
+              <Text style={{ fontSize: 16, color: BaseColors.grey }}>
+                End time :{" "}
+                <Text style={{ color: BaseColors.titleColor }}>
+                  {item?.end_time || "--"}
+                </Text>
+              </Text>
+            </View>
             <View
               style={{
                 flexDirection: "row",

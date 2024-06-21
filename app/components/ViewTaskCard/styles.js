@@ -10,8 +10,7 @@ export const createStyles = (colors) => {
     cardSty: {
       marginVertical: 3,
       width: "100%",
-      borderRadius: 5,
-      backgroundColor: "#FFEDED",
+      borderRadius: 20,
     },
     filterView: {
       flex: 1,

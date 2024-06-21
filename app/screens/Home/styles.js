@@ -66,7 +66,7 @@ export const createStyles = (colors) => {
     cardSty: {
       marginVertical: 4,
       width: "100%",
-      borderRadius: 10,
+      borderRadius: 20,
     },
     dateItem: {
       width: 55,
