@@ -12,7 +12,7 @@ import {
 import { createStyles } from "./styles";
 import { useIsFocused, useTheme } from "@react-navigation/native";
 import { NoData } from "../../components";
-import { flattenDeep, isEmpty } from "lodash";
+import { flattenDeep, isEmpty, isNull } from "lodash";
 import { CustomIcon } from "../../config/LoadIcons";
 import { Calendar } from "react-native-calendars";
 import BaseSetting from "../../config/setting";
@@ -215,11 +215,13 @@ export default function ViewTaskCard(props) {
                   }}
                 >
                   {repeatDayText} :{" "}
-                  {moment(
-                    item?.next_due_date
-                      ? item?.next_due_date
-                      : item?.last_completed
-                  ).format("DD-MM-YYYY") || "-"}
+                  {!isNull(item?.last_completed) || !isNull(item?.next_due_date)
+                    ? moment(
+                        item?.next_due_date
+                          ? item?.next_due_date
+                          : item?.last_completed
+                      ).format("DD-MM-YYYY")
+                    : "--"}
                 </Text>
               ) : (
                 <Text
@@ -230,7 +232,9 @@ export default function ViewTaskCard(props) {
                   }}
                 >
                   {onceDateText} :{" "}
-                  {moment(item?.end_date).format("DD-MM-YYYY") || "-"}
+                  {!isNull(item?.end_date)
+                    ? moment(item?.end_date).format("DD-MM-YYYY")
+                    : "--"}
                 </Text>
               )}
               <View

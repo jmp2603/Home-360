@@ -32,8 +32,8 @@ export default function Login({ navigation }) {
   let backPressed = 0;
   const { fcmToken } = useSelector((state) => state.notification);
   const dispatch = useDispatch();
-  const [phone, setPhone] = useState(__DEV__ ? "9995277508" : "");
-  const [password, setPassword] = useState(__DEV__ ? "593304" : "");
+  const [phone, setPhone] = useState(__DEV__ ? "9988776655" : "");
+  const [password, setPassword] = useState(__DEV__ ? "468050" : "");
   const [phoneErr, setPhoneErr] = useState({ err: false, txt: "" });
   const [passwordErr, setPasswordErr] = useState({ err: false, txt: "" });
   const [btnLoader, setBtnLoader] = useState(false);
@@ -112,9 +112,9 @@ export default function Login({ navigation }) {
             name: resp?.data?.name,
             phone: resp?.data?.phone,
           };
-          saveFcmToken();
           dispatch(setUserData(user));
           dispatch(setAccessToken(resp?.data?.access_token));
+          saveFcmToken();
           Toast.show(resp?.message);
           navigation.replace("Home");
           setBtnLoader(false);
