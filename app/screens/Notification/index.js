@@ -162,7 +162,7 @@ export default function Notification({ navigation, route }) {
     try {
       const resp = await getApiData(url, "GET");
       if (resp.status) {
-        getNotificationList(1, "onEndreached");
+        // getNotificationList(1, "onEndreached");
       }
     } catch (error) {
       Toast.show("Something went wrong");
@@ -214,7 +214,10 @@ export default function Notification({ navigation, route }) {
       >
         <TouchableOpacity
           activeOpacity={0.7}
-          onPress={() => readNotificaiton(item?.id)}
+          onPress={() => {
+            navigation.navigate("TaskDetails", { detail: item?.data });
+            readNotificaiton(item?.id);
+          }}
           style={[
             styles.mainView,
             {

@@ -27,6 +27,7 @@ import { chatFilesVal } from "../../utils/CommonFunc";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { Button } from "../../components";
 import CommentView from "../../components/CommentView";
+import ImageViewModal from "../../components/ImageViewModal";
 
 const { width, height } = Dimensions.get("window");
 export default function ViewDetails({ navigation, route }) {
@@ -41,11 +42,15 @@ export default function ViewDetails({ navigation, route }) {
   const [multipicLoader, setMultipicLoader] = useState(false);
   const [completedLoader, setCompletedLoader] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [content, setContent] = useState({});
 
   // View Vessel Details...
   async function getTaskDetails() {
     setIsLoading(true);
-    const url = BaseSetting.endpoints.taskDetail + `?taskId=${detail?.id}`;
+    const url =
+      BaseSetting.endpoints.taskDetail +
+      `?taskId=${detail?.id || detail?.task_id}`;
     try {
       const res = await getApiData(url, "GET");
       if (res.status) {
@@ -310,7 +315,10 @@ export default function ViewDetails({ navigation, route }) {
                   taskDetail?.task_files.map((li) => {
                     return (
                       <TouchableOpacity
-                        onPress={() => {}}
+                        onPress={() => {
+                          setVisible(true);
+                          setContent({ source: li });
+                        }}
                         style={[
                           styles.imageContainer,
                           {
@@ -405,6 +413,10 @@ export default function ViewDetails({ navigation, route }) {
                             },
                           ]}
                           activeOpacity={0.8}
+                          onPress={() => {
+                            setVisible(true);
+                            setContent(d);
+                          }}
                         >
                           <FastImage
                             style={{
@@ -491,6 +503,11 @@ export default function ViewDetails({ navigation, route }) {
           </View>
         </KeyboardAwareScrollView>
       )}
+      <ImageViewModal
+        visible={visible}
+        onPress={() => setVisible(false)}
+        content={content}
+      />
       <RBSheet
         ref={ActionSheetRef}
         closeOnDragDown={true}

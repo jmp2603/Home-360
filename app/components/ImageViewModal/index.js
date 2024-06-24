@@ -42,7 +42,11 @@ export default function ImageViewModal(props) {
         style={styles.modalViewSty}
         onPress={onPress}
       >
-        <View style={styles.ImageViewSty}>
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => {}}
+          style={styles.ImageViewSty}
+        >
           <View
             style={{
               width: Dimensions.get("window").width / 1.8,
@@ -59,14 +63,18 @@ export default function ImageViewModal(props) {
               /> // Replace this with your custom loader
             )}
             <Image
-              source={content.source ? { uri: content.source } : Images.noImage}
+              source={
+                content.source || content.file
+                  ? { uri: content.source || content.file }
+                  : Images.noImage
+              }
               style={{ width: "100%", height: "100%" }}
               resizeMode="contain"
               onLoad={() => setImageLoading(false)} // Set loading to false once image loads
               onLoadEnd={() => setImageLoading(false)} // Also handle onLoadEnd event
             />
           </View>
-        </View>
+        </TouchableOpacity>
       </TouchableOpacity>
     </Modal>
   );
