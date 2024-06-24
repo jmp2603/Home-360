@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   FlatList,
   Platform,
+  RefreshControl,
   Text,
   TouchableOpacity,
   View,
@@ -32,6 +33,7 @@ export default function ViewTaskCard(props) {
   const [nextPage, setNextPage] = useState(false);
   const [nextLoading, setNextLoading] = useState(false);
   const [page, setPage] = useState(1);
+  const [refresh, setRefresh] = useState(false);
 
   /**
    * Function for Get Task List...
@@ -59,6 +61,7 @@ export default function ViewTaskCard(props) {
         setPage(Number(resp?.pagination?.currentPage));
         setTaskList(tempPArr);
         setOpenCalender(null);
+        setRefresh(false);
         if (resp?.pagination?.isMore) {
           setNextPage(true);
         } else {
@@ -358,6 +361,12 @@ export default function ViewTaskCard(props) {
     );
   };
 
+  // onRefresh handle
+  const onRefresh = () => {
+    setRefresh(true);
+    getTaskList(1);
+  };
+
   return (
     <>
       <View style={{ ...styles.container, backgroundColor: BaseColors.white }}>
@@ -376,7 +385,6 @@ export default function ViewTaskCard(props) {
         ) : (
           <View style={{ marginHorizontal: 10 }}>
             <FlatList
-              bounces={false}
               showsVerticalScrollIndicator={false}
               data={taskList}
               renderItem={renderItem}
@@ -388,6 +396,14 @@ export default function ViewTaskCard(props) {
                 padding: 0,
                 margin: 0,
               }}
+              refreshControl={
+                <RefreshControl
+                  colors={[BaseColors.primary]}
+                  tintColor={BaseColors.primary}
+                  refreshing={refresh}
+                  onRefresh={onRefresh}
+                />
+              }
             />
           </View>
         )}

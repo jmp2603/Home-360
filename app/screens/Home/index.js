@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import { BaseColors } from "../../config/theme";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import {
   Alert,
   AppState,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 import { createStyles } from "./styles";
 import { useIsFocused, useTheme } from "@react-navigation/native";
@@ -59,6 +60,7 @@ export default function Home({ navigation, index }) {
   const [btnLoading, setBtnLoading] = useState(false);
   const [selectItem, setSelectItem] = useState({});
   const [completedLoader, setCompletedLoader] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     generateDatesForCurrentMonth();
@@ -145,6 +147,7 @@ export default function Home({ navigation, index }) {
         if (p > 1) {
           tempPArr = flattenDeep([taskList, tempPArr]);
         }
+        setRefresh(false);
         setPage(Number(resp?.pagination?.currentPage));
         setPagination(resp?.pagination);
         setTaskList(tempPArr);
@@ -625,6 +628,12 @@ export default function Home({ navigation, index }) {
     }
   }, [dates]);
 
+  // onRefresh handle
+  const onRefresh = useCallback(() => {
+    setRefresh(true);
+    getTaskList(1);
+  });
+
   return (
     <View style={styles.mainContainer}>
       <StatusBar
@@ -772,7 +781,6 @@ export default function Home({ navigation, index }) {
           <NoData />
         ) : (
           <FlatList
-            bounces={false}
             showsVerticalScrollIndicator={false}
             data={taskList}
             renderItem={renderItem}
@@ -784,6 +792,14 @@ export default function Home({ navigation, index }) {
               padding: 0,
               margin: 0,
             }}
+            refreshControl={
+              <RefreshControl
+                colors={[BaseColors.primary]}
+                tintColor={BaseColors.primary}
+                refreshing={refresh}
+                onRefresh={onRefresh}
+              />
+            }
           />
         )}
       </View>
