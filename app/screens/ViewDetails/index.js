@@ -254,6 +254,28 @@ export default function ViewDetails({ navigation, route }) {
             <View style={styles.cotent}>
               <Text style={styles.title}>{taskDetail?.title || "-"}</Text>
             </View>
+            <View style={styles.cotent}>
+              <Text style={styles.dateTxt}>Start Date: </Text>
+              <Text style={styles.value}>
+                {taskDetail?.start_date
+                  ? moment(taskDetail?.start_date).format("DD-MM-YYYY")
+                  : "-"}
+              </Text>
+            </View>
+            <View style={{ flexDirection: "row" }}>
+              <View style={styles.cotent}>
+                <Text style={styles.dateTxt}>Start Time: </Text>
+                <Text style={styles.value}>
+                  {taskDetail?.start_time ? taskDetail?.start_time : "--"}
+                </Text>
+              </View>
+              <View style={[styles.cotent, { marginHorizontal: 10 }]}>
+                <Text style={styles.dateTxt}>End Time: </Text>
+                <Text style={styles.value}>
+                  {taskDetail?.end_time ? taskDetail?.end_time : "--"}
+                </Text>
+              </View>
+            </View>
             {taskDetail?.type === "once" && taskDetail?.status !== 1 ? (
               <View style={[styles.cotent, { paddingVertical: 5 }]}>
                 <Text style={styles.dateTxt}>Due date : </Text>

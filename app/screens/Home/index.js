@@ -218,6 +218,7 @@ export default function Home({ navigation, index }) {
     if (nextAppState === "active") {
       // Call your API here
       getTaskList();
+      generateDatesForCurrentMonth();
     }
   };
 
