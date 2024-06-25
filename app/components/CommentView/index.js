@@ -35,7 +35,7 @@ export default function CommentView(props) {
     setCommentLoader(ty === "onEndreached" ? false : true);
     const ndata = {
       page: p,
-      taskId: detail?.id,
+      taskId: detail?.id || detail?.task_id,
     };
     const string = urlParams(ndata);
     const url = BaseSetting.endpoints.commentList + string?._j;
@@ -114,7 +114,7 @@ export default function CommentView(props) {
   async function handleSubmit() {
     setBtnLoader(true);
     const nData = {
-      "TaskComment[task_id]": detail?.id,
+      "TaskComment[task_id]": detail?.id || detail?.task_id,
       "TaskComment[message]": textAreaVal,
     };
     const url = BaseSetting.endpoints.createCommit;

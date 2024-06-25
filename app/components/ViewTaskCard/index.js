@@ -244,6 +244,26 @@ export default function ViewTaskCard(props) {
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
+                  paddingVertical: 5,
+                }}
+              >
+                <Text style={{ fontSize: 14, color: BaseColors.black }}>
+                  Start time :{" "}
+                  <Text style={{ color: BaseColors.black }}>
+                    {item?.start_time || "--"}
+                  </Text>
+                </Text>
+                <Text style={{ fontSize: 14, color: BaseColors.black }}>
+                  End time :{" "}
+                  <Text style={{ color: BaseColors.black }}>
+                    {item?.end_time || "--"}
+                  </Text>
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
                 }}
               >
                 <View

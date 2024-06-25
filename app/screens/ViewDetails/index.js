@@ -214,7 +214,7 @@ export default function ViewDetails({ navigation, route }) {
     setCompletedLoader(true);
     const url =
       BaseSetting.endpoints.markasComplete +
-      `?taskDataId=${detail?.task_data_id}`;
+      `?taskDataId=${taskDetail?.task_data_id}`;
     try {
       const resp = await getApiData(url, "GET");
       if (resp.status) {
@@ -395,7 +395,9 @@ export default function ViewDetails({ navigation, route }) {
               >
                 <TouchableOpacity
                   activeOpacity={0.7}
-                  disabled={detail?.status === 1 || size(uploadedImages) === 5}
+                  disabled={
+                    taskDetail?.status === 1 || size(uploadedImages) === 5
+                  }
                   onPress={() => {
                     ActionSheetRef.current.open();
                   }}
@@ -408,7 +410,7 @@ export default function ViewDetails({ navigation, route }) {
                     backgroundColor: BaseColors.lightOrange,
                     marginTop: 10,
                     opacity:
-                      detail?.status === 1 || size(uploadedImages) === 5
+                      taskDetail?.status === 1 || size(uploadedImages) === 5
                         ? 0.5
                         : 1,
                   }}
