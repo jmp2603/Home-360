@@ -540,8 +540,11 @@ export default function Home({ navigation, index }) {
   async function uploadMultiImage() {
     setBtnLoading(true);
     let uploadImg = {};
-    uploadedImages &&
-      uploadedImages.map((li, ind) => {
+    const uploadedFile =
+      uploadedImages &&
+      uploadedImages.filter((obj) => !obj.hasOwnProperty("file"));
+    uploadedFile &&
+      uploadedFile.map((li, ind) => {
         uploadImg = { ...uploadImg, [`TaskData[proofFile][${ind}]`]: li };
       });
     const passData = {

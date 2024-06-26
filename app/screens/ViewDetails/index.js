@@ -257,9 +257,7 @@ export default function ViewDetails({ navigation, route }) {
             <View style={styles.cotent}>
               <Text style={styles.dateTxt}>Start Date: </Text>
               <Text style={styles.value}>
-                {taskDetail?.start_date
-                  ? moment(taskDetail?.start_date).format("DD-MM-YYYY")
-                  : "-"}
+                {taskDetail?.start_date ? taskDetail?.start_date : "-"}
               </Text>
             </View>
             <View style={{ flexDirection: "row" }}>
