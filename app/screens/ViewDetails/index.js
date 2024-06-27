@@ -22,7 +22,7 @@ import { isArray, isEmpty, isObject, size } from "lodash";
 import { CustomIcon } from "../../config/LoadIcons";
 import Toast from "react-native-simple-toast";
 import CAlert from "../../components/CAlert";
-import ImageCropPicker from "react-native-image-crop-picker";
+import ImagePicker from "react-native-image-crop-picker";
 import { chatFilesVal } from "../../utils/CommonFunc";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { Button } from "../../components";
@@ -46,8 +46,8 @@ export default function ViewDetails({ navigation, route }) {
   const [content, setContent] = useState({});
 
   // View Vessel Details...
-  async function getTaskDetails() {
-    setIsLoading(true);
+  async function getTaskDetails(ty = "") {
+    setIsLoading(ty === "upload" ? false : true);
     const url =
       BaseSetting.endpoints.taskDetail +
       `?taskId=${detail?.id || detail?.task_id}`;
@@ -99,9 +99,11 @@ export default function ViewDetails({ navigation, route }) {
       const resp = await getApiData(url, "POST", uploadData, "", true);
       if (resp?.status) {
         setDisabled(false);
+        getTaskDetails("upload");
         setUploadedImages([...uploadedImages, imagData]);
         ActionSheetRef.current.close();
       }
+      Toast.show(resp?.message);
       setMultipicLoader(false);
     } catch (err) {
       setMultipicLoader(false);
@@ -109,7 +111,7 @@ export default function ViewDetails({ navigation, route }) {
   }
 
   const openGallery = () => {
-    ImageCropPicker.openPicker({
+    ImagePicker.openPicker({
       cropping: true,
     }).then((image) => {
       const fType = image?.mime || "";
@@ -118,15 +120,19 @@ export default function ViewDetails({ navigation, route }) {
         uploadImage(image);
       } else {
         setTimeout(() => {
-          setProfileImg(image?.path);
+          CAlert(
+            "Please select valid file or file size must be exceeded",
+            "Alert!"
+          );
         }, 2000);
       }
     });
   };
 
   const openCamera = () => {
-    ImageCropPicker.openCamera({
+    ImagePicker.openCamera({
       cropping: true,
+      compressImageQuality: 0.8,
       // useFrontCamera: true,
     }).then((image) => {
       const fType = image?.mime || "";

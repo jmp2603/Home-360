@@ -466,7 +466,10 @@ export default function Home({ navigation, index }) {
         upload(image);
       } else {
         setTimeout(() => {
-          setProfileImg(image?.path);
+          CAlert(
+            "Please select valid file or file size must be exceeded",
+            "Alert!"
+          );
         }, 2000);
       }
     });
@@ -475,6 +478,7 @@ export default function Home({ navigation, index }) {
   const openCamera = () => {
     ImagePicker.openCamera({
       cropping: true,
+      compressImageQuality: 0.8,
       // useFrontCamera: true,
     }).then((image) => {
       const fType = image?.mime || "";
@@ -558,8 +562,8 @@ export default function Home({ navigation, index }) {
       if (resp.status) {
         getTaskList(1, "onEndreached");
         ActionUploadRef.current.close();
-        Toast.show(resp?.message);
       }
+      Toast.show(resp?.message);
       setBtnLoading(false);
     } catch (er) {
       ActionUploadRef.current.close();
