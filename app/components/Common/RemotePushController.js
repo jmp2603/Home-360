@@ -43,7 +43,7 @@ const RemotePushController = () => {
         }
       },
 
-      // popInitialNotification: true,
+      popInitialNotification: true,
       requestPermissions: true,
     });
 
