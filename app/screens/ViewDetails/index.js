@@ -94,7 +94,8 @@ export default function ViewDetails({ navigation, route }) {
       [`TaskData[proofFile][0]`]: imagData,
     };
     const url =
-      BaseSetting.endpoints.uploadImage + `?taskDataId=${detail?.task_data_id}`;
+      BaseSetting.endpoints.uploadImage +
+      `?taskDataId=${taskDetail?.task_data_id}`;
     try {
       const resp = await getApiData(url, "POST", uploadData, "", true);
       if (resp?.status) {

@@ -1,14 +1,14 @@
-import {useEffect} from 'react';
-import messaging from '@react-native-firebase/messaging';
-import {showNotification} from '../Services/NotificationHelper';
-import PushNotification from 'react-native-push-notification';
-import {store} from '../../redux/store/configureStore';
-import NotificationAction from '../../redux/reducers/notification/actions';
-import {navigationRef} from '../../navigation/NavigationService';
+import { useEffect } from "react";
+import messaging from "@react-native-firebase/messaging";
+import { showNotification } from "../Services/NotificationHelper";
+import PushNotification from "react-native-push-notification";
+import { store } from "../../redux/store/configureStore";
+import NotificationAction from "../../redux/reducers/notification/actions";
+import { navigationRef } from "../../navigation/NavigationService";
 
-const storeFCMToken = async token => {
+const storeFCMToken = async (token) => {
   const {
-    notification: {fcmToken},
+    notification: { fcmToken },
   } = store.getState();
 
   try {
@@ -27,76 +27,73 @@ const RemotePushController = () => {
     PushNotification.configure({
       // (required) Called when a remote or local notification is opened or received
       onNotification: function (notification) {
-        // console.log('LOCAL NOTIFICATION ==>', JSON.stringify(notification));
+        // console.log("LOCAL NOTIFICATIONs ==>", JSON.stringify(notification));
         // old app code
-        // dispatch({ type: 'onNotificationOpen', payload: notification });
         store.dispatch(NotificationAction.onNotificationOpen(notification));
         if (notification.userInteraction && notification.foreground) {
-          navigationRef.current.navigate('NotificationStackNavigator', {
-            screen: 'Notification',
-            params: {type: 'normal'},
+          navigationRef.current.navigate("TaskDetails", {
+            detail: notification.data,
           });
         } else if (notification.userInteraction && !notification.foreground) {
-          navigationRef.current.navigate('NotificationStackNavigator', {
-            screen: 'Notification',
-            params: {type: 'normal'},
-          });
+          setTimeout(() => {
+            navigationRef.current.navigate("TaskDetails", {
+              detail: notification.data,
+            });
+          }, 5000);
         }
       },
 
-      popInitialNotification: true,
+      // popInitialNotification: true,
       requestPermissions: true,
     });
 
     PushNotification.createChannel(
       {
-        channelId: 'default-channel-id', // (required)
-        channelName: 'Default channel', // (required)
-        channelDescription: 'A default channel', // (optional) default: undefined.
-        soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
+        channelId: "default-channel-id", // (required)
+        channelName: "Default channel", // (required)
+        channelDescription: "A default channel", // (optional) default: undefined.
+        soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
         importance: 4, // (optional) default: 4. Int value of the Android notification importance
         vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
       },
-      created =>
-        console.log(`createChannel 'default-channel-id' returned '${created}'`), // (optional) callback returns whether the channel was created, false means it already existed.
+      (created) =>
+        console.log(`createChannel 'default-channel-id' returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
     );
 
-    messaging().onNotificationOpenedApp(remoteMessage => {
+    messaging().onNotificationOpenedApp((remoteMessage) => {
       if (remoteMessage?.data) {
-        navigationRef.current.navigate('NotificationStackNavigator', {
-          screen: 'Notification',
-          params: {type: 'normal'},
+        navigationRef.current.navigate("TaskDetails", {
+          detail: remoteMessage.data,
         });
       }
     });
     // Check whether an initial notification is available
     messaging()
       .getInitialNotification()
-      .then(remoteMessage => {
-        if (remoteMessage) {
-          navigationRef.current.navigate('NotificationStackNavigator', {
-            screen: 'Notification',
-            params: {type: 'normal'},
-          });
-        }
+      .then((remoteMessage) => {
+        // if (remoteMessage) {
+        //   navigationRef.current.navigate("TaskDetails", {
+        //     detail: remoteMessage.data,
+        //   });
+        // }
       });
 
     // Get the device token
     messaging()
       .getToken()
-      .then(token => {
+      .then((token) => {
         // console.log('FCM Token', token);
         return storeFCMToken(token);
       });
 
     // Listen to whether the token changes
-    return messaging().onTokenRefresh(token => {
+    return messaging().onTokenRefresh((token) => {
       storeFCMToken(token);
     });
   }, []);
 
   useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
       // console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
       // dispatch({ type: 'updateNotification', payload: remoteMessage });
       store.dispatch(NotificationAction.updateNotification(remoteMessage));
